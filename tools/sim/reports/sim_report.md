@@ -1,4 +1,4 @@
-# Simulation Report — Cultivation: Beyond Heaven (Stage 2)
+# Simulation Report — Cultivation: Beyond Heaven (Stage 3)
 
 **Best strategy (active):** `artifact_focused`
 
@@ -37,13 +37,13 @@
 | Strategy | R1 | R2 | R3 | R4 | R5 | Walls | Longest wait |
 |----------|----|----|----|----|----|-------|--------------|
 | greedy_cheapest | — | — | — | — | — | 0 | 27.0s |
-| best_roi | — | — | — | — | — | 0 | 10.3m |
+| best_roi | — | — | — | — | — | 0 | 7.3m |
 | rush_breakthrough | — | — | — | — | — | 0 | 3.9m |
 | rebirth_early | 45.9m | 17.5m | 8.9m | 6.2m | 4.6m | 0 | 17.5m |
 | rebirth_late | 57.1m | 21.2m | 11.1m | 7.7m | 5.6m | 0 | 20.7m |
 | talent_focused | 45.9m | 17.5m | 8.9m | 6.2m | 4.6m | 0 | 17.5m |
 | artifact_focused | 45.6m | 17.0m | 8.7m | 6.0m | 4.5m | 0 | 17.0m |
-| offline_heavy | 16.33h | 8.17h | 8.17h | 8.17h | 7.2m | 5 | 8.17h |
+| offline_heavy | 16.33h | 8.17h | 8.17h | 8.17h | 4.9m | 5 | 8.17h |
 
 ## Key milestones
 
@@ -56,11 +56,40 @@
 | rebirth_late | 6.0s | 1.4m | 45.9m | 57.1m | 1.71h |
 | talent_focused | 6.0s | 1.4m | 45.9m | 45.9m | 1.39h |
 | artifact_focused | 6.0s | 1.4m | 45.6m | 45.6m | 1.36h |
-| offline_heavy | 6.0s | 1.4m | 16.33h | 16.33h | 40.95h |
+| offline_heavy | 6.0s | 1.4m | 16.33h | 16.33h | 40.91h |
 
 ## Pacing issues (artifact_focused)
 - none
 
-best_roi longest wait: 10.3m until `upgrade:breath_meditation:L165`
+best_roi longest wait: 7.3m until `upgrade:foundation_mantra:L56`
 
-offline_heavy calendar to last recorded rebirth: 40.95h rebirths=5
+offline_heavy calendar to last recorded rebirth: 40.91h rebirths=5
+
+## Stage 3 — time to first ascension
+
+Active bots step once per second after the shared early game. First ascension enters the Spirit World.
+
+| Strategy | Ascension | Rebirths | Bursts | Sacrifices | Absorbs | Speed windows | Compound hours |
+|----------|-----------|----------|--------|------------|---------|---------------|----------------|
+| path_heavenly_sword | 1.62h | 25 | 11 | 0 | 0 | 0 | 0.24 |
+| path_demon_emperor | 1.47h | 25 | 0 | 21 | 0 | 0 | 0.10 |
+| path_immortal | 1.70h | 25 | 0 | 0 | 0 | 0 | 0.32 |
+| path_world_devourer | 1.57h | 25 | 0 | 0 | 22 | 0 | 0.20 |
+| path_time_lord | 1.71h | 25 | 0 | 0 | 0 | 2 | 0.34 |
+| mixed_switch | 1.65h | 25 | 6 | 0 | 0 | 1 | 0.18 |
+| mixed_world | 2.44h | 25 | 0 | 0 | 0 | 0 | 0.78 |
+
+Pure paths span 1.47h – 1.71h (spread 1.161, cap 1.25).
+
+## World probes (7 minutes from Soul Transformation)
+
+| World | Essence | Fragments | Dust | Seeds | Tribulations |
+|-------|---------|-----------|------|-------|--------------|
+| spirit_world | 6.605e+09 | 0 | 0 | 2 | 0 |
+| heavenly_world | 8.203e+09 | 4.2 | 0 | 2 | 2 |
+| void_dimension | 2.669e+09 | 0 | 2.176e+09 | 2 | 0 |
+| chaos_origin | 3.085e+09 | 0 | 0 | 5 | 0 |
+
+Notation supports exponent 1000000 (`1.23e1000000`). Live Qi is clamped at 1e300 because the economy runs in float64.
+
+Stage 3 checks: none.

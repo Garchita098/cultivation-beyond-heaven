@@ -1,0 +1,72 @@
+{
+  "spread": 1.1607614021862043,
+  "ascension_sec": {
+    "path_heavenly_sword": 5831.0,
+    "path_demon_emperor": 5306.0,
+    "path_immortal": 6114.0,
+    "path_world_devourer": 5669.0,
+    "path_time_lord": 6159.0,
+    "mixed_switch": 5948.0,
+    "mixed_world": 8797.0
+  },
+  "probes": {
+    "spirit_world": {
+      "world": "spirit_world",
+      "qi": 782765863537.1132,
+      "essence": 6604692685.612968,
+      "fragments": 0.0,
+      "dust": 0.0,
+      "seeds": 2.0,
+      "tribulations": 0,
+      "laws": [
+        "flat_as_mult"
+      ],
+      "rank": 20,
+      "finite": true
+    },
+    "heavenly_world": {
+      "world": "heavenly_world",
+      "qi": 1328745446517.0894,
+      "essence": 8202656168.319929,
+      "fragments": 4.199999999999999,
+      "dust": 0.0,
+      "seeds": 2.0,
+      "tribulations": 2,
+      "laws": [
+        "flat_as_mult"
+      ],
+      "rank": 21,
+      "finite": true
+    },
+    "void_dimension": {
+      "world": "void_dimension",
+      "qi": 458473361141.3027,
+      "essence": 2669253033.6849117,
+      "fragments": 0.0,
+      "dust": 2176283535.708749,
+      "seeds": 2.0,
+      "tribulations": 0,
+      "laws": [
+        "flat_as_mult"
+      ],
+      "rank": 20,
+      "finite": true
+    },
+    "chaos_origin": {
+      "world": "chaos_origin",
+      "qi": 770217310513.5958,
+      "essence": 3084667237.2961636,
+      "fragments": 0.0,
+      "dust": 0.0,
+      "seeds": 5.0,
+      "tribulations": 0,
+      "laws": [
+        "flat_as_mult"
+      ],
+      "rank": 20,
+      "finite": true
+    }
+  },
+  "issues": [],
+  "notation": "1.23e1000000"
+}

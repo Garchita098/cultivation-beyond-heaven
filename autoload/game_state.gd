@@ -23,20 +23,13 @@ func _ready() -> void:
 func tick(delta: float) -> void:
 	if run == null or delta <= 0.0 or not Content.valid:
 		return
-	var prod := Economy.production_float(run)
-	if not is_finite(prod) or prod < 0.0:
+	var sim := run.to_sim()
+	EconomyCore.tick(Content.data, sim, delta)
+	run.apply_sim(sim, true)
+	last_prod = EconomyCore.production_state(Content.data, sim)
+	if not is_finite(last_prod) or last_prod < 0.0:
 		push_error("Qi production is not a finite non-negative number")
 		last_prod = 0.0
-		return
-	last_prod = prod
-	var gained := prod * delta
-	if not is_finite(gained):
-		push_error("Qi tick gain is not finite")
-		return
-	var gained_bn := BigNum.from_float(gained)
-	run.qi = run.qi.add(gained_bn)
-	run.lifetime_qi = run.lifetime_qi.add(gained_bn)
-	run.time_sec += delta
 
 
 func try_buy(uid: String) -> bool:
@@ -125,6 +118,93 @@ func set_auto_buy_mode(mode: String) -> void:
 	_mutate(func(sim: SimState) -> bool:
 		sim.auto_buy_mode = mode
 		return true
+	)
+
+
+func try_choose_path(path_id: String) -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return Stage3Rules.choose_path(Content.data, sim, path_id)
+	)
+
+
+func try_buy_node(node_id: String) -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return Stage3Rules.buy_node(Content.data, sim, node_id)
+	)
+
+
+func try_sacrifice(mode: String = "qi") -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return Stage3Rules.sacrifice(Content.data, sim, mode)
+	)
+
+
+func try_absorb(kind: String) -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return Stage3Rules.absorb(Content.data, sim, kind)
+	)
+
+
+func try_speed() -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return Stage3Rules.start_speed(Content.data, sim)
+	)
+
+
+func try_skip() -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return Stage3Rules.time_skip(Content.data, sim)
+	)
+
+
+func try_ascend() -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return Stage3Rules.do_ascension(Content.data, sim)
+	)
+
+
+func set_essence_ratio(ratio: float) -> void:
+	_mutate(func(sim: SimState) -> bool:
+		Stage3Rules.set_essence_ratio(sim, ratio)
+		return true
+	)
+
+
+func set_retain(seconds: float) -> void:
+	_mutate(func(sim: SimState) -> bool:
+		Stage3Rules.set_retain(Content.data, sim, seconds)
+		return true
+	)
+
+
+func set_stance(stance: String) -> void:
+	_mutate(func(sim: SimState) -> bool:
+		Stage3Rules.set_stance(sim, stance)
+		return true
+	)
+
+
+func set_reality(mode: String) -> void:
+	_mutate(func(sim: SimState) -> bool:
+		return Stage3Rules.set_reality(sim, mode)
+	)
+
+
+func try_slot_law(law_id: String) -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return Stage3Rules.slot_law(Content.data, sim, law_id)
+	)
+
+
+func try_rewrite() -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return Stage3Rules.buy_void_rewrite(Content.data, sim)
+	)
+
+
+func promote_research(study_id: String) -> void:
+	_mutate(func(sim: SimState) -> bool:
+		return Stage3Rules.promote_research(Content.data, sim, study_id)
 	)
 
 
@@ -234,6 +314,22 @@ func _bootstrap_screenshot() -> void:
 	run.auto_buy_mode = "roi"
 	run.auto_rebirth_min_rank = 15
 	run.auto_rebirth_min_karma = 3
+	run.rebirth_count = 25
+	run.rank_index = 19
+	run.highest_rank_index = 19
+	run.path_id = "heavenly_sword"
+	run.path_joined = true
+	run.path_currency = 4.0
+	run.path_nodes = {"shorten_charge": 2, "extend_burst": 1, "echo_slash": 1}
+	run.burst_left = 6.0
+	run.dao_marks = 3.0
+	run.essence_ratio = 0.25
+	run.world_res = {"spirit_essence": 12.0}
+	run.research_progress = 40.0
+	run.unlocked["ascension_gate"] = true
+	run.unlocked["dao_laws"] = true
+	run.unlocked["dual_flow"] = true
+	run.unlocked["reality_stitch"] = true
 	for feature in ["spiritual_roots", "artifacts_basic", "rebirth_unlock", "automation_buy_upgrades", "path_selection"]:
 		run.reveal_seen[feature] = true
 	last_prod = Economy.production_float(run)

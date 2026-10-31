@@ -12,7 +12,7 @@ const TABS := [
 	{"id": "talents", "label": "Корни", "cta": false, "need": "spiritual_roots"},
 	{"id": "artifacts", "label": "Артеф.", "cta": false, "need": "artifacts_basic"},
 	{"id": "rebirth", "label": "Карма", "cta": false, "need": "rebirth_unlock"},
-	{"id": "research", "label": "Авто", "cta": false, "need": "automation_buy_upgrades"},
+	{"id": "research", "label": "Дао", "cta": false, "need": "automation_buy_upgrades"},
 ]
 
 const REVEALS := {
@@ -20,8 +20,8 @@ const REVEALS := {
 	"artifacts_basic": {"tab": 4, "title": "Реликвия", "line": "Она уже в коллекции", "color": Color("F0C75E")},
 	"rebirth_unlock": {"tab": 5, "title": "Колесо кармы", "line": "Можно переродиться", "color": Color("F0C75E")},
 	"automation_buy_upgrades": {"tab": 6, "title": "Автоматизация", "line": "Тренировки покупаются сами", "color": Color("5CE1FF")},
-	"path_selection": {"tab": 5, "title": "Пять путей", "line": "Пути ждут следующего этапа", "color": Color("A78BFA")},
-	"ascension_gate": {"tab": 5, "title": "Врата Вознесения", "line": "Духовный мир ещё закрыт", "color": Color("3DDBA0")},
+	"path_selection": {"tab": 5, "title": "Пять путей", "line": "Можно выбрать путь", "color": Color("A78BFA")},
+	"ascension_gate": {"tab": 5, "title": "Врата Вознесения", "line": "Новый мир ждёт", "color": Color("3DDBA0")},
 }
 
 var _status_qi: Label
@@ -36,6 +36,9 @@ var _current: int = 0
 var _flash: ColorRect
 var _reveal: Control
 var _rebirth_modal: Control
+var _path_sheet: Control
+var _ascension_modal: Control
+var _world_sheet: Control
 
 var _shooting: bool = false
 var _shot_dir: String = ""
@@ -85,7 +88,19 @@ func _ready() -> void:
 	_rebirth_modal = preload("res://scenes/rebirth_modal.gd").new()
 	_rebirth_modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	overlay.add_child(_rebirth_modal)
+	_path_sheet = preload("res://scenes/path_sheet.gd").new()
+	_path_sheet.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_path_sheet)
+	_ascension_modal = preload("res://scenes/ascension_modal.gd").new()
+	_ascension_modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_ascension_modal)
+	_world_sheet = preload("res://scenes/world_sheet.gd").new()
+	_world_sheet.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_world_sheet)
 	EventBus.open_rebirth_confirm.connect(_rebirth_modal.show_offer)
+	EventBus.open_path_sheet.connect(_path_sheet.show_sheet)
+	EventBus.open_ascension_confirm.connect(_ascension_modal.show_offer)
+	EventBus.open_world_sheet.connect(_world_sheet.show_world)
 	EventBus.feature_unlocked.connect(_on_feature)
 	EventBus.rebirth_done.connect(func(_c): _pulse())
 
@@ -245,7 +260,7 @@ func _build_pages() -> void:
 	_pages["talents"] = preload("res://scenes/tabs/talents_view.gd").new()
 	_pages["artifacts"] = preload("res://scenes/tabs/artifacts_view.gd").new()
 	_pages["rebirth"] = preload("res://scenes/tabs/rebirth_view.gd").new()
-	_pages["research"] = preload("res://scenes/tabs/automation_view.gd").new()
+	_pages["research"] = preload("res://scenes/tabs/research_view.gd").new()
 	for id in _pages.keys():
 		var page: Control = _pages[id]
 		page.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -332,24 +347,90 @@ func _on_feature(feature_id: String) -> void:
 	_pulse()
 
 
+const _EXTRA_SHOTS := [
+	"rebirth_confirm",
+	"path_select",
+	"ascension_confirm",
+	"world_spirit",
+	"world_heavenly",
+	"world_void",
+	"world_chaos",
+	"tab_automation",
+]
+
+
 func _capture_shot() -> void:
 	var img := get_viewport().get_texture().get_image()
 	var err := OK
+	var dir := _shot_dir.trim_suffix("/")
 	if _shot_i < TABS.size():
 		var spec: Dictionary = TABS[_shot_i]
-		err = img.save_png(_shot_dir.trim_suffix("/") + "/tab_%s.png" % str(spec["id"]))
+		err = img.save_png(dir + "/tab_%s.png" % str(spec["id"]))
 		_shot_i += 1
 		_shot_pending = false
 		_shot_timer = 0.0
-		if err != OK:
-			push_error("Screenshot failed (%s)" % error_string(err))
 		if _shot_i < TABS.size():
 			_show_tab(_shot_i)
 		else:
-			_show_tab(5)
-			_rebirth_modal.show_offer()
+			_prepare_extra(0)
+		if err != OK:
+			push_error("Screenshot failed (%s)" % error_string(err))
 		return
-	err = img.save_png(_shot_dir.trim_suffix("/") + "/rebirth_confirm.png")
-	if err != OK:
-		push_error("Screenshot failed (%s)" % error_string(err))
-	get_tree().quit(0 if err == OK else 1)
+	var extra := _shot_i - TABS.size()
+	if extra < _EXTRA_SHOTS.size():
+		err = img.save_png(dir + "/%s.png" % str(_EXTRA_SHOTS[extra]))
+		_shot_i += 1
+		_shot_pending = false
+		_shot_timer = 0.0
+		if _shot_i - TABS.size() < _EXTRA_SHOTS.size():
+			_prepare_extra(_shot_i - TABS.size())
+		else:
+			get_tree().quit(0 if err == OK else 1)
+		return
+	get_tree().quit(0)
+
+
+func _prepare_extra(index: int) -> void:
+	_rebirth_modal.visible = false
+	_path_sheet.visible = false
+	_ascension_modal.visible = false
+	_world_sheet.visible = false
+	var name := str(_EXTRA_SHOTS[index])
+	if name == "rebirth_confirm":
+		_show_tab(5)
+		_rebirth_modal.show_offer()
+	elif name == "path_select":
+		_show_tab(0)
+		_path_sheet.show_sheet()
+	elif name == "ascension_confirm":
+		_path_sheet.visible = false
+		_ascension_modal.show_offer()
+	elif name.begins_with("world_"):
+		_ascension_modal.visible = false
+		var world_id: String = {
+			"world_spirit": "spirit_world",
+			"world_heavenly": "heavenly_world",
+			"world_void": "void_dimension",
+			"world_chaos": "chaos_origin",
+		}[name]
+		GameState.run.world_id = world_id
+		if world_id == "void_dimension":
+			GameState.run.world_res["void_dust"] = 24.0
+			GameState.run.retain_seconds = 180.0
+		elif world_id == "chaos_origin":
+			GameState.run.world_res["chaos_seed"] = 3.0
+		elif world_id == "heavenly_world":
+			GameState.run.world_res["dao_fragments"] = 6.0
+			GameState.run.stance = "defy"
+			GameState.run.boon_left = 12.0
+		elif world_id == "spirit_world":
+			GameState.run.essence_ratio = 0.5
+			GameState.run.world_res["spirit_essence"] = 40.0
+		_show_tab(0)
+		_world_sheet.show_world()
+	elif name == "tab_automation":
+		_world_sheet.visible = false
+		GameState.run.world_id = "mortal_world"
+		_show_tab(6)
+		var page = _pages["research"]
+		page.show_mode("auto")

@@ -320,24 +320,29 @@
         },
         {
           "milestone": "rank:soul_xform_mid",
-          "time_sec": 10210.5,
-          "time": "2.84h"
+          "time_sec": 8758.0,
+          "time": "2.43h"
+        },
+        {
+          "milestone": "rank:soul_xform_late",
+          "time_sec": 9767.5,
+          "time": "2.71h"
         }
       ],
-      "longest_wait_sec": 616.5,
-      "longest_wait_until": "upgrade:breath_meditation:L165",
+      "longest_wait_sec": 437.0,
+      "longest_wait_until": "upgrade:foundation_mantra:L56",
       "walls": [],
       "magnitude_issues": [],
       "pacing_issues": [],
       "final": {
         "time": 10800.0,
-        "qi": 3476004235956.986,
-        "prod": 6175071630.0,
-        "rank": "soul_xform_mid",
-        "rank_index": 21,
+        "qi": 4306265193744.772,
+        "prod": 14017537170.0,
+        "rank": "soul_xform_late",
+        "rank_index": 22,
         "rebirths": 0,
         "karma": 0.0,
-        "lifetime_qi": 12867659551179.268,
+        "lifetime_qi": 24467194030871.52,
         "talents": 4,
         "artifacts": 1,
         "shop_mult": 1.0,
@@ -1228,8 +1233,8 @@
         },
         {
           "milestone": "rebirth:5",
-          "time_sec": 147433.5,
-          "time": "40.95h"
+          "time_sec": 147294.0,
+          "time": "40.91h"
         },
         {
           "milestone": "rank:nascent_early",
@@ -1330,6 +1335,36 @@
           "milestone": "rank:soul_xform_peak",
           "time_sec": 118200.0,
           "time": "32.83h"
+        },
+        {
+          "milestone": "rank:void_early",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:void_mid",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:void_late",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:void_peak",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:integration_early",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:integration_peak",
+          "time_sec": 118200.0,
+          "time": "32.83h"
         }
       ],
       "longest_wait_sec": 29400.0,
@@ -1379,20 +1414,20 @@
       "magnitude_issues": [],
       "pacing_issues": [],
       "final": {
-        "time": 147433.5,
+        "time": 147294.0,
         "qi": 0.0,
-        "prod": 7.970305776947829,
+        "prod": 9.336336591620398,
         "rank": "mortal_early",
         "rank_index": 0,
         "rebirths": 5,
-        "karma": 37.0,
-        "lifetime_qi": 1322012240826636.2,
+        "karma": 42.0,
+        "lifetime_qi": 7.274206011747734e+16,
         "talents": 9,
         "artifacts": 7,
-        "shop_mult": 1.3,
+        "shop_mult": 1.4,
         "shop_levels": {
           "karma_offline": 3,
-          "karma_prod_1": 3,
+          "karma_prod_1": 4,
           "karma_start_qi": 0
         },
         "rebirth_times": [
@@ -1400,7 +1435,7 @@
           88200.0,
           117600.0,
           147000.0,
-          147433.5
+          147294.0
         ]
       },
       "note": "longest_wait includes 8h offline sleeps; active-player walls are not this bot"

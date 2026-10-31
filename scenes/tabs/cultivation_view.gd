@@ -8,6 +8,8 @@ var _qi_label: Label
 var _rate_label: Label
 var _next_label: Label
 var _bar: ProgressBar
+var _path_btn: Button
+var _act_btn: Button
 
 
 func _ready() -> void:
@@ -70,6 +72,27 @@ func _ready() -> void:
 	CBHTheme.style_label(_next_label, theme.font_sans, 16, CBHTheme.COL_MUTED)
 	col.add_child(_next_label)
 
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 8)
+	col.add_child(actions)
+	_path_btn = Button.new()
+	_path_btn.focus_mode = Control.FOCUS_NONE
+	_path_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_path_btn.custom_minimum_size = Vector2(0, 64)
+	_path_btn.pressed.connect(func(): EventBus.open_path_sheet.emit())
+	actions.add_child(_path_btn)
+	_act_btn = Button.new()
+	_act_btn.focus_mode = Control.FOCUS_NONE
+	_act_btn.custom_minimum_size = Vector2(180, 64)
+	_act_btn.pressed.connect(_path_action)
+	actions.add_child(_act_btn)
+	var world_btn := Button.new()
+	world_btn.focus_mode = Control.FOCUS_NONE
+	world_btn.custom_minimum_size = Vector2(120, 64)
+	world_btn.text = "Мир"
+	world_btn.pressed.connect(func(): EventBus.open_world_sheet.emit())
+	actions.add_child(world_btn)
+
 
 func _process(_delta: float) -> void:
 	if not visible:
@@ -101,6 +124,65 @@ func refresh() -> void:
 		_mat.set_shader_parameter("tier", _tier(rank))
 		_mat.set_shader_parameter("progress", progress)
 		_mat.set_shader_parameter("canvas_size", _shader_rect.size)
+		var tint := Color(-1, -1, -1)
+		if run.path_joined:
+			tint = CBHTheme.path_color(run.path_id)
+		_mat.set_shader_parameter("path_tint", Vector3(tint.r, tint.g, tint.b))
+	_refresh_path_chip(run)
+
+
+func _refresh_path_chip(run: RunState) -> void:
+	if _path_btn == null:
+		return
+	if not run.path_joined:
+		_path_btn.text = "Путь"
+		_act_btn.visible = false
+		return
+	var tint := CBHTheme.path_color(run.path_id)
+	var style := CBHTheme.flat(tint, tint, 16, 0)
+	_path_btn.add_theme_stylebox_override("normal", style)
+	_path_btn.add_theme_stylebox_override("hover", style)
+	_path_btn.add_theme_stylebox_override("pressed", style)
+	_path_btn.add_theme_color_override("font_color", CBHTheme.COL_BG)
+	var name := str(Content.data.paths_by_id[run.path_id].get("name_ru", ""))
+	if run.path_id == "heavenly_sword":
+		_path_btn.text = name if run.burst_left <= 0.0 else "%s  %ds" % [name, int(ceil(run.burst_left))]
+		_act_btn.visible = false
+	elif run.path_id == "demon_emperor":
+		_path_btn.text = name
+		_act_btn.visible = true
+		_act_btn.text = "Жертва"
+	elif run.path_id == "world_devourer":
+		_path_btn.text = name
+		_act_btn.visible = true
+		_act_btn.text = "Поглотить"
+	elif run.path_id == "time_lord":
+		_path_btn.text = name
+		_act_btn.visible = true
+		_act_btn.text = "Ускорить" if run.speed_left <= 0.0 else "Пропуск"
+	else:
+		_path_btn.text = name
+		_act_btn.visible = false
+
+
+func _path_action() -> void:
+	if GameState.run == null:
+		return
+	match GameState.run.path_id:
+		"demon_emperor":
+			GameState.try_sacrifice("qi")
+		"world_devourer":
+			if not GameState.run.devour_types.has("upgrade"):
+				GameState.try_absorb("upgrade")
+			elif not GameState.run.devour_types.has("artifact"):
+				GameState.try_absorb("artifact")
+			else:
+				GameState.try_absorb("spirit_essence")
+		"time_lord":
+			if GameState.run.speed_left <= 0.0:
+				GameState.try_speed()
+			else:
+				GameState.try_skip()
 
 
 func _tier(rank: Dictionary) -> float:

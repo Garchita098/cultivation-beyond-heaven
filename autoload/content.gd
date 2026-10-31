@@ -11,6 +11,7 @@ const FILES := {
 	"artifacts": "res://data/artifacts.json",
 	"paths": "res://data/paths.json",
 	"automation": "res://data/automation.json",
+	"research": "res://data/research.json",
 }
 
 static var data: EconData
@@ -46,6 +47,10 @@ static func load_all() -> bool:
 	econ.artifacts = parsed["artifacts"]
 	econ.paths = parsed["paths"]
 	econ.automation = parsed["automation"]
+	econ.research = parsed["research"]
+	econ.worlds_doc = parsed["worlds"]
+	for p in parsed["paths"]["paths"]:
+		econ.paths_by_id[str(p["id"])] = p
 	econ.ranks = parsed["ranks"]["ranks"]
 	for r in econ.ranks:
 		econ.ranks_by_id[str(r["id"])] = r

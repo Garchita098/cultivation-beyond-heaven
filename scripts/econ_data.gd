@@ -12,7 +12,10 @@ var worlds: Dictionary = {}
 var talents: Dictionary = {}
 var artifacts: Dictionary = {}
 var paths: Dictionary = {}
+var paths_by_id: Dictionary = {}
 var automation: Dictionary = {}
+var research: Dictionary = {}
+var worlds_doc: Dictionary = {}
 
 
 func rank_at(index: int) -> Dictionary:

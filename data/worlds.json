@@ -1,5 +1,14 @@
 {
   "schema_version": 1,
+  "ascension": {
+    "currency_id": "dao_marks",
+    "currency_name_ru": "Знаки Дао",
+    "min_rebirths": 25,
+    "perm_mult_per_mark": 0.08,
+    "gain_log_div": 4.0,
+    "gain_per_rank": 0.08,
+    "gain_per_ascension": 0.5
+  },
   "worlds": [
     {
       "id": "mortal_world",
@@ -9,8 +18,9 @@
       "resource_id": "qi",
       "resource_name_ru": "Ци",
       "mechanic": "standard_idle",
-      "mechanic_desc_ru": "Классическое автопроизводство Ци. Базовый цикл игры.",
+      "mechanic_desc_ru": "Классическое автопроизводство Ци.",
       "unlock_requirement": "start",
+      "tint": "#8BA0B8",
       "stage": 1
     },
     {
@@ -19,14 +29,16 @@
       "name_ru": "Духовный Мир",
       "order": 1,
       "resource_id": "spirit_essence",
-      "resource_name_ru": "Духовная Сущность",
+      "resource_name_ru": "Сущность",
       "mechanic": "essence_channels",
-      "mechanic_desc_ru": "Каналы Сущности: игрок распределяет % производства между Ци и Сущностью. Сущность ускоряет прорывы (снижает стоимость ранга).",
+      "mechanic_desc_ru": "Каналы делят поток между Ци и Сущностью. Сущность удешевляет прорыв.",
       "unlock_requirement": {"type": "rank", "id": "nascent_peak"},
-      "qi_to_essence_convert_ratio": 0.01,
+      "qi_to_essence_convert_ratio": 0.02,
       "essence_breakthrough_discount_per": 0.001,
       "essence_discount_cap": 0.5,
-      "stage": 2
+      "channel_presets": [0, 0.25, 0.5, 0.75],
+      "tint": "#3DDBA0",
+      "stage": 3
     },
     {
       "id": "heavenly_world",
@@ -36,21 +48,41 @@
       "resource_id": "dao_fragments",
       "resource_name_ru": "Осколки Дао",
       "mechanic": "tribulation_cycles",
-      "mechanic_desc_ru": "Циклы Небесной Трибуляции: каждые N минут накапливается давление; успешный прорыв даёт всплеск Осколков Дао и временно меняет формулу производства (аддитив → мультипликатив на короткое окно).",
+      "mechanic_desc_ru": "Трибуляция сама сверяет силу. Успех на время меняет формулу.",
       "unlock_requirement": {"type": "rank", "id": "immortal_ascendant"},
-      "tribulation_interval_sec": 600,
+      "tribulation_interval_sec": 180,
+      "pressure_base": 8,
+      "pressure_per_cycle": 1.15,
+      "power_rank_weight": 0.35,
+      "success_fragments": 3,
+      "fail_fragments": 1,
+      "boon_sec": 24,
+      "boon_flat_coeff": 0.012,
+      "fail_penalty_sec": 14,
+      "fail_penalty_mult": 0.72,
+      "guard_pressure": 0.72,
+      "guard_reward": 0.7,
+      "defy_pressure": 1.28,
+      "defy_reward": 1.55,
+      "tint": "#F0C75E",
       "stage": 3
     },
     {
       "id": "void_dimension",
       "name_en": "Void Dimension",
-      "name_ru": "Измерение Пустоты",
+      "name_ru": "Пустота",
       "order": 3,
       "resource_id": "void_dust",
       "resource_name_ru": "Пыль Пустоты",
       "mechanic": "entropy_drain",
-      "mechanic_desc_ru": "Энтропия: производство растёт, но неиспользованная Ци «сгорает» в Пыль. Активное управление балансом Ци/Пыли. Пыль открывает переписывание одного правила за раз.",
+      "mechanic_desc_ru": "Лишняя Ци сгорает в пыль. Пыль переписывает одно правило.",
       "unlock_requirement": {"type": "ascension_count", "min": 3},
+      "entropy_rate": 0.018,
+      "dust_per_qi": 0.002,
+      "retain_choices": [60, 180, 600],
+      "default_retain_seconds": 180,
+      "rewrite_cost": 20,
+      "tint": "#A78BFA",
       "stage": 3
     },
     {
@@ -61,8 +93,12 @@
       "resource_id": "chaos_seed",
       "resource_name_ru": "Семя Хаоса",
       "mechanic": "rule_forge",
-      "mechanic_desc_ru": "Кузница Правил: игрок комбинирует законы (производство, время, стоимость, оффлайн) в кастомную формулу на забег. Мета-прогрессия между Ascension.",
+      "mechanic_desc_ru": "Кузница законов: выбранные законы переписывают формулу забега.",
       "unlock_requirement": {"type": "rank", "id": "law_weaver"},
+      "pulse_sec": 90,
+      "seed_per_pulse": 1,
+      "forge_slots": 2,
+      "tint": "#E85D5D",
       "stage": 3
     }
   ]

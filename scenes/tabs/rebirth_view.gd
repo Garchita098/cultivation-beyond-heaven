@@ -145,47 +145,44 @@ func _shop_row(item: Dictionary, theme: CBHTheme) -> PanelContainer:
 	return panel
 
 
-func _paths(theme: CBHTheme) -> PanelContainer:
-	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", CBHTheme.flat(CBHTheme.COL_PANEL, CBHTheme.COL_DAO, 16, 1))
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 8)
-	panel.add_child(box)
-	var head := Label.new()
-	head.text = "Пять путей"
-	head.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	CBHTheme.style_label(head, theme.font_serif, 18, CBHTheme.COL_DAO)
-	box.add_child(head)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 6)
-	box.add_child(row)
-	for p in Content.data.paths["paths"]:
-		var chip := Label.new()
-		chip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		chip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		chip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		chip.text = str(p["name_ru"]).replace("Путь ", "")
-		CBHTheme.style_label(chip, theme.font_sans, 12, CBHTheme.COL_MUTED)
-		row.add_child(chip)
-	var soon := Label.new()
-	soon.text = "Скоро"
-	soon.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	CBHTheme.style_label(soon, theme.font_sans, 14, CBHTheme.COL_MUTED)
-	box.add_child(soon)
-	return panel
+func _paths(theme: CBHTheme) -> Button:
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(0, 76)
+	button.focus_mode = Control.FOCUS_NONE
+	var run := GameState.run
+	if run.path_joined and Content.data.paths_by_id.has(run.path_id):
+		button.text = str(Content.data.paths_by_id[run.path_id]["name_ru"])
+		var tint := CBHTheme.path_color(run.path_id)
+		var style := CBHTheme.flat(tint, tint, 16, 0)
+		button.add_theme_stylebox_override("normal", style)
+		button.add_theme_stylebox_override("hover", style)
+		button.add_theme_stylebox_override("pressed", style)
+		button.add_theme_color_override("font_color", CBHTheme.COL_BG)
+	else:
+		button.text = "Выбрать путь"
+	button.pressed.connect(func(): EventBus.open_path_sheet.emit())
+	button.add_theme_font_override("font", theme.font_bold)
+	button.add_theme_font_size_override("font_size", 20)
+	return button
 
 
-func _ascension(theme: CBHTheme) -> PanelContainer:
+func _ascension(theme: CBHTheme) -> Button:
 	var open := GameState.run.rebirth_count >= 25 or GameState.run.unlocked.has("ascension_gate")
-	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 88)
-	panel.add_theme_stylebox_override("panel", CBHTheme.flat(CBHTheme.COL_PANEL, CBHTheme.COL_JADE if open else CBHTheme.COL_LINE, 16, 1))
-	var label := Label.new()
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.text = "Врата Вознесения" if open else "Врата   ·   25"
-	CBHTheme.style_label(label, theme.font_serif, 20, CBHTheme.COL_JADE if open else CBHTheme.COL_MUTED)
-	panel.add_child(label)
-	return panel
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(0, 76)
+	button.focus_mode = Control.FOCUS_NONE
+	button.text = "Вознесение" if open else "Врата   ·   25"
+	button.disabled = not open
+	if open:
+		var style := CBHTheme.flat(CBHTheme.COL_JADE, CBHTheme.COL_JADE, 16, 0)
+		button.add_theme_stylebox_override("normal", style)
+		button.add_theme_stylebox_override("hover", style)
+		button.add_theme_stylebox_override("pressed", style)
+		button.add_theme_color_override("font_color", CBHTheme.COL_BG)
+		button.pressed.connect(func(): EventBus.open_ascension_confirm.emit())
+	button.add_theme_font_override("font", theme.font_serif)
+	button.add_theme_font_size_override("font_size", 22)
+	return button
 
 
 func _seal(need: String, color: Color, theme: CBHTheme) -> PanelContainer:
