@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "unlock_rank": "foundation_late",
+  "max_equipped": 4,
+  "artifacts": [
+    {"id": "jade_slip", "name_ru": "Нефритовая Скрижаль", "rarity": "common", "effect_type": "mult_prod", "effect_value": 0.05, "stage": 1},
+    {"id": "spirit_stone_pouch", "name_ru": "Мешочек Духовных Камней", "rarity": "common", "effect_type": "flat_prod", "effect_value": 2.0, "stage": 1},
+    {"id": "flying_sword_shard", "name_ru": "Осколок Летающего Меча", "rarity": "uncommon", "effect_type": "mult_prod", "effect_value": 0.12, "path_bonus": "heavenly_sword", "stage": 1},
+    {"id": "blood_chalice", "name_ru": "Кровавая Чаша", "rarity": "uncommon", "effect_type": "sacrifice_efficiency", "effect_value": 0.10, "path_bonus": "demon_emperor", "stage": 2},
+    {"id": "longevity_peach_seed", "name_ru": "Семя Персика Долголетия", "rarity": "rare", "effect_type": "offline_bonus", "effect_value": 0.25, "path_bonus": "immortal", "stage": 2},
+    {"id": "world_fang", "name_ru": "Клык Мира", "rarity": "rare", "effect_type": "absorb_rate", "effect_value": 0.15, "path_bonus": "world_devourer", "stage": 2},
+    {"id": "chrono_hourglass", "name_ru": "Хроно-Песочные Часы", "rarity": "epic", "effect_type": "time_skip_charge", "effect_value": 0.10, "path_bonus": "time_lord", "stage": 2},
+    {"id": "heavenly_mirror", "name_ru": "Небесное Зеркало", "rarity": "epic", "effect_type": "mult_prod", "effect_value": 0.40, "stage": 2},
+    {"id": "dao_compass", "name_ru": "Компас Дао", "rarity": "legendary", "effect_type": "breakthrough_discount", "effect_value": 0.20, "stage": 3},
+    {"id": "chaos_bead", "name_ru": "Бусина Хаоса", "rarity": "mythic", "effect_type": "rule_slot", "effect_value": 1, "stage": 3}
+  ],
+  "upgrade": {
+    "currency": "qi",
+    "cost_base": 1000,
+    "cost_growth": 2.5,
+    "effect_gain_fraction": 0.1,
+    "max_level": 10
+  }
+}

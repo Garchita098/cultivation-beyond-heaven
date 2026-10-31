@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "worlds": [
+    {
+      "id": "mortal_world",
+      "name_en": "Mortal World",
+      "name_ru": "Смертный Мир",
+      "order": 0,
+      "resource_id": "qi",
+      "resource_name_ru": "Ци",
+      "mechanic": "standard_idle",
+      "mechanic_desc_ru": "Классическое автопроизводство Ци. Базовый цикл игры.",
+      "unlock_requirement": "start",
+      "stage": 1
+    },
+    {
+      "id": "spirit_world",
+      "name_en": "Spirit World",
+      "name_ru": "Духовный Мир",
+      "order": 1,
+      "resource_id": "spirit_essence",
+      "resource_name_ru": "Духовная Сущность",
+      "mechanic": "essence_channels",
+      "mechanic_desc_ru": "Каналы Сущности: игрок распределяет % производства между Ци и Сущностью. Сущность ускоряет прорывы (снижает стоимость ранга).",
+      "unlock_requirement": {"type": "rank", "id": "nascent_peak"},
+      "qi_to_essence_convert_ratio": 0.01,
+      "essence_breakthrough_discount_per": 0.001,
+      "essence_discount_cap": 0.5,
+      "stage": 2
+    },
+    {
+      "id": "heavenly_world",
+      "name_en": "Heavenly World",
+      "name_ru": "Небесный Мир",
+      "order": 2,
+      "resource_id": "dao_fragments",
+      "resource_name_ru": "Осколки Дао",
+      "mechanic": "tribulation_cycles",
+      "mechanic_desc_ru": "Циклы Небесной Трибуляции: каждые N минут накапливается давление; успешный прорыв даёт всплеск Осколков Дао и временно меняет формулу производства (аддитив → мультипликатив на короткое окно).",
+      "unlock_requirement": {"type": "rank", "id": "immortal_ascendant"},
+      "tribulation_interval_sec": 600,
+      "stage": 3
+    },
+    {
+      "id": "void_dimension",
+      "name_en": "Void Dimension",
+      "name_ru": "Измерение Пустоты",
+      "order": 3,
+      "resource_id": "void_dust",
+      "resource_name_ru": "Пыль Пустоты",
+      "mechanic": "entropy_drain",
+      "mechanic_desc_ru": "Энтропия: производство растёт, но неиспользованная Ци «сгорает» в Пыль. Активное управление балансом Ци/Пыли. Пыль открывает переписывание одного правила за раз.",
+      "unlock_requirement": {"type": "ascension_count", "min": 3},
+      "stage": 3
+    },
+    {
+      "id": "chaos_origin",
+      "name_en": "Chaos Origin",
+      "name_ru": "Исток Хаоса",
+      "order": 4,
+      "resource_id": "chaos_seed",
+      "resource_name_ru": "Семя Хаоса",
+      "mechanic": "rule_forge",
+      "mechanic_desc_ru": "Кузница Правил: игрок комбинирует законы (производство, время, стоимость, оффлайн) в кастомную формулу на забег. Мета-прогрессия между Ascension.",
+      "unlock_requirement": {"type": "rank", "id": "law_weaver"},
+      "stage": 3
+    }
+  ]
+}

@@ -1,0 +1,760 @@
+{
+  "best_strategy": "rebirth_early",
+  "targets": {
+    "first_upgrade": 15,
+    "first_breakthrough": 300,
+    "first_rebirth": 3900,
+    "stage1_end_active": 5400,
+    "first_rebirth_min": 1800,
+    "first_breakthrough_min": 60
+  },
+  "reports": {
+    "greedy_cheapest": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 221.0,
+          "time": "3.7m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 826.0,
+          "time": "13.8m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 2605.0,
+          "time": "43.4m"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 6840.5,
+          "time": "1.90h"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 221.0,
+          "time": "3.7m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 354.0,
+          "time": "5.9m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 573.5,
+          "time": "9.6m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 1177.0,
+          "time": "19.6m"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 1783.5,
+          "time": "29.7m"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 2150.5,
+          "time": "35.8m"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 3267.5,
+          "time": "54.5m"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 4145.0,
+          "time": "1.15h"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 5406.0,
+          "time": "1.50h"
+        }
+      ],
+      "longest_wait_sec": 56.5,
+      "longest_wait_until": "rank:core_early",
+      "walls": [],
+      "magnitude_issues": [],
+      "pacing_issues": [
+        "first_rebirth not reached in sim window"
+      ],
+      "final": {
+        "time": 7200.0,
+        "qi": 205430418.34908468,
+        "prod": 6238036.3500000015,
+        "rank": "core_early",
+        "rank_index": 12,
+        "rebirths": 0,
+        "karma": 0.0,
+        "lifetime_qi": 9882642494.065174
+      }
+    },
+    "best_roi": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 488.5,
+          "time": "8.1m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 1336.0,
+          "time": "22.3m"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 2514.0,
+          "time": "41.9m"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": 3542.0,
+          "time": "59.0m"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": 3542.0,
+          "time": "59.0m"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 176.5,
+          "time": "2.9m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 323.0,
+          "time": "5.4m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 637.0,
+          "time": "10.6m"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 883.5,
+          "time": "14.7m"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 1114.0,
+          "time": "18.6m"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 1538.5,
+          "time": "25.6m"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 1803.0,
+          "time": "30.1m"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 2164.0,
+          "time": "36.1m"
+        },
+        {
+          "milestone": "rank:core_mid",
+          "time_sec": 2812.5,
+          "time": "46.9m"
+        },
+        {
+          "milestone": "rank:core_late",
+          "time_sec": 3147.0,
+          "time": "52.5m"
+        }
+      ],
+      "longest_wait_sec": 1644.0,
+      "longest_wait_until": "upgrade:meridian_opening:L68",
+      "walls": [],
+      "magnitude_issues": [],
+      "pacing_issues": [
+        "first_rebirth not reached in sim window"
+      ],
+      "final": {
+        "time": 7200.0,
+        "qi": 43158276929.11819,
+        "prod": 43615353.6,
+        "rank": "core_peak",
+        "rank_index": 15,
+        "rebirths": 0,
+        "karma": 0.0,
+        "lifetime_qi": 127277119693.10492
+      }
+    },
+    "rush_breakthrough": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 96.5,
+          "time": "1.6m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 408.0,
+          "time": "6.8m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 1273.0,
+          "time": "21.2m"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 2678.0,
+          "time": "44.6m"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": 3985.5,
+          "time": "1.11h"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": 3985.5,
+          "time": "1.11h"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 96.5,
+          "time": "1.6m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 178.5,
+          "time": "3.0m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 284.5,
+          "time": "4.7m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 551.0,
+          "time": "9.2m"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 777.5,
+          "time": "13.0m"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 1050.5,
+          "time": "17.5m"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 1497.0,
+          "time": "24.9m"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 1778.0,
+          "time": "29.6m"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 2215.5,
+          "time": "36.9m"
+        },
+        {
+          "milestone": "rank:core_mid",
+          "time_sec": 3034.0,
+          "time": "50.6m"
+        },
+        {
+          "milestone": "rank:core_late",
+          "time_sec": 3460.0,
+          "time": "57.7m"
+        }
+      ],
+      "longest_wait_sec": 119.5,
+      "longest_wait_until": "rank:core_peak",
+      "walls": [],
+      "magnitude_issues": [],
+      "pacing_issues": [
+        "first_rebirth not reached in sim window"
+      ],
+      "final": {
+        "time": 7200.0,
+        "qi": 748170651.2578992,
+        "prod": 50688783.6,
+        "rank": "core_peak",
+        "rank_index": 15,
+        "rebirths": 0,
+        "karma": 0.0,
+        "lifetime_qi": 154485062303.14832
+      }
+    },
+    "rebirth_early": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 488.5,
+          "time": "8.1m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 1336.0,
+          "time": "22.3m"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 2514.0,
+          "time": "41.9m"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": 3542.0,
+          "time": "59.0m"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": 3542.0,
+          "time": "59.0m"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": 3542.5,
+          "time": "59.0m"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 176.5,
+          "time": "2.9m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 323.0,
+          "time": "5.4m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 637.0,
+          "time": "10.6m"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 883.5,
+          "time": "14.7m"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 1114.0,
+          "time": "18.6m"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 1538.5,
+          "time": "25.6m"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 1803.0,
+          "time": "30.1m"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 2164.0,
+          "time": "36.1m"
+        },
+        {
+          "milestone": "rank:core_mid",
+          "time_sec": 2812.5,
+          "time": "46.9m"
+        },
+        {
+          "milestone": "rank:core_late",
+          "time_sec": 3147.0,
+          "time": "52.5m"
+        }
+      ],
+      "longest_wait_sec": 151.5,
+      "longest_wait_until": "upgrade:body_tempering:L81",
+      "walls": [],
+      "magnitude_issues": [],
+      "pacing_issues": [],
+      "final": {
+        "time": 5400.25,
+        "qi": 796416723.3832769,
+        "prod": 11090644.32,
+        "rank": "core_mid",
+        "rank_index": 13,
+        "rebirths": 1,
+        "karma": 11.0,
+        "lifetime_qi": 12892918520.348383
+      }
+    },
+    "rebirth_late": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 488.5,
+          "time": "8.1m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 1336.0,
+          "time": "22.3m"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 2514.0,
+          "time": "41.9m"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": 3542.0,
+          "time": "59.0m"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": 3542.0,
+          "time": "59.0m"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 176.5,
+          "time": "2.9m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 323.0,
+          "time": "5.4m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 637.0,
+          "time": "10.6m"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 883.5,
+          "time": "14.7m"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 1114.0,
+          "time": "18.6m"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 1538.5,
+          "time": "25.6m"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 1803.0,
+          "time": "30.1m"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 2164.0,
+          "time": "36.1m"
+        },
+        {
+          "milestone": "rank:core_mid",
+          "time_sec": 2812.5,
+          "time": "46.9m"
+        },
+        {
+          "milestone": "rank:core_late",
+          "time_sec": 3147.0,
+          "time": "52.5m"
+        }
+      ],
+      "longest_wait_sec": 1644.0,
+      "longest_wait_until": "upgrade:meridian_opening:L68",
+      "walls": [],
+      "magnitude_issues": [],
+      "pacing_issues": [
+        "first_rebirth not reached in sim window"
+      ],
+      "final": {
+        "time": 7200.0,
+        "qi": 43158276929.11819,
+        "prod": 43615353.6,
+        "rank": "core_peak",
+        "rank_index": 15,
+        "rebirths": 0,
+        "karma": 0.0,
+        "lifetime_qi": 127277119693.10492
+      }
+    },
+    "offline_heavy": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 488.5,
+          "time": "8.1m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 29400.0,
+          "time": "8.17h"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 58800.0,
+          "time": "16.33h"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": 58800.0,
+          "time": "16.33h"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": 58800.0,
+          "time": "16.33h"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": 58800.5,
+          "time": "16.33h"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": 117600.0,
+          "time": "32.67h"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 176.5,
+          "time": "2.9m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 323.0,
+          "time": "5.4m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 29400.0,
+          "time": "8.17h"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 29400.0,
+          "time": "8.17h"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 29400.0,
+          "time": "8.17h"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 29400.0,
+          "time": "8.17h"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 29886.0,
+          "time": "8.30h"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 58800.0,
+          "time": "16.33h"
+        },
+        {
+          "milestone": "rank:core_mid",
+          "time_sec": 58800.0,
+          "time": "16.33h"
+        },
+        {
+          "milestone": "rank:core_late",
+          "time_sec": 58800.0,
+          "time": "16.33h"
+        }
+      ],
+      "longest_wait_sec": 29561.5,
+      "longest_wait_until": "upgrade:breath_meditation:L92",
+      "walls": [
+        {
+          "from": 599.5,
+          "to": 29400.0,
+          "gap_sec": 28800.5,
+          "phase": "mid",
+          "threshold": 1800,
+          "next_event": "rank:foundation_early"
+        },
+        {
+          "from": 29886.0,
+          "to": 58800.0,
+          "gap_sec": 28914.0,
+          "phase": "mid",
+          "threshold": 1800,
+          "next_event": "rank:core_early"
+        },
+        {
+          "from": 58800.5,
+          "to": 88362.0,
+          "gap_sec": 29561.5,
+          "phase": "mid",
+          "threshold": 1800,
+          "next_event": "upgrade:breath_meditation:L92"
+        },
+        {
+          "from": 88797.0,
+          "to": 117600.0,
+          "gap_sec": 28803.0,
+          "phase": "mid",
+          "threshold": 1800,
+          "next_event": "rank:nascent_early"
+        }
+      ],
+      "magnitude_issues": [],
+      "pacing_issues": [
+        "first_rebirth slow: 58800.5 target<=3900"
+      ],
+      "final": {
+        "time": 147000.0,
+        "qi": 7569460251.218546,
+        "prod": 31131873.75200001,
+        "rank": "core_peak",
+        "rank_index": 15,
+        "rebirths": 2,
+        "karma": 23.0,
+        "lifetime_qi": 283083286499.7878
+      }
+    }
+  }
+}

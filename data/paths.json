@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "unlock_rebirths": 5,
+  "paths": [
+    {
+      "id": "heavenly_sword",
+      "name_en": "Heavenly Sword Path",
+      "name_ru": "Путь Небесного Меча",
+      "mechanic": "burst_cycles",
+      "desc_ru": "Накопление «Намерения Меча» во время производства. Каждые 60 сек (улучшается) — автоматический всплеск: xN к производству на 5–15 сек. Активный стиль: короткие пики силы.",
+      "params": {
+        "charge_period_sec": 60,
+        "burst_duration_sec": 8,
+        "burst_mult_base": 5.0,
+        "burst_mult_per_path_level": 0.5,
+        "outside_burst_mult": 0.85
+      },
+      "level_currency": "sword_intent",
+      "stage": 3
+    },
+    {
+      "id": "demon_emperor",
+      "name_en": "Demon Emperor Path",
+      "name_ru": "Путь Демонического Императора",
+      "mechanic": "sacrifice",
+      "desc_ru": "Жертва: можно сжечь % текущей Ци (или уровень улучшения) ради огромного временного/постоянного множителя. Демонический голод: без жертв производство падает до 70%.",
+      "params": {
+        "idle_penalty_mult": 0.70,
+        "sacrifice_qi_fraction": 0.5,
+        "sacrifice_burst_mult": 8.0,
+        "sacrifice_burst_sec": 30,
+        "permanent_gain_per_sacrifice": 0.01,
+        "permanent_gain_cap": 2.0
+      },
+      "level_currency": "demon_blood",
+      "stage": 3
+    },
+    {
+      "id": "immortal",
+      "name_en": "Immortal Path",
+      "name_ru": "Путь Бессмертного",
+      "mechanic": "compound_offline",
+      "desc_ru": "Медленное сложное процентирование: каждый час активного/оффлайн даёт compounding_bonus. Лучший оффлайн (до 100% эффективности). Слабее в коротких сессиях.",
+      "params": {
+        "compound_rate_per_hour": 0.02,
+        "offline_efficiency_bonus": 0.25,
+        "offline_efficiency_cap": 1.0,
+        "active_play_mult": 0.90
+      },
+      "level_currency": "longevity_dew",
+      "stage": 3
+    },
+    {
+      "id": "world_devourer",
+      "name_en": "World Devourer Path",
+      "name_ru": "Путь Пожирателя Миров",
+      "mechanic": "absorb_resources",
+      "desc_ru": "Поглощает вторичные ресурсы (Сущность, Осколки, Пыль) и конвертирует в Ци с курсом. Чем больше разных ресурсов поглощено за забег — тем выше Devour Mult. Стимулирует multi-resource play.",
+      "params": {
+        "absorb_ratio": 0.5,
+        "devour_mult_per_resource_type": 0.15,
+        "devour_mult_cap": 3.0,
+        "qi_convert_bonus": 1.0
+      },
+      "level_currency": "devour_cores",
+      "stage": 3
+    },
+    {
+      "id": "time_lord",
+      "name_en": "Time Lord Path",
+      "name_ru": "Путь Владыки Времени",
+      "mechanic": "time_manipulation",
+      "desc_ru": "Накапливает Chrono Charge оффлайн и активно. Можно потратить на time-skip (симуляция N минут мгновенно) или на ускорение x2–x5. Единственный путь с ручным «перемотать время» — но не кликер ресурсов.",
+      "params": {
+        "charge_per_offline_hour": 1.0,
+        "charge_per_active_hour": 0.5,
+        "skip_minutes_per_charge": 10,
+        "speed_mult_cost": 2.0,
+        "speed_mult_value": 2.0,
+        "speed_mult_duration_sec": 120,
+        "max_skip_per_day_minutes": 180
+      },
+      "level_currency": "chrono_sand",
+      "stage": 3
+    }
+  ]
+}
