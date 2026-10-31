@@ -66,6 +66,22 @@ static func flat(bg: Color, border: Color, radius: int, border_w: int) -> StyleB
 	return box
 
 
+static func path_color(path_id: String) -> Color:
+	match path_id:
+		"heavenly_sword":
+			return Color("F0C75E")
+		"demon_emperor":
+			return Color("E85D5D")
+		"immortal":
+			return Color("3DDBA0")
+		"world_devourer":
+			return Color("C084FC")
+		"time_lord":
+			return Color("5CE1FF")
+		_:
+			return COL_DAO
+
+
 static func style_label(label: Label, font: Font, size: int, color: Color) -> void:
 	label.add_theme_font_override("font", font)
 	label.add_theme_font_size_override("font_size", size)

@@ -40,6 +40,10 @@
       "Sp",
       "Oc"
     ],
-    "scientific_from_exponent": 33
-  }
+    "scientific_from_exponent": 33,
+    "notation_max_exponent": 1000000
+  },
+  "magnitude_cap": 1e300,
+  "path_pace_spread": 0.25,
+  "ascension_max_sec": 172800
 }

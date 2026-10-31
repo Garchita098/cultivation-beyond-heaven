@@ -1,15 +1,15 @@
 class_name EconomyCore
 extends RefCounted
-## Direct port of tools/sim/economy.py (docs/FORMULAS.md). Stage cap is 2.
+## Direct port of tools/sim/economy.py (docs/FORMULAS.md). Stage cap is 3.
 
-const STAGE_CAP := 2
+const STAGE_CAP := 3
 const HOOK_EFFECTS := {
 	"sacrifice_efficiency": true,
 	"absorb_rate": true,
 	"time_skip_charge": true,
 	"rule_slot": true,
 }
-const AUTO_ORDER_MAX := 4
+const AUTO_ORDER_MAX := 7
 
 
 static func cbh_unit(n: int) -> float:
@@ -56,7 +56,7 @@ static func production_state(data: EconData, state: SimState) -> float:
 	var rank_mult := float(data.rank_at(state.rank_index)["prod_mult"])
 	var perm := float(data.rebirth["tiers"][0]["perm_mult_per_karma"])
 	var karma_mult := 1.0 + state.karma_shards * perm
-	return (
+	var prod := (
 		base
 		* (1.0 + flat_sum)
 		* (1.0 + mult_add)
@@ -67,6 +67,7 @@ static func production_state(data: EconData, state: SimState) -> float:
 		* float(amods["mult"])
 		* speed_mult
 	)
+	return Stage3Rules.adjust_prod(data, state, prod, {"flat_sum": flat_sum, "mult_add": mult_add, "speed_mult": speed_mult})
 
 
 static func upgrade_cost(data: EconData, levels: Dictionary, uid: String) -> float:
@@ -82,8 +83,10 @@ static func upgrade_cost_bn(data: EconData, levels: Dictionary, uid: String) -> 
 static func upgrade_cost_state(data: EconData, state: SimState, uid: String) -> float:
 	var u: Dictionary = data.upgrades[uid]
 	var lvl := int(state.upgrade_levels.get(uid, 0))
+	var reduction := cost_reduction(data, state)
 	var raw := float(u["base_cost"]) * pow(float(u["growth"]), float(lvl))
-	return raw * (1.0 - cost_reduction(data, state))
+	var cost := raw * (1.0 - reduction)
+	return Stage3Rules.adjust_cost(data, state, cost, float(u["base_cost"]), float(u["growth"]), lvl, reduction)
 
 
 static func cost_reduction(data: EconData, state: SimState) -> float:
@@ -116,6 +119,7 @@ static func offline_bonus(data: EconData, state: SimState) -> float:
 	bonus += float(item["value"]) * float(mini(lvl, mx))
 	bonus += float(talent_mods(data, state)["offline"])
 	bonus += float(artifact_mods(data, state)["offline"])
+	bonus += Stage3Rules.extra_offline_bonus(data, state)
 	return bonus
 
 
@@ -146,7 +150,8 @@ static func breakthrough_cost(data: EconData, state: SimState) -> float:
 	if nxt.is_empty():
 		return -1.0
 	var disc: float = float(artifact_mods(data, state)["discount"])
-	return float(nxt["cost_qi"]) * (1.0 - disc)
+	var cost := float(nxt["cost_qi"]) * (1.0 - disc)
+	return Stage3Rules.adjust_breakthrough(data, state, cost)
 
 
 static func unlocked_upgrades(data: EconData, state: SimState) -> Array:
@@ -174,8 +179,15 @@ static func buy(data: EconData, state: SimState, uid: String) -> bool:
 	if not can_buy(data, state, uid):
 		return false
 	var cost := upgrade_cost_state(data, state, uid)
+	var u: Dictionary = data.upgrades[uid]
 	state.qi -= cost
 	state.upgrade_levels[uid] = int(state.upgrade_levels.get(uid, 0)) + 1
+	var extra := Stage3Rules.bonus_levels(data, state, int(state.upgrade_levels[uid]))
+	if extra > 0:
+		var mx := int(u.get("max_level", 0))
+		var nxt_lvl := int(state.upgrade_levels[uid]) + extra
+		if mx <= 0 or nxt_lvl <= mx:
+			state.upgrade_levels[uid] = nxt_lvl
 	state.last_purchase_or_unlock_time = state.time_sec
 	var key := "upgrade:%s:L%d" % [uid, int(state.upgrade_levels[uid])]
 	_mark(state, key)
@@ -194,7 +206,11 @@ static func breakthrough(data: EconData, state: SimState) -> bool:
 	if not can_breakthrough(data, state):
 		return false
 	var nxt := next_rank_state(data, state)
-	state.qi -= breakthrough_cost(data, state)
+	var cost := breakthrough_cost(data, state)
+	var spent := Stage3Rules.bank_spent_on_breakthrough(data, state)
+	if spent > 0.0:
+		state.banked_sec = maxf(0.0, state.banked_sec - spent)
+	state.qi -= cost
 	state.rank_index += 1
 	state.highest_rank_index = maxi(state.highest_rank_index, state.rank_index)
 	state.last_purchase_or_unlock_time = state.time_sec
@@ -533,7 +549,7 @@ static func artifact_mods(data: EconData, state: SimState, equipped: Array = [])
 			offline += ev
 		elif et == "breakthrough_discount":
 			discount += ev
-		elif HOOK_EFFECTS.has(et):
+		elif HOOK_EFFECTS.has(et) and not Stage3Rules.hook_consumed(state, et):
 			mult *= 1.0 + ev * hook_frac
 	return {
 		"mult": mult,
@@ -779,6 +795,7 @@ static func do_rebirth(data: EconData, state: SimState) -> bool:
 	state.rank_index = 0
 	_apply_start_rank(data, state)
 	state.last_purchase_or_unlock_time = state.time_sec
+	Stage3Rules.on_rebirth(data, state)
 	_mark(state, "rebirth:%d" % state.rebirth_count)
 	_mark(state, "first_rebirth")
 	return true
@@ -809,6 +826,10 @@ static func auto_available(data: EconData, state: SimState, aid: String) -> bool
 		return state.rank_index >= need or state.highest_rank_index >= need
 	if str(spec["type"]) == "rebirths":
 		return state.rebirth_count >= int(spec["min"])
+	if str(spec["type"]) == "path_level":
+		return Stage3Rules.path_level(state) >= int(spec["min"])
+	if str(spec["type"]) == "ascension":
+		return state.ascension_count >= int(spec["min"])
 	return false
 
 
@@ -848,6 +869,7 @@ static func automation_act(data: EconData, state: SimState) -> void:
 			act_cheapest(data, state, false)
 		else:
 			act_best_roi(data, state, false)
+	Stage3Rules.auto_systems(data, state)
 
 
 static func _roi(data: EconData, state: SimState, uid: String) -> float:
@@ -1103,16 +1125,16 @@ static func play_rebirth_policy(data: EconData, state: SimState, style: String, 
 
 static func offline_needs_chunks(data: EconData, state: SimState) -> bool:
 	sync_automation_unlocks(data, state)
-	return auto_on(data, state, "auto_buy_upgrades") or auto_on(data, state, "auto_breakthrough") or auto_on(data, state, "auto_rebirth")
+	return auto_on(data, state, "auto_buy_upgrades") or auto_on(data, state, "auto_breakthrough") or auto_on(data, state, "auto_rebirth") or Stage3Rules.needs_chunks(data, state)
 
 
 static func offline_eff(data: EconData, state: SimState) -> float:
-	return minf(1.0, float(data.balance["offline"]["efficiency"]) + offline_bonus(data, state))
+	return minf(Stage3Rules.offline_cap(data, state), float(data.balance["offline"]["efficiency"]) + offline_bonus(data, state))
 
 
 static func apply_offline(data: EconData, state: SimState, absent_sec: float) -> Dictionary:
 	var off: Dictionary = data.balance["offline"]
-	var soft := float(off["soft_cap_hours"]) * 3600.0
+	var soft := (float(off["soft_cap_hours"]) + Stage3Rules.soft_cap_bonus_hours(data, state)) * 3600.0
 	var hard := float(off["hard_cap_hours"]) * 3600.0
 	var raw := float(absent_sec)
 	var absent := minf(maxf(0.0, raw), hard)
@@ -1172,6 +1194,13 @@ static func _offline_slice(data: EconData, state: SimState, dt: float, half: boo
 	var gained := production_state(data, state) * dt * eff
 	state.qi += gained
 	state.lifetime_qi += gained
+	var banked := Stage3Rules.maybe_bank_offline(data, state, gained, dt)
+	if banked > 0.0:
+		state.qi -= banked
+		state.lifetime_qi -= banked
+		gained -= banked
+	Stage3Rules.advance(data, state, dt, gained, true)
+	Stage3Rules.clamp_state(data, state)
 	return gained
 
 
@@ -1181,6 +1210,8 @@ static func tick(data: EconData, state: SimState, dt: float) -> void:
 	state.qi += gained
 	state.lifetime_qi += gained
 	state.time_sec += dt
+	Stage3Rules.advance(data, state, dt, gained, false)
+	Stage3Rules.clamp_state(data, state)
 
 
 static func _mark(state: SimState, key: String) -> void:
