@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "unlock_rank": "qi_early",
+  "max_equipped": 3,
+  "rarities": [
+    {"id": "common", "name_ru": "Обычный", "weight": 50, "mult_range": [0.02, 0.05], "color": "#9E9E9E"},
+    {"id": "uncommon", "name_ru": "Необычный", "weight": 25, "mult_range": [0.05, 0.10], "color": "#4CAF50"},
+    {"id": "rare", "name_ru": "Редкий", "weight": 15, "mult_range": [0.10, 0.18], "color": "#2196F3"},
+    {"id": "epic", "name_ru": "Эпический", "weight": 7, "mult_range": [0.18, 0.30], "color": "#9C27B0"},
+    {"id": "legendary", "name_ru": "Легендарный", "weight": 2.5, "mult_range": [0.30, 0.50], "color": "#FF9800"},
+    {"id": "mythic", "name_ru": "Мифический", "weight": 0.5, "mult_range": [0.50, 1.00], "color": "#F44336"}
+  ],
+  "roots": [
+    {"id": "fire_root", "name_ru": "Огненный Корень", "element": "fire", "effect_type": "mult_prod", "synergy_with": ["sword_intent"], "synergy_bonus": 0.15},
+    {"id": "water_root", "name_ru": "Водный Корень", "element": "water", "effect_type": "offline_bonus", "synergy_with": ["immortal_body"], "synergy_bonus": 0.20},
+    {"id": "wood_root", "name_ru": "Деревянный Корень", "element": "wood", "effect_type": "flat_prod", "synergy_with": ["devour_seed"], "synergy_bonus": 0.10},
+    {"id": "metal_root", "name_ru": "Металлический Корень", "element": "metal", "effect_type": "cost_reduction", "synergy_with": ["sword_intent"], "synergy_bonus": 0.12},
+    {"id": "earth_root", "name_ru": "Земляной Корень", "element": "earth", "effect_type": "mult_prod", "synergy_with": ["demon_heart"], "synergy_bonus": 0.15},
+    {"id": "thunder_root", "name_ru": "Громовой Корень", "element": "thunder", "effect_type": "speed_mult", "synergy_with": ["time_fragment"], "synergy_bonus": 0.25},
+    {"id": "void_root", "name_ru": "Пустотный Корень", "element": "void", "effect_type": "mult_prod", "synergy_with": ["devour_seed", "time_fragment"], "synergy_bonus": 0.30}
+  ],
+  "upgrade": {
+    "currency": "karma_shards",
+    "cost_base": 2,
+    "cost_growth": 1.6,
+    "effect_gain_per_level": 0.02,
+    "max_level": 20
+  }
+}

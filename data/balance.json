@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "base_qi_per_sec": 1.0,
+  "tick_seconds": 0.25,
+  "offline": {
+    "efficiency": 0.75,
+    "soft_cap_hours": 8,
+    "hard_cap_hours": 24,
+    "chunk_seconds": 60
+  },
+  "walls": {
+    "early_game_max_idle_sec": 600,
+    "mid_game_max_idle_sec": 1800,
+    "late_game_max_idle_sec": 3600,
+    "early_until_rank_index": 8,
+    "mid_until_rank_index": 20,
+    "meaningful_unlock_min_mult_gain": 1.05
+  },
+  "pacing_targets_sec": {
+    "first_upgrade": 15,
+    "first_breakthrough": 300,
+    "first_rebirth": 3900,
+    "stage1_end_active": 5400,
+    "first_rebirth_min": 1800,
+    "first_breakthrough_min": 60
+  },
+  "bignum": {
+    "suffixes": [
+      "",
+      "K",
+      "M",
+      "B",
+      "T",
+      "Qa",
+      "Qi",
+      "Sx",
+      "Sp",
+      "Oc"
+    ],
+    "scientific_from_exponent": 33
+  }
+}

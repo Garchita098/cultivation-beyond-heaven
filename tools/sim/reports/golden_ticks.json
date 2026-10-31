@@ -1,0 +1,987 @@
+{
+  "bot": "rebirth_early",
+  "milestones": {
+    "first_upgrade": 6.0,
+    "rank:mortal_mid": 87.0,
+    "first_breakthrough": 87.0,
+    "rank:mortal_late": 176.5,
+    "rank:mortal_peak": 323.0,
+    "rank:qi_early": 488.5,
+    "rank:qi_mid": 637.0,
+    "rank:qi_late": 883.5,
+    "rank:qi_peak": 1114.0,
+    "rank:foundation_early": 1336.0,
+    "rank:foundation_mid": 1538.5,
+    "rank:foundation_late": 1803.0,
+    "rank:foundation_peak": 2164.0,
+    "rank:core_early": 2514.0,
+    "rank:core_mid": 2812.5,
+    "rank:core_late": 3147.0,
+    "rank:core_peak": 3542.0,
+    "rebirth_unlocked": 3542.0,
+    "rebirth:1": 3542.5,
+    "first_rebirth": 3542.5
+  },
+  "ticks_every_30s": [
+    {
+      "t": 0.25,
+      "qi": 0.25,
+      "prod": 1.0,
+      "rank_index": 0,
+      "rank_id": "mortal_early",
+      "rebirths": 0
+    },
+    {
+      "t": 30.0,
+      "qi": 5.099204781250018,
+      "prod": 4.5,
+      "rank_index": 0,
+      "rank_id": "mortal_early",
+      "rebirths": 0
+    },
+    {
+      "t": 60.0,
+      "qi": 120.17769057168364,
+      "prod": 6.0,
+      "rank_index": 0,
+      "rank_id": "mortal_early",
+      "rebirths": 0
+    },
+    {
+      "t": 90.0,
+      "qi": 5.279344157436185,
+      "prod": 9.75,
+      "rank_index": 1,
+      "rank_id": "mortal_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 120.0,
+      "qi": 149.94253483350698,
+      "prod": 16.575000000000003,
+      "rank_index": 1,
+      "rank_id": "mortal_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 150.0,
+      "qi": 647.1925348335064,
+      "prod": 16.575000000000003,
+      "rank_index": 1,
+      "rank_id": "mortal_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 180.0,
+      "qi": 42.475855789907925,
+      "prod": 33.0,
+      "rank_index": 2,
+      "rank_id": "mortal_late",
+      "rebirths": 0
+    },
+    {
+      "t": 210.0,
+      "qi": 980.4719341583954,
+      "prod": 36.96000000000001,
+      "rank_index": 2,
+      "rank_id": "mortal_late",
+      "rebirths": 0
+    },
+    {
+      "t": 240.0,
+      "qi": 2089.271934158395,
+      "prod": 36.96000000000001,
+      "rank_index": 2,
+      "rank_id": "mortal_late",
+      "rebirths": 0
+    },
+    {
+      "t": 270.0,
+      "qi": 3022.80186428213,
+      "prod": 41.14000000000001,
+      "rank_index": 2,
+      "rank_id": "mortal_late",
+      "rebirths": 0
+    },
+    {
+      "t": 300.0,
+      "qi": 3010.546105569647,
+      "prod": 66.52800000000002,
+      "rank_index": 2,
+      "rank_id": "mortal_late",
+      "rebirths": 0
+    },
+    {
+      "t": 330.0,
+      "qi": 866.7375389302708,
+      "prod": 118.27200000000002,
+      "rank_index": 3,
+      "rank_id": "mortal_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 360.0,
+      "qi": 4414.897538930287,
+      "prod": 118.27200000000002,
+      "rank_index": 3,
+      "rank_id": "mortal_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 390.0,
+      "qi": 7963.057538930312,
+      "prod": 118.27200000000002,
+      "rank_index": 3,
+      "rank_id": "mortal_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 420.0,
+      "qi": 10341.69603084755,
+      "prod": 141.10208,
+      "rank_index": 3,
+      "rank_id": "mortal_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 450.0,
+      "qi": 10684.288562345744,
+      "prod": 206.97600000000003,
+      "rank_index": 3,
+      "rank_id": "mortal_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 480.0,
+      "qi": 10550.694796624022,
+      "prod": 281.72288000000003,
+      "rank_index": 3,
+      "rank_id": "mortal_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 510.0,
+      "qi": 9784.094725009509,
+      "prod": 451.77600000000007,
+      "rank_index": 4,
+      "rank_id": "qi_early",
+      "rebirths": 0
+    },
+    {
+      "t": 540.0,
+      "qi": 23337.37472500945,
+      "prod": 451.77600000000007,
+      "rank_index": 4,
+      "rank_id": "qi_early",
+      "rebirths": 0
+    },
+    {
+      "t": 570.0,
+      "qi": 34777.01828824623,
+      "prod": 481.72800000000007,
+      "rank_index": 4,
+      "rank_id": "qi_early",
+      "rebirths": 0
+    },
+    {
+      "t": 600.0,
+      "qi": 34334.55377061489,
+      "prod": 658.24,
+      "rank_index": 4,
+      "rank_id": "qi_early",
+      "rebirths": 0
+    },
+    {
+      "t": 630.0,
+      "qi": 34490.41273839486,
+      "prod": 812.6299999999999,
+      "rank_index": 4,
+      "rank_id": "qi_early",
+      "rebirths": 0
+    },
+    {
+      "t": 660.0,
+      "qi": 28214.557738394957,
+      "prod": 1218.945,
+      "rank_index": 5,
+      "rank_id": "qi_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 690.0,
+      "qi": 64782.907738395166,
+      "prod": 1218.945,
+      "rank_index": 5,
+      "rank_id": "qi_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 720.0,
+      "qi": 101351.25773839538,
+      "prod": 1218.945,
+      "rank_index": 5,
+      "rank_id": "qi_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 750.0,
+      "qi": 137919.60773839525,
+      "prod": 1218.945,
+      "rank_index": 5,
+      "rank_id": "qi_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 780.0,
+      "qi": 136488.76915056974,
+      "prod": 1576.2,
+      "rank_index": 5,
+      "rank_id": "qi_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 810.0,
+      "qi": 136592.44276659674,
+      "prod": 1894.167,
+      "rank_index": 5,
+      "rank_id": "qi_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 840.0,
+      "qi": 141584.44851373162,
+      "prod": 2168.5950000000003,
+      "rank_index": 5,
+      "rank_id": "qi_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 870.0,
+      "qi": 138954.32874000657,
+      "prod": 2460.8610000000003,
+      "rank_index": 5,
+      "rank_id": "qi_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 900.0,
+      "qi": 14739.452724498442,
+      "prod": 5198.450400000001,
+      "rank_index": 6,
+      "rank_id": "qi_late",
+      "rebirths": 0
+    },
+    {
+      "t": 930.0,
+      "qi": 139268.73752449855,
+      "prod": 6738.732000000002,
+      "rank_index": 6,
+      "rank_id": "qi_late",
+      "rebirths": 0
+    },
+    {
+      "t": 960.0,
+      "qi": 341430.69752449874,
+      "prod": 6738.732000000002,
+      "rank_index": 6,
+      "rank_id": "qi_late",
+      "rebirths": 0
+    },
+    {
+      "t": 990.0,
+      "qi": 543592.6575245004,
+      "prod": 6738.732000000002,
+      "rank_index": 6,
+      "rank_id": "qi_late",
+      "rebirths": 0
+    },
+    {
+      "t": 1020.0,
+      "qi": 556646.5277496945,
+      "prod": 8221.910400000002,
+      "rank_index": 6,
+      "rank_id": "qi_late",
+      "rebirths": 0
+    },
+    {
+      "t": 1050.0,
+      "qi": 568944.5367312172,
+      "prod": 9415.375200000002,
+      "rank_index": 6,
+      "rank_id": "qi_late",
+      "rebirths": 0
+    },
+    {
+      "t": 1080.0,
+      "qi": 578389.768516757,
+      "prod": 10460.867999999999,
+      "rank_index": 6,
+      "rank_id": "qi_late",
+      "rebirths": 0
+    },
+    {
+      "t": 1110.0,
+      "qi": 597989.9136440037,
+      "prod": 13482.1104,
+      "rank_index": 6,
+      "rank_id": "qi_late",
+      "rebirths": 0
+    },
+    {
+      "t": 1140.0,
+      "qi": 405946.29284400394,
+      "prod": 26382.2592,
+      "rank_index": 7,
+      "rank_id": "qi_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 1170.0,
+      "qi": 1197414.068844009,
+      "prod": 26382.2592,
+      "rank_index": 7,
+      "rank_id": "qi_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 1200.0,
+      "qi": 1988881.844844015,
+      "prod": 26382.2592,
+      "rank_index": 7,
+      "rank_id": "qi_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 1230.0,
+      "qi": 2184401.5781851104,
+      "prod": 29692.656000000003,
+      "rank_index": 7,
+      "rank_id": "qi_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 1260.0,
+      "qi": 2192698.6907160357,
+      "prod": 32840.9088,
+      "rank_index": 7,
+      "rank_id": "qi_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 1290.0,
+      "qi": 2153772.3113104454,
+      "prod": 39492.182400000005,
+      "rank_index": 7,
+      "rank_id": "qi_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 1320.0,
+      "qi": 2160671.004647135,
+      "prod": 45912.608,
+      "rank_index": 7,
+      "rank_id": "qi_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 1350.0,
+      "qi": 612946.7523307791,
+      "prod": 88673.52,
+      "rank_index": 8,
+      "rank_id": "foundation_early",
+      "rebirths": 0
+    },
+    {
+      "t": 1380.0,
+      "qi": 3273152.352330768,
+      "prod": 88673.52,
+      "rank_index": 8,
+      "rank_id": "foundation_early",
+      "rebirths": 0
+    },
+    {
+      "t": 1410.0,
+      "qi": 5933357.952330755,
+      "prod": 88673.52,
+      "rank_index": 8,
+      "rank_id": "foundation_early",
+      "rebirths": 0
+    },
+    {
+      "t": 1440.0,
+      "qi": 6966894.143248159,
+      "prod": 95079.59999999999,
+      "rank_index": 8,
+      "rank_id": "foundation_early",
+      "rebirths": 0
+    },
+    {
+      "t": 1470.0,
+      "qi": 7020407.086052859,
+      "prod": 108687.39,
+      "rank_index": 8,
+      "rank_id": "foundation_early",
+      "rebirths": 0
+    },
+    {
+      "t": 1500.0,
+      "qi": 6951480.297262152,
+      "prod": 124139.25,
+      "rank_index": 8,
+      "rank_id": "foundation_early",
+      "rebirths": 0
+    },
+    {
+      "t": 1530.0,
+      "qi": 6861008.550937062,
+      "prod": 139628.82,
+      "rank_index": 8,
+      "rank_id": "foundation_early",
+      "rebirths": 0
+    },
+    {
+      "t": 1560.0,
+      "qi": 4610923.358537059,
+      "prod": 212235.8064,
+      "rank_index": 9,
+      "rank_id": "foundation_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 1590.0,
+      "qi": 10977997.55053709,
+      "prod": 212235.8064,
+      "rank_index": 9,
+      "rank_id": "foundation_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 1620.0,
+      "qi": 17345071.742537122,
+      "prod": 212235.8064,
+      "rank_index": 9,
+      "rank_id": "foundation_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 1650.0,
+      "qi": 21717013.16671961,
+      "prod": 216428.86319999996,
+      "rank_index": 9,
+      "rank_id": "foundation_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 1680.0,
+      "qi": 21420006.82101249,
+      "prod": 258384.92160000003,
+      "rank_index": 9,
+      "rank_id": "foundation_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 1710.0,
+      "qi": 21976576.026417978,
+      "prod": 275102.33,
+      "rank_index": 9,
+      "rank_id": "foundation_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 1740.0,
+      "qi": 21606981.684320096,
+      "prod": 304288.61760000006,
+      "rank_index": 9,
+      "rank_id": "foundation_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 1770.0,
+      "qi": 21576623.113283042,
+      "prod": 331900.32959999994,
+      "rank_index": 9,
+      "rank_id": "foundation_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 1800.0,
+      "qi": 24091369.25796296,
+      "prod": 340428.0312,
+      "rank_index": 9,
+      "rank_id": "foundation_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 1830.0,
+      "qi": 14141871.689962998,
+      "prod": 519600.6792000001,
+      "rank_index": 10,
+      "rank_id": "foundation_late",
+      "rebirths": 0
+    },
+    {
+      "t": 1860.0,
+      "qi": 29729892.065962844,
+      "prod": 519600.6792000001,
+      "rank_index": 10,
+      "rank_id": "foundation_late",
+      "rebirths": 0
+    },
+    {
+      "t": 1890.0,
+      "qi": 45317912.44196265,
+      "prod": 519600.6792000001,
+      "rank_index": 10,
+      "rank_id": "foundation_late",
+      "rebirths": 0
+    },
+    {
+      "t": 1920.0,
+      "qi": 60905932.81796246,
+      "prod": 519600.6792000001,
+      "rank_index": 10,
+      "rank_id": "foundation_late",
+      "rebirths": 0
+    },
+    {
+      "t": 1950.0,
+      "qi": 68760940.55466133,
+      "prod": 561764.104,
+      "rank_index": 10,
+      "rank_id": "foundation_late",
+      "rebirths": 0
+    },
+    {
+      "t": 1980.0,
+      "qi": 69074113.63120984,
+      "prod": 609386.9759999999,
+      "rank_index": 10,
+      "rank_id": "foundation_late",
+      "rebirths": 0
+    },
+    {
+      "t": 2010.0,
+      "qi": 70091337.42427412,
+      "prod": 664214.0512000001,
+      "rank_index": 10,
+      "rank_id": "foundation_late",
+      "rebirths": 0
+    },
+    {
+      "t": 2040.0,
+      "qi": 69126200.6520262,
+      "prod": 713766.1888,
+      "rank_index": 10,
+      "rank_id": "foundation_late",
+      "rebirths": 0
+    },
+    {
+      "t": 2070.0,
+      "qi": 70583743.73722005,
+      "prod": 743082.3467999999,
+      "rank_index": 10,
+      "rank_id": "foundation_late",
+      "rebirths": 0
+    },
+    {
+      "t": 2100.0,
+      "qi": 68559146.45395161,
+      "prod": 792339.7632,
+      "rank_index": 10,
+      "rank_id": "foundation_late",
+      "rebirths": 0
+    },
+    {
+      "t": 2130.0,
+      "qi": 70488664.78701183,
+      "prod": 818565.4840000002,
+      "rank_index": 10,
+      "rank_id": "foundation_late",
+      "rebirths": 0
+    },
+    {
+      "t": 2160.0,
+      "qi": 76997040.56364332,
+      "prod": 828888.2544000002,
+      "rank_index": 10,
+      "rank_id": "foundation_late",
+      "rebirths": 0
+    },
+    {
+      "t": 2190.0,
+      "qi": 33753947.29324339,
+      "prod": 1286205.9120000005,
+      "rank_index": 11,
+      "rank_id": "foundation_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 2220.0,
+      "qi": 72340124.65324341,
+      "prod": 1286205.9120000005,
+      "rank_index": 11,
+      "rank_id": "foundation_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 2250.0,
+      "qi": 110926302.01324342,
+      "prod": 1286205.9120000005,
+      "rank_index": 11,
+      "rank_id": "foundation_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 2280.0,
+      "qi": 149512479.37324274,
+      "prod": 1286205.9120000005,
+      "rank_index": 11,
+      "rank_id": "foundation_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 2310.0,
+      "qi": 175440635.61246353,
+      "prod": 1348983.7200000002,
+      "rank_index": 11,
+      "rank_id": "foundation_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 2340.0,
+      "qi": 171633181.69670147,
+      "prod": 1452433.6800000004,
+      "rank_index": 11,
+      "rank_id": "foundation_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 2370.0,
+      "qi": 171941532.87434763,
+      "prod": 1492968.0960000001,
+      "rank_index": 11,
+      "rank_id": "foundation_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 2400.0,
+      "qi": 177147787.88702452,
+      "prod": 1583488.4400000002,
+      "rank_index": 11,
+      "rank_id": "foundation_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 2430.0,
+      "qi": 180711979.4118921,
+      "prod": 1618958.8800000004,
+      "rank_index": 11,
+      "rank_id": "foundation_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 2460.0,
+      "qi": 179603725.2240871,
+      "prod": 1695103.2000000002,
+      "rank_index": 11,
+      "rank_id": "foundation_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 2490.0,
+      "qi": 173824019.2262292,
+      "prod": 1730380.32,
+      "rank_index": 11,
+      "rank_id": "foundation_peak",
+      "rebirths": 0
+    },
+    {
+      "t": 2520.0,
+      "qi": 17816287.864041936,
+      "prod": 2932033.32,
+      "rank_index": 12,
+      "rank_id": "core_early",
+      "rebirths": 0
+    },
+    {
+      "t": 2550.0,
+      "qi": 105777287.46404172,
+      "prod": 2932033.32,
+      "rank_index": 12,
+      "rank_id": "core_early",
+      "rebirths": 0
+    },
+    {
+      "t": 2580.0,
+      "qi": 193738287.06404272,
+      "prod": 2932033.32,
+      "rank_index": 12,
+      "rank_id": "core_early",
+      "rebirths": 0
+    },
+    {
+      "t": 2610.0,
+      "qi": 281699286.6640437,
+      "prod": 2932033.32,
+      "rank_index": 12,
+      "rank_id": "core_early",
+      "rebirths": 0
+    },
+    {
+      "t": 2640.0,
+      "qi": 353955273.10525435,
+      "prod": 3031424.28,
+      "rank_index": 12,
+      "rank_id": "core_early",
+      "rebirths": 0
+    },
+    {
+      "t": 2670.0,
+      "qi": 340987023.45936275,
+      "prod": 3113583.96,
+      "rank_index": 12,
+      "rank_id": "core_early",
+      "rebirths": 0
+    },
+    {
+      "t": 2700.0,
+      "qi": 353791192.7758655,
+      "prod": 3299119.2,
+      "rank_index": 12,
+      "rank_id": "core_early",
+      "rebirths": 0
+    },
+    {
+      "t": 2730.0,
+      "qi": 362218102.48792875,
+      "prod": 3366999.8999999994,
+      "rank_index": 12,
+      "rank_id": "core_early",
+      "rebirths": 0
+    },
+    {
+      "t": 2760.0,
+      "qi": 362549124.9137209,
+      "prod": 3514358.4,
+      "rank_index": 12,
+      "rank_id": "core_early",
+      "rebirths": 0
+    },
+    {
+      "t": 2790.0,
+      "qi": 350102392.20349306,
+      "prod": 3620106.0,
+      "rank_index": 12,
+      "rank_id": "core_early",
+      "rebirths": 0
+    },
+    {
+      "t": 2820.0,
+      "qi": 46851202.77751869,
+      "prod": 6058237.5,
+      "rank_index": 13,
+      "rank_id": "core_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 2850.0,
+      "qi": 228598327.7775187,
+      "prod": 6058237.5,
+      "rank_index": 13,
+      "rank_id": "core_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 2880.0,
+      "qi": 410345452.7775187,
+      "prod": 6058237.5,
+      "rank_index": 13,
+      "rank_id": "core_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 2910.0,
+      "qi": 592092577.7775187,
+      "prod": 6058237.5,
+      "rank_index": 13,
+      "rank_id": "core_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 2940.0,
+      "qi": 773839702.7775187,
+      "prod": 6058237.5,
+      "rank_index": 13,
+      "rank_id": "core_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 2970.0,
+      "qi": 787726541.462815,
+      "prod": 6365992.5,
+      "rank_index": 13,
+      "rank_id": "core_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 3000.0,
+      "qi": 784214703.7859651,
+      "prod": 6733440.0,
+      "rank_index": 13,
+      "rank_id": "core_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 3030.0,
+      "qi": 806609693.7093815,
+      "prod": 6848512.0,
+      "rank_index": 13,
+      "rank_id": "core_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 3060.0,
+      "qi": 813349945.8319992,
+      "prod": 7122192.0,
+      "rank_index": 13,
+      "rank_id": "core_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 3090.0,
+      "qi": 795314048.7208774,
+      "prod": 7325922.5,
+      "rank_index": 13,
+      "rank_id": "core_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 3120.0,
+      "qi": 827911211.785429,
+      "prod": 7601879.999999999,
+      "rank_index": 13,
+      "rank_id": "core_mid",
+      "rebirths": 0
+    },
+    {
+      "t": 3150.0,
+      "qi": 38761709.83271693,
+      "prod": 12843689.04,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3180.0,
+      "qi": 424072381.03271616,
+      "prod": 12843689.04,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3210.0,
+      "qi": 809383052.232715,
+      "prod": 12843689.04,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3240.0,
+      "qi": 1194693723.432714,
+      "prod": 12843689.04,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3270.0,
+      "qi": 1580004394.6327128,
+      "prod": 12843689.04,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3300.0,
+      "qi": 1889779714.9623508,
+      "prod": 12892119.239999998,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3330.0,
+      "qi": 1884477305.3861384,
+      "prod": 13479560.639999999,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3360.0,
+      "qi": 1913046479.6095645,
+      "prod": 13976966.639999999,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3390.0,
+      "qi": 1923996326.2827735,
+      "prod": 14196742.560000002,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3420.0,
+      "qi": 1987922402.861285,
+      "prod": 14653990.260000004,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3450.0,
+      "qi": 1914889882.1999166,
+      "prod": 14879744.880000003,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3480.0,
+      "qi": 1909852113.8067253,
+      "prod": 15037440.6,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3510.0,
+      "qi": 1879368292.120726,
+      "prod": 15562627.08,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3540.0,
+      "qi": 2171163842.696905,
+      "prod": 15578362.8,
+      "rank_index": 14,
+      "rank_id": "core_late",
+      "rebirths": 0
+    },
+    {
+      "t": 3570.0,
+      "qi": 15.352690571683645,
+      "prod": 9.3,
+      "rank_index": 0,
+      "rank_id": "mortal_early",
+      "rebirths": 1
+    }
+  ]
+}

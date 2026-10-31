@@ -1,0 +1,174 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  economy-sim:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Golden ticks still match the simulator
+        run: python3 tools/sim/check_golden.py
+      - name: Run economy bots against data/
+        run: python3 tools/sim/run_sim.py
+
+  godot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: System packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            unzip curl ca-certificates openjdk-17-jdk-headless \
+            xvfb libgl1-mesa-dri libgl1 libx11-6 libxcursor1 libxinerama1 \
+            libxi6 libxrandr2 libxext6 libxrender1 libfontconfig1 \
+            mesa-vulkan-drivers
+
+      - name: Cache Godot
+        id: cache-godot
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ runner.temp }}/godot-install
+            ${{ runner.tool_cache }}/godot-templates
+          key: godot-4.7.2-stable-linux
+
+      - name: Install Godot 4.7.2
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/godot-install" "$HOME/.local/share/godot/export_templates/4.7.2.stable"
+          if [ ! -x "$RUNNER_TEMP/godot-install/godot4" ]; then
+            curl -fsSL -o /tmp/godot.zip -L "https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip"
+            unzip -q /tmp/godot.zip -d /tmp/godot-bin
+            install -m 755 /tmp/godot-bin/Godot_v4.7.2-stable_linux.x86_64 "$RUNNER_TEMP/godot-install/godot4"
+          fi
+          if [ ! -f "$HOME/.local/share/godot/export_templates/4.7.2.stable/android_debug.apk" ]; then
+            mkdir -p "${{ runner.tool_cache }}/godot-templates"
+            if [ ! -f "${{ runner.tool_cache }}/godot-templates/templates.tpz" ]; then
+              curl -fL --retry 3 -o "${{ runner.tool_cache }}/godot-templates/templates.tpz" \
+                "https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz"
+            fi
+            rm -rf /tmp/godot-templates
+            unzip -q "${{ runner.tool_cache }}/godot-templates/templates.tpz" -d /tmp/godot-templates
+            cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
+          fi
+          echo "$RUNNER_TEMP/godot-install" >> "$GITHUB_PATH"
+          godot4 --version
+
+      - name: Headless GDScript tests
+        run: |
+          set -euo pipefail
+          CBH_TEST=1 godot4 --headless --path . --import --quit
+          CBH_TEST=1 godot4 --headless --path . -s res://test/run_tests.gd
+
+      - name: UI screenshots
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/shots"
+          Xvfb :99 -screen 0 720x1280x24 -ac +extension GLX +render -noreset &
+          echo $! > /tmp/xvfb.pid
+          sleep 1
+          export DISPLAY=:99
+          export LIBGL_ALWAYS_SOFTWARE=1
+          godot4 --path . --display-driver x11 --audio-driver Dummy --rendering-driver opengl3 \
+            -- --screenshots "$RUNNER_TEMP/shots"
+          kill "$(cat /tmp/xvfb.pid)" || true
+          ls -l "$RUNNER_TEMP/shots"
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-screenshots
+          path: ${{ runner.temp }}/shots/*.png
+          if-no-files-found: error
+
+      - name: Cache Android SDK
+        id: cache-sdk
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/android-sdk
+          key: android-sdk-35-build-tools-35.0.1
+
+      - name: Android SDK
+        run: |
+          set -euo pipefail
+          export ANDROID_HOME="$RUNNER_TEMP/android-sdk"
+          mkdir -p "$ANDROID_HOME"
+          if [ ! -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" ]; then
+            curl -fL --retry 3 -o /tmp/cmdtools.zip "https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip"
+            rm -rf /tmp/cmdline-tools
+            unzip -q /tmp/cmdtools.zip -d /tmp/cmdline-tools-src
+            mkdir -p "$ANDROID_HOME/cmdline-tools"
+            mv /tmp/cmdline-tools-src/cmdline-tools "$ANDROID_HOME/cmdline-tools/latest"
+          fi
+          set +o pipefail
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$ANDROID_HOME" \
+            "platform-tools" "build-tools;35.0.1" "platforms;android-35" >/tmp/sdkmanager.log
+          set -o pipefail
+          test -d "$ANDROID_HOME/build-tools/35.0.1"
+          echo "ANDROID_HOME=$ANDROID_HOME" >> "$GITHUB_ENV"
+          JAVA_HOME="$(dirname "$(dirname "$(readlink -f "$(command -v java)")")")"
+          echo "JAVA_HOME=$JAVA_HOME" >> "$GITHUB_ENV"
+
+      - name: Debug keystore and editor settings
+        run: |
+          set -euo pipefail
+          KEYSTORE="$RUNNER_TEMP/debug.keystore"
+          keytool -genkeypair -keystore "$KEYSTORE" -storepass android -keypass android \
+            -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 \
+            -dname "CN=CBH CI, OU=CI, O=CBH, L=NA, ST=NA, C=US"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_PATH=$KEYSTORE" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_USER=androiddebugkey" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD=android" >> "$GITHUB_ENV"
+          export KEYSTORE
+          python3 - << 'PY'
+          import os
+          from pathlib import Path
+          p = Path.home() / ".config/godot/editor_settings-4.7.tres"
+          text = p.read_text() if p.exists() else '[gd_resource type="EditorSettings" format=3]\n\n[resource]\n'
+          updates = {
+              "export/android/android_sdk_path": os.environ["ANDROID_HOME"],
+              "export/android/java_sdk_path": os.environ["JAVA_HOME"],
+              "export/android/debug_keystore": os.environ["KEYSTORE"],
+              "export/android/debug_keystore_user": "androiddebugkey",
+              "export/android/debug_keystore_pass": "android",
+          }
+          lines = text.splitlines()
+          seen = set()
+          out = []
+          for line in lines:
+              key = line.split(" = ", 1)[0] if " = " in line else None
+              if key in updates:
+                  out.append('%s = "%s"' % (key, updates[key]))
+                  seen.add(key)
+              else:
+                  out.append(line)
+          for key, val in updates.items():
+              if key not in seen:
+                  out.append('%s = "%s"' % (key, val))
+          p.parent.mkdir(parents=True, exist_ok=True)
+          p.write_text("\n".join(out) + "\n")
+          print("patched", p)
+          PY
+
+      - name: Export debug APK
+        run: |
+          set -euo pipefail
+          mkdir -p build
+          godot4 --headless --path . --export-debug "Android" "build/cbh-debug.apk"
+          ls -lh build/cbh-debug.apk
+          test -s build/cbh-debug.apk
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: cbh-debug-apk
+          path: build/cbh-debug.apk
+          if-no-files-found: error
