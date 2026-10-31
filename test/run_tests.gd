@@ -29,6 +29,9 @@ func _all() -> bool:
 	_test_save_migration()
 	_test_offline_matches_ticks()
 	_test_golden_parity()
+	_test_rebirth_rules()
+	_test_stage2_cases()
+	_test_offline_automation()
 	return _fails.is_empty()
 
 
@@ -175,21 +178,57 @@ func _test_save_migration() -> void:
 	var migrated: Dictionary = save.migrate(original)
 	if int(original["save_version"]) != 1:
 		_fail("migrate mutated caller")
-	elif int(migrated["save_version"]) != 2 or int(migrated["highest_rank_index"]) != 12:
-		_fail("v1->v2 missing highest_rank_index")
+	elif int(migrated["save_version"]) != 3 or int(migrated["highest_rank_index"]) != 12:
+		_fail("v1->current missing highest_rank_index")
 	elif str(migrated["qi"]) != "1.5e10":
 		_fail("v1 qi changed %s" % str(migrated["qi"]))
+	elif typeof(migrated.get("talents_owned")) != TYPE_ARRAY or typeof(migrated.get("shop_levels")) != TYPE_DICTIONARY:
+		_fail("v1->v3 missing stage 2 fields")
 	else:
-		_ok("migrate v1 to v2")
+		_ok("migrate v1 stage-1 save through v3")
 	var again: Dictionary = save.migrate(migrated)
-	if int(again["save_version"]) != 2 or int(again["highest_rank_index"]) != 12:
-		_fail("migrate v2 not idempotent")
+	if int(again["save_version"]) != 3 or int(again["highest_rank_index"]) != 12:
+		_fail("migrate v3 not idempotent")
 	else:
-		_ok("migrate v2 idempotent")
+		_ok("migrate v3 idempotent")
+
+	var stage1 := {
+		"save_version": 2,
+		"timestamp_unix": 50,
+		"qi": "8.5e6",
+		"lifetime_qi": "9e6",
+		"rank_index": 9,
+		"highest_rank_index": 9,
+		"upgrade_levels": {"breath_meditation": 20, "body_tempering": 5},
+		"karma_shards": "0",
+		"rebirth_count": 0,
+		"unlocked": ["upgrades_basic", "spiritual_roots"],
+		"path_id": null,
+		"world_id": "mortal_world",
+		"shop_mult": 1.0,
+		"offline_eff_bonus": 0.0,
+		"starting_qi": "0",
+		"time_sec": 1200.0,
+		"meta": {},
+	}
+	var from_stage1: Dictionary = save.migrate(stage1)
+	var stage1_run := RunState.from_save_dict(from_stage1)
+	if int(from_stage1["save_version"]) != 3:
+		_fail("stage-1 v2 did not become v3")
+	elif not stage1_run.qi.nearly(BigNum.from_save_string("8.5e6")) or stage1_run.rank_index != 9:
+		_fail("stage-1 qi/rank lost")
+	elif int(stage1_run.upgrade_levels.get("breath_meditation", 0)) != 20:
+		_fail("stage-1 upgrades lost")
+	elif not stage1_run.unlocked.has("spiritual_roots") or not stage1_run.talents_owned.is_empty():
+		_fail("stage-1 unlocks or empty talents")
+	elif int(stage1_run.shop_levels.get("karma_prod_1", 0)) != 0:
+		_fail("stage-1 invented shop levels")
+	else:
+		_ok("migrate stage-1 v2 save to v3")
 
 	var legacy: Dictionary = save.migrate({"save_version": 0, "qi": 100, "rank": 1})
 	var legacy_run := RunState.from_save_dict(legacy)
-	if int(legacy["save_version"]) != 2 or not legacy_run.qi.nearly(BigNum.from_float(100.0)):
+	if int(legacy["save_version"]) != 3 or not legacy_run.qi.nearly(BigNum.from_float(100.0)):
 		_fail("v0 numeric qi migration %s" % str(legacy.get("qi")))
 	elif legacy_run.rank_index != 1:
 		_fail("v0 rank")
@@ -223,10 +262,10 @@ func _test_save_migration() -> void:
 	else:
 		_ok("save/load roundtrip")
 	var doc: Dictionary = save.load_document(dir)
-	if int(doc["data"]["save_version"]) != 2:
+	if int(doc["data"]["save_version"]) != 3:
 		_fail("saved version")
 	else:
-		_ok("saved document is v2")
+		_ok("saved document is v3")
 
 	var latest := dir + "save_latest.json"
 	var file := FileAccess.open(latest, FileAccess.WRITE)
@@ -311,13 +350,13 @@ func _test_golden_parity() -> void:
 				shown += 1
 			continue
 		var got: Dictionary = by_t[key]
-		if int(got["rank_index"]) != int(exp["rank_index"]) or int(got["rebirths"]) != int(exp["rebirths"]) or str(got["rank_id"]) != str(exp["rank_id"]):
+		if int(got["rank_index"]) != int(exp["rank_index"]) or int(got["rebirths"]) != int(exp["rebirths"]) or str(got["rank_id"]) != str(exp["rank_id"]) or int(got["talents"]) != int(exp["talents"]) or int(got["artifacts"]) != int(exp["artifacts"]):
 			fails += 1
 			if shown < 8:
 				print("FAIL t=%s rank %s#%s r%s != %s#%s r%s" % [str(exp["t"]), got["rank_id"], str(got["rank_index"]), str(got["rebirths"]), exp["rank_id"], str(exp["rank_index"]), str(exp["rebirths"])])
 				shown += 1
 			continue
-		if not _close(float(got["qi"]), float(exp["qi"])) or not _close(float(got["prod"]), float(exp["prod"])):
+		if not _close(float(got["qi"]), float(exp["qi"])) or not _close(float(got["prod"]), float(exp["prod"])) or not _close(float(got["karma"]), float(exp["karma"])) or not _close(float(got["shop_mult"]), float(exp["shop_mult"])):
 			fails += 1
 			if shown < 8:
 				print("FAIL t=%s qi %s != %s prod %s != %s" % [str(exp["t"]), str(got["qi"]), str(exp["qi"]), str(got["prod"]), str(exp["prod"])])
@@ -334,6 +373,172 @@ func _test_golden_parity() -> void:
 		_fail("golden parity mismatches=%d samples=%d" % [fails, ran["samples"].size()])
 	else:
 		_ok("golden parity %d samples" % ran["samples"].size())
+
+
+func _test_rebirth_rules() -> void:
+	var data: EconData = preload("res://autoload/content.gd").data
+	var state := SimState.new()
+	state.rank_index = 15
+	state.highest_rank_index = 15
+	state.qi = 80.0
+	state.lifetime_qi = 2.5e9
+	state.upgrade_levels = {"breath_meditation": 15, "swift_circulation": 3}
+	state.karma_shards = 4.0
+	state.unlocked["spiritual_roots"] = true
+	state.unlocked["artifacts_basic"] = true
+	state.unlocked["rebirth_unlock"] = true
+	state.shop_levels["karma_prod_1"] = 2
+	state.talents_owned = [{"uid": "t1", "root_id": "water_root", "rarity": "common", "roll": 0.04, "level": 0}]
+	state.talents_equipped = ["t1"]
+	state.talent_seq = 2
+	state.artifacts_owned = {"jade_slip": 0}
+	state.artifacts_equipped = ["jade_slip"]
+	state.path_id = "immortal"
+	state.automation_toggles["auto_buy_upgrades"] = false
+	var life := state.lifetime_qi
+	var karma_before := state.karma_shards
+	if not EconomyCore.do_rebirth(data, state):
+		_fail("rebirth refused at core peak")
+		return
+	var kept_qi := state.qi
+	if state.rebirth_count != 1 or state.rank_index != 0:
+		_fail("rebirth count/rank %d / %d" % [state.rebirth_count, state.rank_index])
+	elif not state.upgrade_levels.is_empty():
+		_fail("upgrades were not reset")
+	elif absf(state.lifetime_qi - life) > 1.0:
+		_fail("lifetime qi was reset")
+	elif state.karma_shards <= karma_before:
+		_fail("karma did not increase")
+	elif state.talents_owned.size() != 2 or not state.artifacts_owned.has("jade_slip"):
+		_fail("talents/artifacts did not persist")
+	elif state.path_id != "immortal" or int(state.shop_levels.get("karma_prod_1", 0)) != 2:
+		_fail("path or shop did not persist")
+	elif not state.unlocked.has("karma_shop_basic"):
+		_fail("first rebirth did not open the shop")
+	elif kept_qi < 0.0:
+		_fail("qi negative after rebirth")
+	else:
+		_ok("rebirth resets the run and keeps the meta")
+
+	# A pinned training line survives when the shop says so.
+	state.rank_index = 15
+	state.highest_rank_index = 15
+	state.upgrade_levels = {"breath_meditation": 9, "body_tempering": 2}
+	state.shop_levels["karma_keep_upgrade"] = 1
+	state.unlocked["karma_shop_advanced"] = true
+	state.rebirth_count = 10
+	if not EconomyCore.do_rebirth(data, state):
+		_fail("second rebirth refused")
+	elif int(state.upgrade_levels.get("breath_meditation", 0)) != 9 or state.upgrade_levels.has("body_tempering"):
+		_fail("keep-one-line kept the wrong training %s" % str(state.upgrade_levels))
+	else:
+		_ok("rebirth keeps the strongest training line")
+
+
+func _test_stage2_cases() -> void:
+	var path := "res://tools/sim/reports/stage2_cases.json"
+	if not FileAccess.file_exists(path):
+		_fail("missing stage2_cases.json")
+		return
+	var cases = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if typeof(cases) != TYPE_DICTIONARY:
+		_fail("stage2 cases json")
+		return
+	var data: EconData = preload("res://autoload/content.gd").data
+	var roll: Dictionary = EconomyCore.roll_talent_fields(data, 81001)
+	var expect: Dictionary = cases["roll_81001"]
+	if str(roll["root_id"]) != str(expect["root_id"]) or str(roll["rarity"]) != str(expect["rarity"]) or not _close(float(roll["roll"]), float(expect["roll"])):
+		_fail("talent roll 81001 %s" % str(roll))
+	else:
+		_ok("talent roll matches sim")
+	var costs: Array = cases["shop_prod_costs"]
+	var cost_ok := true
+	for i in costs.size():
+		if EconomyCore.shop_cost(data, "karma_prod_1", i) != int(costs[i]):
+			cost_ok = false
+	if not cost_ok:
+		_fail("shop costs diverged")
+	else:
+		_ok("shop costs match sim")
+
+	var plain := SimState.new()
+	plain.artifacts_owned["flying_sword_shard"] = 0
+	plain.artifacts_equipped = ["flying_sword_shard"]
+	var with_path := SimState.new()
+	with_path.artifacts_owned["flying_sword_shard"] = 0
+	with_path.artifacts_equipped = ["flying_sword_shard"]
+	with_path.path_id = "heavenly_sword"
+	var hook: Dictionary = cases["path_hook_prod"]
+	if not _close(EconomyCore.production_state(data, plain), float(hook["plain"])) or not _close(EconomyCore.production_state(data, with_path), float(hook["with_path"])):
+		_fail("path hook prod %s / %s" % [str(EconomyCore.production_state(data, plain)), str(EconomyCore.production_state(data, with_path))])
+	elif float(hook["with_path"]) <= float(hook["plain"]):
+		_fail("path hook did not raise production")
+	else:
+		_ok("artifact path hook matches sim")
+
+	var rb: Dictionary = cases["rebirth"]
+	var st := SimState.new()
+	st.rank_index = 15
+	st.highest_rank_index = 15
+	st.qi = 50.0
+	st.lifetime_qi = 1.0e10
+	st.upgrade_levels = {"breath_meditation": 12, "body_tempering": 4}
+	st.unlocked["spiritual_roots"] = true
+	st.unlocked["artifacts_basic"] = true
+	st.unlocked["rebirth_unlock"] = true
+	st.artifacts_owned["jade_slip"] = 1
+	st.artifacts_equipped = ["jade_slip"]
+	st.talents_owned = [{"uid": "t1", "root_id": "fire_root", "rarity": "rare", "roll": 0.12, "level": 1}]
+	st.talents_equipped = ["t1"]
+	st.talent_seq = 2
+	st.shop_levels["karma_prod_1"] = 1
+	st.karma_shards = 3.0
+	st.path_id = "heavenly_sword"
+	EconomyCore.do_rebirth(data, st)
+	if st.rebirth_count != int(rb["rebirths"]) or st.rank_index != int(rb["rank_index"]) or st.talents_owned.size() != int(rb["talents"]):
+		_fail("rebirth case shape r%d rank %d talents %d" % [st.rebirth_count, st.rank_index, st.talents_owned.size()])
+	elif not _close(st.karma_shards, float(rb["karma"])) or not _close(st.qi, float(rb["qi"])) or not _close(st.shop_mult, float(rb["shop_mult"])):
+		_fail("rebirth case numbers karma %s qi %s" % [str(st.karma_shards), str(st.qi)])
+	elif st.path_id != str(rb["path_id"]) or not st.unlocked.has("karma_shop_basic"):
+		_fail("rebirth case persist")
+	else:
+		_ok("rebirth case matches sim")
+
+
+func _test_offline_automation() -> void:
+	var path := "res://tools/sim/reports/stage2_cases.json"
+	var cases = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var data: EconData = preload("res://autoload/content.gd").data
+	var state := SimState.new()
+	state.rank_index = 12
+	state.highest_rank_index = 12
+	state.qi = 0.0
+	state.unlocked["automation_buy_upgrades"] = true
+	state.unlocked["auto_buy_upgrades"] = true
+	state.automation_toggles["auto_buy_upgrades"] = true
+	var info := EconomyCore.apply_offline(data, state, 180.0)
+	var expect: Dictionary = cases["offline_auto"]
+	if not bool(info["chunked"]):
+		_fail("automation offline stayed closed-form")
+	elif int(state.upgrade_levels.get("breath_meditation", 0)) != int(expect["breath"]):
+		_fail("offline auto breath %s != %s" % [str(state.upgrade_levels.get("breath_meditation", 0)), str(expect["breath"])])
+	elif not _close(state.qi, float(expect["qi"])) or state.rank_index != int(expect["rank_index"]):
+		_fail("offline auto qi/rank %s / %d" % [str(state.qi), state.rank_index])
+	elif int(state.upgrade_levels.get("breath_meditation", 0)) <= 0:
+		_fail("offline auto bought nothing")
+	else:
+		_ok("offline with auto-buy matches sim")
+
+	# Same window with automation off stays closed-form and does not buy.
+	var quiet := SimState.new()
+	quiet.rank_index = 12
+	quiet.highest_rank_index = 12
+	quiet.automation_toggles["auto_buy_upgrades"] = false
+	var closed := EconomyCore.apply_offline(data, quiet, 180.0)
+	if bool(closed["chunked"]) or int(quiet.upgrade_levels.get("breath_meditation", 0)) != 0:
+		_fail("automation off still acted")
+	else:
+		_ok("offline without automation is closed-form")
 
 
 func _close(a: float, b: float) -> bool:

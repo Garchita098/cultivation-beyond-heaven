@@ -32,14 +32,13 @@ static func gained_float(prod: float, absent_sec: float, bonus: float) -> Dictio
 
 
 static func apply_to_run(run: RunState, absent_sec: float) -> Dictionary:
-	var prod := EconomyCore.production(
-		_Content.data, run.rank_index, run.upgrade_levels, run.karma_float(), run.shop_mult
-	)
-	var info := gained_float(prod, absent_sec, run.offline_eff_bonus)
+	var sim := run.to_sim()
+	var info := EconomyCore.apply_offline(_Content.data, sim, absent_sec)
+	run.apply_sim(sim, true)
 	var gained_bn := BigNum.from_float(float(info["gained"]))
-	run.qi = run.qi.add(gained_bn)
-	run.lifetime_qi = run.lifetime_qi.add(gained_bn)
-	run.time_sec += float(info["absent_sec"])
 	info["gained_text"] = BigNum.format(gained_bn, _Content.sci_from())
-	info["prod"] = prod
+	info["prod"] = EconomyCore.production_state(_Content.data, sim)
+	if bool(info.get("chunked", false)):
+		var note := str(info.get("gained_text", ""))
+		info["gained_text"] = note
 	return info

@@ -51,13 +51,13 @@ func _rebuild() -> void:
 	_list.add_child(title)
 	for uid in Content.data.upgrade_order:
 		var u: Dictionary = Content.data.upgrades[uid]
-		if int(u.get("stage", 1)) > 1:
+		if int(u.get("stage", 1)) > EconomyCore.STAGE_CAP:
 			continue
 		_list.add_child(_make_row(uid, u))
 	var later := PanelContainer.new()
 	later.add_theme_stylebox_override("panel", CBHTheme.flat(CBHTheme.COL_PANEL, CBHTheme.COL_LINE, 16, 1))
 	var later_label := Label.new()
-	later_label.text = "Дальше — следующий этап"
+	later_label.text = "Пустота и законы — следующий этап"
 	CBHTheme.style_label(later_label, theme.font_sans, 16, CBHTheme.COL_MUTED)
 	later.add_child(later_label)
 	_list.add_child(later)

@@ -154,7 +154,7 @@
       "name_en": "Foundation · Peak",
       "name_ru": "Основание · Пик",
       "index": 11,
-      "cost_qi": 80000000.0,
+      "cost_qi": 48000000.0,
       "prod_mult": 90.0,
       "unlocks": [],
       "stage": 1
@@ -166,7 +166,7 @@
       "name_en": "Core Formation · Early",
       "name_ru": "Золотое Ядро · Раннее",
       "index": 12,
-      "cost_qi": 200000000.0,
+      "cost_qi": 115000000.0,
       "prod_mult": 150.0,
       "unlocks": [
         "automation_buy_upgrades",
@@ -181,7 +181,7 @@
       "name_en": "Core Formation · Mid",
       "name_ru": "Золотое Ядро · Среднее",
       "index": 13,
-      "cost_qi": 400000000.0,
+      "cost_qi": 240000000.0,
       "prod_mult": 250.0,
       "unlocks": [],
       "stage": 1
@@ -193,7 +193,7 @@
       "name_en": "Core Formation · Late",
       "name_ru": "Золотое Ядро · Позднее",
       "index": 14,
-      "cost_qi": 900000000.0,
+      "cost_qi": 560000000.0,
       "prod_mult": 420.0,
       "unlocks": [],
       "stage": 1
@@ -205,7 +205,7 @@
       "name_en": "Core Formation · Peak",
       "name_ru": "Золотое Ядро · Пик",
       "index": 15,
-      "cost_qi": 2200000000.0,
+      "cost_qi": 1500000000.0,
       "prod_mult": 700.0,
       "unlocks": [
         "rebirth_unlock"
@@ -219,7 +219,7 @@
       "name_en": "Nascent Soul · Early",
       "name_ru": "Душа Начала · Ранняя",
       "index": 16,
-      "cost_qi": 50000000000.0,
+      "cost_qi": 8000000000.0,
       "prod_mult": 1400.0,
       "unlocks": [
         "paths_preview"
@@ -233,7 +233,7 @@
       "name_en": "Nascent Soul · Mid",
       "name_ru": "Душа Начала · Средняя",
       "index": 17,
-      "cost_qi": 300000000000.0,
+      "cost_qi": 28000000000.0,
       "prod_mult": 2500.0,
       "unlocks": [],
       "stage": 2
@@ -245,7 +245,7 @@
       "name_en": "Nascent Soul · Late",
       "name_ru": "Душа Начала · Поздняя",
       "index": 18,
-      "cost_qi": 2000000000000.0,
+      "cost_qi": 90000000000.0,
       "prod_mult": 4500.0,
       "unlocks": [],
       "stage": 2
@@ -257,7 +257,7 @@
       "name_en": "Nascent Soul · Peak",
       "name_ru": "Душа Начала · Пик",
       "index": 19,
-      "cost_qi": 15000000000000.0,
+      "cost_qi": 280000000000.0,
       "prod_mult": 8000.0,
       "unlocks": [
         "ascension_spirit_world"
@@ -271,7 +271,7 @@
       "name_en": "Soul Transformation · Early",
       "name_ru": "Преображение Души · Раннее",
       "index": 20,
-      "cost_qi": 1.5e+16,
+      "cost_qi": 500000000000.0,
       "prod_mult": 15000.0,
       "unlocks": [],
       "stage": 2
@@ -283,7 +283,7 @@
       "name_en": "Soul Transformation · Mid",
       "name_ru": "Преображение Души · Среднее",
       "index": 21,
-      "cost_qi": 1.5e+17,
+      "cost_qi": 1800000000000.0,
       "prod_mult": 30000.0,
       "unlocks": [],
       "stage": 2
@@ -295,7 +295,7 @@
       "name_en": "Soul Transformation · Late",
       "name_ru": "Преображение Души · Позднее",
       "index": 22,
-      "cost_qi": 1.5e+18,
+      "cost_qi": 4000000000000.0,
       "prod_mult": 60000.0,
       "unlocks": [],
       "stage": 2
@@ -307,7 +307,7 @@
       "name_en": "Soul Transformation · Peak",
       "name_ru": "Преображение Души · Пик",
       "index": 23,
-      "cost_qi": 1.5e+19,
+      "cost_qi": 10000000000000.0,
       "prod_mult": 120000.0,
       "unlocks": [],
       "stage": 2

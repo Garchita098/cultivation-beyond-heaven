@@ -73,6 +73,8 @@ func show_summary(summary: Dictionary) -> void:
 		note += "  ·  учтено 24 ч"
 	elif bool(summary.get("soft_capped", false)):
 		note += "  ·  после 8 ч тише"
+	if bool(summary.get("chunked", false)):
+		note += "  ·  авто"
 	_note.text = note
 	visible = true
 

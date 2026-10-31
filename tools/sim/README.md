@@ -6,7 +6,8 @@
 - `best_roi` (гибрид: прорыв + короткий payback)
 - `rush_breakthrough`
 - `rebirth_early` / `rebirth_late`
-- `offline_heavy` (3 check-in/day: 10m active + 8h offline)
+- `talent_focused` / `artifact_focused`
+- `offline_heavy` (3 check-in/day: 10m active + 8h offline, automation runs while away)
 
 ```bash
 python3 tools/sim/run_sim.py

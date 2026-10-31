@@ -49,7 +49,7 @@ func _rebuild() -> void:
 	var order: Array[String] = []
 	for r in Content.data.ranks:
 		var major := str(r["major"])
-		if int(r.get("stage", 1)) > EconomyCore.STAGE1_CAP:
+		if int(r.get("stage", 1)) > EconomyCore.STAGE_CAP:
 			if not groups.has("_later"):
 				groups["_later"] = []
 				order.append("_later")

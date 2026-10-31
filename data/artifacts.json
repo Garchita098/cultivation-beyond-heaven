@@ -2,6 +2,21 @@
   "schema_version": 1,
   "unlock_rank": "foundation_late",
   "max_equipped": 4,
+  "drop_order": [
+    "jade_slip",
+    "spirit_stone_pouch",
+    "flying_sword_shard",
+    "blood_chalice",
+    "longevity_peach_seed",
+    "world_fang",
+    "chrono_hourglass",
+    "heavenly_mirror"
+  ],
+  "grant_per_rebirth": 1,
+  "grant_per_rebirth_after_gacha": 2,
+  "gacha_min_rebirths": 5,
+  "stage2_hook_as_mult": 0.5,
+  "path_match_effect_scale": 1.5,
   "artifacts": [
     {"id": "jade_slip", "name_ru": "Нефритовая Скрижаль", "rarity": "common", "effect_type": "mult_prod", "effect_value": 0.05, "stage": 1},
     {"id": "spirit_stone_pouch", "name_ru": "Мешочек Духовных Камней", "rarity": "common", "effect_type": "flat_prod", "effect_value": 2.0, "stage": 1},

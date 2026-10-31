@@ -2,11 +2,11 @@
 
 Portrait Android idle cultivation game: Qi gathers on its own, with ranks, breakthroughs, and offline progress.
 
-Stage 1 is the playable base. There is no tap-to-earn. Qi per second comes from rank, trainings, and (later) karma. Design notes are in `docs/`. Balance numbers live only in `data/*.json`.
+Stage 2 adds rebirth, karma, spiritual roots, artifacts, and automation. There is no tap-to-earn. Qi per second comes from rank, trainings, karma, roots, and relics. Design notes are in `docs/`. Balance numbers live only in `data/*.json`.
 
 ## Play
 
-Open the repo in Godot 4.7 and run the main scene (`720×1280`, portrait). Tabs: Cultivation, Upgrades, Ranks. Talents, Artifacts, Rebirth, and Research are visible and locked.
+Open the repo in Godot 4.7 and run the main scene (`720×1280`, portrait). Tabs: Cultivation, Upgrades, Ranks, Roots, Artifacts, Karma, Automation. A tab stays quiet until its rank or rebirth tier, then a short reveal opens it. Rebirth asks for confirmation. Paths and Ascension are visible hooks only.
 
 ## Economy sim
 
