@@ -60,7 +60,7 @@ jobs:
             cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
           fi
           echo "$RUNNER_TEMP/godot-install" >> "$GITHUB_PATH"
-          godot4 --version
+          "$RUNNER_TEMP/godot-install/godot4" --version
 
       - name: Headless GDScript tests
         run: |
