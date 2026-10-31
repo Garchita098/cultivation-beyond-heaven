@@ -1,5 +1,9 @@
 {
   "schema_version": 1,
+  "auto_rebirth_defaults": {
+    "min_rank_index": 15,
+    "min_karma_gain": 1
+  },
   "unlock_order": [
     {
       "id": "auto_buy_upgrades",

@@ -6,4 +6,5 @@ signal rank_up(rank_index: int, rank_id: String)
 signal rebirth_done(count: int)
 signal feature_unlocked(feature_id: String)
 signal offline_summary(summary: Dictionary)
+signal open_rebirth_confirm
 signal state_changed

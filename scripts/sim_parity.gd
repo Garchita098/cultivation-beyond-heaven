@@ -1,11 +1,10 @@
 class_name SimParity
 extends RefCounted
-## Replays the Python rebirth_early bot (tools/sim/bots.py + run sampler in check_golden.py).
+## Replays tools/sim RebirthEarly (bots.py + check_golden.py sampler).
 
 
 static func run_rebirth_early_until(data: EconData, max_sec: float) -> SimState:
-	var packed: Dictionary = run_rebirth_early(data, max_sec, false)
-	return packed["state"]
+	return run_rebirth_early(data, max_sec, false)["state"]
 
 
 static func run_rebirth_early(data: EconData, max_sec: float, collect: bool = true) -> Dictionary:
@@ -19,21 +18,29 @@ static func run_rebirth_early(data: EconData, max_sec: float, collect: bool = tr
 		var decided := false
 		if acc >= 0.5 - 1e-12:
 			acc = 0.0
-			EconomyCore.decide_rebirth_early(data, state)
+			EconomyCore.play_rebirth_policy(data, state, "early", 15, 3)
 			decided = true
 		if collect:
 			var t := state.time_sec
 			var on_grid := absf(t - dt) < 1e-9 or _near_multiple(t, 30.0)
 			if on_grid and (decided or absf(t - dt) < 1e-9):
-				samples.append({
-					"t": t,
-					"qi": state.qi,
-					"prod": EconomyCore.production(data, state.rank_index, state.upgrade_levels, state.karma_shards, state.shop_mult),
-					"rank_index": state.rank_index,
-					"rank_id": str(data.rank_at(state.rank_index)["id"]),
-					"rebirths": state.rebirth_count,
-				})
+				samples.append(_sample(data, state))
 	return {"state": state, "samples": samples, "milestones": state.milestones}
+
+
+static func _sample(data: EconData, state: SimState) -> Dictionary:
+	return {
+		"t": state.time_sec,
+		"qi": state.qi,
+		"prod": EconomyCore.production_state(data, state),
+		"rank_index": state.rank_index,
+		"rank_id": str(data.rank_at(state.rank_index)["id"]),
+		"rebirths": state.rebirth_count,
+		"karma": state.karma_shards,
+		"talents": state.talents_owned.size(),
+		"artifacts": state.artifacts_owned.size(),
+		"shop_mult": state.shop_mult,
+	}
 
 
 static func _near_multiple(t: float, step: float) -> bool:

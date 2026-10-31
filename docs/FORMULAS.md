@@ -114,7 +114,32 @@ roi    = d_prod / cost(level)
 payback_sec = cost / d_prod
 ```
 
-## 10. Детекция стен
+## 10. Stage 2 — таланты, артефакты, лавка, оффлайн с автоматизацией
+
+Числа только из JSON. `path_mult` остаётся `1` до Stage 3. `path_id` уже включает синергию корня и `path_match_effect_scale` артефакта.
+
+```
+talent_value = roll + level * effect_gain_per_level
+```
+
+Экипированные корни (до `max_equipped`) входят в формулу §2 по своему `effect_type`. `mult_prod` перемножается. Синергия стихий (`element_synergies`) — дополнительный множитель. Синергия `synergy_with` срабатывает, только если тег есть у выбранного `path_id`.
+
+Артефакт: `ev = effect_value * (1 + effect_gain_fraction * level)`, и `ev *= path_match_effect_scale`, если путь совпал. Эффекты путей без механики (`sacrifice_efficiency`, `absorb_rate`, `time_skip_charge`, `rule_slot`) дают `artifact_mult *= (1 + ev * stage2_hook_as_mult)`.
+
+Лавка кармы:
+
+```
+cost(level) = max(1, floor(cost * growth^level))
+shop_mult   = 1 + karma_prod_1.level * value
+```
+
+`karma_mult` считается от **непотраченных** осколков. Покупка, которая снижает производство, не совершается.
+
+Ролл корня детерминированный (`cbh_unit`, один и тот же в симе и в Godot): один раз на `qi_early`, один раз на каждый `milestone_ranks`, и один на каждое перерождение. Пустой слот заполняется сам. Реликвии выпадают по `drop_order` на `foundation_late` и на перерождении (`grant_per_rebirth`, с 5-го — `grant_per_rebirth_after_gacha`).
+
+Оффлайн: если включены автопокупка, автопрорыв или авто-rebirth, расчёт идёт чанками `chunk_seconds` с теми же решениями, что и в бою. Иначе — closed-form §6.
+
+## 11. Детекция стен
 
 Непрерывный интервал без покупки улучшения и без прорыва:
 

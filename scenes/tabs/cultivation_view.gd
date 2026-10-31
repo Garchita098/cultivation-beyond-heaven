@@ -86,14 +86,14 @@ func refresh() -> void:
 	_qi_label.text = Economy.format_qi(run.qi)
 	var rate := BigNum.from_float(GameState.last_prod)
 	_rate_label.text = "%s Ци/с" % Economy.format_qi(rate)
-	var nxt := Economy.next_rank(run, EconomyCore.STAGE1_CAP)
+	var nxt := Economy.next_rank(run, EconomyCore.STAGE_CAP)
 	var progress := 0.0
 	if nxt.is_empty():
 		progress = 1.0
 		_next_label.text = "Пик этого этапа"
 		_bar.value = 1.0
 	else:
-		var cost := BigNum.from_float(float(nxt["cost_qi"]))
+		var cost := BigNum.from_float(Economy.breakthrough_cost_of(run))
 		progress = clampf(run.qi.ratio_to(cost), 0.0, 1.0)
 		_bar.value = progress
 		_next_label.text = "%s  ·  %s" % [str(nxt.get("name_ru", "")), Economy.format_qi(cost)]

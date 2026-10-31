@@ -23,9 +23,7 @@ func _ready() -> void:
 func tick(delta: float) -> void:
 	if run == null or delta <= 0.0 or not Content.valid:
 		return
-	var prod := EconomyCore.production(
-		Content.data, run.rank_index, run.upgrade_levels, run.karma_float(), run.shop_mult
-	)
+	var prod := Economy.production_float(run)
 	if not is_finite(prod) or prod < 0.0:
 		push_error("Qi production is not a finite non-negative number")
 		last_prod = 0.0
@@ -42,50 +40,120 @@ func tick(delta: float) -> void:
 
 
 func try_buy(uid: String) -> bool:
-	if run == null or not Content.data.upgrades.has(uid):
-		return false
-	var u: Dictionary = Content.data.upgrades[uid]
-	var req := int(Content.data.ranks_by_id[str(u["unlock_rank"])]["index"])
-	if run.rank_index < req:
-		return false
-	var lvl := int(run.upgrade_levels.get(uid, 0))
-	var mx := int(u.get("max_level", 0))
-	if mx > 0 and lvl >= mx:
-		return false
-	var cost := EconomyCore.upgrade_cost_bn(Content.data, run.upgrade_levels, uid)
-	if run.qi.cmp(cost) < 0:
-		return false
-	run.qi = run.qi.sub(cost)
-	if run.qi.mantissa < 0.0:
-		run.qi = BigNum.zero()
-	run.upgrade_levels[uid] = lvl + 1
-	last_prod = Economy.production_float(run)
-	EventBus.state_changed.emit()
-	return true
+	return _mutate(func(sim: SimState) -> bool:
+		return EconomyCore.buy(Content.data, sim, uid)
+	)
 
 
 func try_breakthrough() -> bool:
-	if run == null:
+	var before := run.rank_index if run != null else -1
+	var ok := _mutate(func(sim: SimState) -> bool:
+		return EconomyCore.breakthrough(Content.data, sim)
+	)
+	if ok and run.rank_index != before:
+		var rank: Dictionary = Content.data.rank_at(run.rank_index)
+		EventBus.rank_up.emit(run.rank_index, str(rank.get("id", "")))
+	return ok
+
+
+func try_rebirth() -> bool:
+	var before := run.rebirth_count if run != null else -1
+	var ok := _mutate(func(sim: SimState) -> bool:
+		return EconomyCore.do_rebirth(Content.data, sim)
+	)
+	if ok and run.rebirth_count != before:
+		EventBus.rebirth_done.emit(run.rebirth_count)
+		_emit_new_unlocks()
+	return ok
+
+
+func try_shop(item_id: String) -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return EconomyCore.buy_shop(Content.data, sim, item_id)
+	)
+
+
+func try_upgrade_talent(uid: String) -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return EconomyCore.upgrade_talent(Content.data, sim, uid)
+	)
+
+
+func try_reroll_talent(uid: String) -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return EconomyCore.reroll_talent(Content.data, sim, uid)
+	)
+
+
+func try_upgrade_artifact(aid: String) -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return EconomyCore.upgrade_artifact(Content.data, sim, aid)
+	)
+
+
+func toggle_talent(uid: String) -> void:
+	_mutate(func(sim: SimState) -> bool:
+		if not EconomyCore._find_talent(sim, uid).is_empty():
+			if sim.talents_equipped.has(uid):
+				sim.talents_equipped.erase(uid)
+			elif sim.talents_equipped.size() < int(Content.data.talents["max_equipped"]):
+				sim.talents_equipped.append(uid)
+		return true
+	)
+
+
+func toggle_artifact(aid: String) -> void:
+	_mutate(func(sim: SimState) -> bool:
+		if not sim.artifacts_owned.has(aid):
+			return false
+		if sim.artifacts_equipped.has(aid):
+			sim.artifacts_equipped.erase(aid)
+		elif sim.artifacts_equipped.size() < int(Content.data.artifacts["max_equipped"]):
+			sim.artifacts_equipped.append(aid)
+		return true
+	)
+
+
+func set_auto(aid: String, enabled: bool) -> void:
+	_mutate(func(sim: SimState) -> bool:
+		sim.automation_toggles[aid] = enabled
+		return true
+	)
+
+
+func set_auto_buy_mode(mode: String) -> void:
+	_mutate(func(sim: SimState) -> bool:
+		sim.auto_buy_mode = mode
+		return true
+	)
+
+
+func set_auto_rebirth(min_rank: int, min_karma: int) -> void:
+	_mutate(func(sim: SimState) -> bool:
+		sim.auto_rebirth_min_rank = min_rank
+		sim.auto_rebirth_min_karma = min_karma
+		return true
+	)
+
+
+func _mutate(action: Callable) -> bool:
+	if run == null or not Content.valid:
 		return false
-	var nxt := Economy.next_rank(run, EconomyCore.STAGE1_CAP)
-	if nxt.is_empty():
+	var sim := run.to_sim()
+	var before_unlock := run.unlocked.duplicate()
+	if not bool(action.call(sim)):
 		return false
-	var cost := BigNum.from_float(float(nxt["cost_qi"]))
-	if run.qi.cmp(cost) < 0:
-		return false
-	run.qi = run.qi.sub(cost)
-	if run.qi.mantissa < 0.0:
-		run.qi = BigNum.zero()
-	run.rank_index += 1
-	run.highest_rank_index = maxi(run.highest_rank_index, run.rank_index)
-	for feature in nxt.get("unlocks", []):
-		var fid := str(feature)
-		run.unlocked[fid] = true
-		EventBus.feature_unlocked.emit(fid)
+	run.apply_sim(sim, false)
 	last_prod = Economy.production_float(run)
-	EventBus.rank_up.emit(run.rank_index, str(nxt["id"]))
+	for k in run.unlocked.keys():
+		if run.unlocked[k] and not before_unlock.has(k):
+			EventBus.feature_unlocked.emit(str(k))
 	EventBus.state_changed.emit()
 	return true
+
+
+func _emit_new_unlocks() -> void:
+	pass
 
 
 func catch_up_offline() -> void:
@@ -124,19 +192,50 @@ func _bootstrap_screenshot() -> void:
 	run = RunState.new()
 	if not Content.valid:
 		return
-	# Deterministic mid-early state so the aura and boards are not an empty frame.
-	var sim := SimParity.run_rebirth_early_until(Content.data, 600.0)
-	run.qi = BigNum.from_float(sim.qi)
-	run.lifetime_qi = BigNum.from_float(sim.lifetime_qi)
-	run.rank_index = sim.rank_index
-	run.highest_rank_index = sim.highest_rank_index
-	run.upgrade_levels = sim.upgrade_levels.duplicate()
-	run.karma_shards = BigNum.from_float(sim.karma_shards)
-	run.rebirth_count = sim.rebirth_count
-	run.shop_mult = sim.shop_mult
-	run.time_sec = sim.time_sec
-	for k in sim.unlocked.keys():
-		run.unlocked[str(k)] = true
+	# A fifth-run Core Peak so every stage-2 tab has something to show.
+	run.qi = BigNum.from_float(9.4e8)
+	run.lifetime_qi = BigNum.from_float(6.2e9)
+	run.rank_index = 15
+	run.highest_rank_index = 15
+	run.karma_shards = BigNum.from_float(18)
+	run.rebirth_count = 5
+	run.shop_levels = {"karma_prod_1": 2, "karma_offline": 1}
+	run.shop_mult = 1.2
+	run.upgrade_levels = {
+		"breath_meditation": 25,
+		"body_tempering": 12,
+		"meridian_opening": 8,
+		"swift_circulation": 6,
+		"foundation_mantra": 4,
+	}
+	for feature in [
+		"upgrades_basic", "spiritual_roots", "artifacts_basic", "rebirth_unlock",
+		"automation_buy_upgrades", "auto_buy_upgrades", "auto_breakthrough",
+		"karma_shop_basic", "offline_efficiency_boost", "talent_reroll",
+		"path_selection", "artifact_gacha_basic",
+	]:
+		run.unlocked[feature] = true
+	run.talents_owned = [
+		{"uid": "t1", "root_id": "fire_root", "rarity": "rare", "roll": 0.14, "level": 1},
+		{"uid": "t2", "root_id": "metal_root", "rarity": "uncommon", "roll": 0.08, "level": 0},
+		{"uid": "t3", "root_id": "water_root", "rarity": "epic", "roll": 0.22, "level": 0},
+		{"uid": "t4", "root_id": "thunder_root", "rarity": "common", "roll": 0.04, "level": 0},
+	]
+	run.talents_equipped = ["t1", "t2", "t3"]
+	run.talent_seq = 5
+	run.artifacts_owned = {
+		"jade_slip": 2,
+		"spirit_stone_pouch": 1,
+		"flying_sword_shard": 0,
+		"heavenly_mirror": 0,
+	}
+	run.artifacts_equipped = ["jade_slip", "spirit_stone_pouch", "flying_sword_shard", "heavenly_mirror"]
+	run.automation_toggles = {"auto_buy_upgrades": true, "auto_breakthrough": true}
+	run.auto_buy_mode = "roi"
+	run.auto_rebirth_min_rank = 15
+	run.auto_rebirth_min_karma = 3
+	for feature in ["spiritual_roots", "artifacts_basic", "rebirth_unlock", "automation_buy_upgrades", "path_selection"]:
+		run.reveal_seen[feature] = true
 	last_prod = Economy.production_float(run)
 	run.timestamp_unix = int(Time.get_unix_time_from_system())
 

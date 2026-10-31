@@ -49,6 +49,10 @@ def run_samples(eco: Economy, max_sec: float) -> dict:
                         "rank_index": state.rank_index,
                         "rank_id": eco.rank(state)["id"],
                         "rebirths": state.rebirth_count,
+                        "karma": state.karma_shards,
+                        "talents": len(state.talents_owned),
+                        "artifacts": len(state.artifacts_owned),
+                        "shop_mult": state.shop_mult,
                     }
                 )
     return {"milestones": dict(state.milestones), "samples": samples}
@@ -80,10 +84,21 @@ def main() -> int:
             )
             fails += 1
             continue
+        if g.get("talents") != exp.get("talents") or g.get("artifacts") != exp.get("artifacts"):
+            print(
+                f"FAIL t={exp['t']} talents/artifacts {g.get('talents')}/{g.get('artifacts')} "
+                f"!= {exp.get('talents')}/{exp.get('artifacts')}"
+            )
+            fails += 1
+            continue
         if not close(g["qi"], exp["qi"]) or not close(g["prod"], exp["prod"]):
             print(
                 f"FAIL t={exp['t']} qi {g['qi']} != {exp['qi']} prod {g['prod']} != {exp['prod']}"
             )
+            fails += 1
+            continue
+        if "karma" in exp and (not close(g["karma"], exp["karma"]) or not close(g["shop_mult"], exp["shop_mult"])):
+            print(f"FAIL t={exp['t']} karma/shop {g['karma']}/{g['shop_mult']} != {exp['karma']}/{exp['shop_mult']}")
             fails += 1
     for key, t in golden["milestones"].items():
         got_t = got["milestones"].get(key)

@@ -1,7 +1,7 @@
 extends Node
 ## Versioned JSON saves. Write temp file, then rename. Corrupt files are kept as .bak.
 
-const CURRENT_VERSION := 2
+const CURRENT_VERSION := 3
 const LATEST_NAME := "save_latest.json"
 const AUTOSAVE_SEC := 20.0
 
@@ -23,6 +23,9 @@ static func migrate(data: Dictionary) -> Dictionary:
 	if version < 2:
 		d = _migrate_1_to_2(d)
 		version = 2
+	if version < 3:
+		d = _migrate_2_to_3(d)
+		version = 3
 	d["save_version"] = CURRENT_VERSION
 	return d
 
@@ -63,6 +66,40 @@ static func _migrate_1_to_2(d: Dictionary) -> Dictionary:
 	if typeof(d.get("meta")) != TYPE_DICTIONARY:
 		d["meta"] = {}
 	d["save_version"] = 2
+	return d
+
+
+static func _migrate_2_to_3(d: Dictionary) -> Dictionary:
+	# Stage 1 saves are version 2. Stage 2 adds loadout, shop, and automation.
+	if typeof(d.get("talents_owned")) != TYPE_ARRAY:
+		d["talents_owned"] = []
+	if typeof(d.get("talents_equipped")) != TYPE_ARRAY:
+		d["talents_equipped"] = []
+	if not d.has("talent_seq"):
+		d["talent_seq"] = 1
+	if typeof(d.get("talent_roll_keys")) != TYPE_ARRAY and typeof(d.get("talent_roll_keys")) != TYPE_DICTIONARY:
+		d["talent_roll_keys"] = []
+	if not d.has("reroll_count"):
+		d["reroll_count"] = 0
+	if typeof(d.get("artifacts_owned")) != TYPE_DICTIONARY:
+		d["artifacts_owned"] = {}
+	if typeof(d.get("artifacts_equipped")) != TYPE_ARRAY:
+		d["artifacts_equipped"] = []
+	if typeof(d.get("shop_levels")) != TYPE_DICTIONARY:
+		d["shop_levels"] = {}
+	if typeof(d.get("automation_toggles")) != TYPE_DICTIONARY:
+		d["automation_toggles"] = {}
+	if not d.has("auto_buy_mode"):
+		d["auto_buy_mode"] = "roi"
+	if not d.has("auto_rebirth_min_rank"):
+		d["auto_rebirth_min_rank"] = 15
+	if not d.has("auto_rebirth_min_karma"):
+		d["auto_rebirth_min_karma"] = 1
+	if typeof(d.get("reveal_seen")) != TYPE_ARRAY and typeof(d.get("reveal_seen")) != TYPE_DICTIONARY:
+		d["reveal_seen"] = []
+	if typeof(d.get("meta")) != TYPE_DICTIONARY:
+		d["meta"] = {}
+	d["save_version"] = 3
 	return d
 
 

@@ -9,11 +9,20 @@ const TABS := [
 	{"id": "cultivation", "label": "Культ.", "cta": true},
 	{"id": "upgrades", "label": "Улучш.", "cta": false},
 	{"id": "ranks", "label": "Ранги", "cta": true},
-	{"id": "talents", "label": "Таланты", "cta": false, "title": "Таланты", "blurb": "Духовные корни откроются позже.", "accent": "dao"},
-	{"id": "artifacts", "label": "Артеф.", "cta": false, "title": "Артефакты", "blurb": "Реликвии появятся на следующем этапе.", "accent": "gold"},
-	{"id": "rebirth", "label": "Карма", "cta": false, "title": "Перерождение", "blurb": "После пика Золотого Ядра.", "accent": "gold"},
-	{"id": "research", "label": "Дао", "cta": false, "title": "Исследования", "blurb": "Законы Дао — поздняя игра.", "accent": "dao"},
+	{"id": "talents", "label": "Корни", "cta": false, "need": "spiritual_roots"},
+	{"id": "artifacts", "label": "Артеф.", "cta": false, "need": "artifacts_basic"},
+	{"id": "rebirth", "label": "Карма", "cta": false, "need": "rebirth_unlock"},
+	{"id": "research", "label": "Авто", "cta": false, "need": "automation_buy_upgrades"},
 ]
+
+const REVEALS := {
+	"spiritual_roots": {"tab": 3, "title": "Духовные корни", "line": "Первый корень уже с вами", "color": Color("A78BFA")},
+	"artifacts_basic": {"tab": 4, "title": "Реликвия", "line": "Она уже в коллекции", "color": Color("F0C75E")},
+	"rebirth_unlock": {"tab": 5, "title": "Колесо кармы", "line": "Можно переродиться", "color": Color("F0C75E")},
+	"automation_buy_upgrades": {"tab": 6, "title": "Автоматизация", "line": "Тренировки покупаются сами", "color": Color("5CE1FF")},
+	"path_selection": {"tab": 5, "title": "Пять путей", "line": "Пути ждут следующего этапа", "color": Color("A78BFA")},
+	"ascension_gate": {"tab": 5, "title": "Врата Вознесения", "line": "Духовный мир ещё закрыт", "color": Color("3DDBA0")},
+}
 
 var _status_qi: Label
 var _status_rate: Label
@@ -25,6 +34,8 @@ var _pages: Dictionary = {}
 var _tab_buttons: Array = []
 var _current: int = 0
 var _flash: ColorRect
+var _reveal: Control
+var _rebirth_modal: Control
 
 var _shooting: bool = false
 var _shot_dir: String = ""
@@ -64,6 +75,19 @@ func _ready() -> void:
 		modal.show_summary(GameState.pending_offline)
 	EventBus.offline_summary.connect(modal.show_summary)
 	EventBus.rank_up.connect(func(_i, _id): _pulse())
+	var overlay := CanvasLayer.new()
+	overlay.layer = 20
+	add_child(overlay)
+	_reveal = preload("res://scenes/reveal_overlay.gd").new()
+	_reveal.set_meta("on_open", _show_tab)
+	_reveal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_reveal)
+	_rebirth_modal = preload("res://scenes/rebirth_modal.gd").new()
+	_rebirth_modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_rebirth_modal)
+	EventBus.open_rebirth_confirm.connect(_rebirth_modal.show_offer)
+	EventBus.feature_unlocked.connect(_on_feature)
+	EventBus.rebirth_done.connect(func(_c): _pulse())
 
 	var args := OS.get_cmdline_user_args()
 	var idx := args.find("--screenshots")
@@ -79,7 +103,8 @@ func _process(delta: float) -> void:
 		return
 	if not _shooting:
 		GameState.tick(delta)
-		Automation.try_act(GameState.run)
+		if not GameState.screenshot_mode:
+			Automation.try_act(GameState.run, delta)
 		SaveSystem.maybe_autosave(GameState.run, delta)
 	else:
 		GameState.tick(delta)
@@ -206,9 +231,7 @@ func _build_nav(theme: CBHTheme) -> void:
 			btn.expand_icon = true
 			btn.add_theme_constant_override("icon_max_width", 28)
 		btn.text = str(spec["label"])
-		var locked := spec.has("title")
-		if locked:
-			btn.add_theme_color_override("font_color", CBHTheme.COL_MUTED)
+		btn.add_theme_color_override("font_color", CBHTheme.COL_TEXT)
 		var index := i
 		btn.pressed.connect(func(): _show_tab(index))
 		row.add_child(btn)
@@ -219,10 +242,10 @@ func _build_pages() -> void:
 	_pages["cultivation"] = preload("res://scenes/tabs/cultivation_view.gd").new()
 	_pages["upgrades"] = preload("res://scenes/tabs/upgrades_view.gd").new()
 	_pages["ranks"] = preload("res://scenes/tabs/ranks_view.gd").new()
-	_pages["talents"] = _locked("Таланты", "Духовные корни откроются позже.", CBHTheme.COL_DAO)
-	_pages["artifacts"] = _locked("Артефакты", "Реликвии появятся на следующем этапе.", CBHTheme.COL_GOLD)
-	_pages["rebirth"] = _locked("Перерождение", "После пика Золотого Ядра.", CBHTheme.COL_GOLD)
-	_pages["research"] = _locked("Исследования", "Законы Дао — поздняя игра.", CBHTheme.COL_DAO)
+	_pages["talents"] = preload("res://scenes/tabs/talents_view.gd").new()
+	_pages["artifacts"] = preload("res://scenes/tabs/artifacts_view.gd").new()
+	_pages["rebirth"] = preload("res://scenes/tabs/rebirth_view.gd").new()
+	_pages["research"] = preload("res://scenes/tabs/automation_view.gd").new()
 	for id in _pages.keys():
 		var page: Control = _pages[id]
 		page.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -249,6 +272,11 @@ func _show_tab(index: int) -> void:
 	_content.offset_bottom = -(NAV_H + (CTA_H if show_cta else 0.0))
 	for i in _tab_buttons.size():
 		var btn: Button = _tab_buttons[i]
+		var spec_i: Dictionary = TABS[i]
+		var open := true
+		if spec_i.has("need") and GameState.run != null:
+			open = GameState.run.unlocked.has(str(spec_i["need"])) or GameState.run.rebirth_count > 0 and str(spec_i["id"]) == "rebirth"
+		btn.add_theme_color_override("font_color", CBHTheme.COL_TEXT if open else CBHTheme.COL_MUTED)
 		var active := i == index
 		var style := CBHTheme.flat(
 			Color("182033") if active else Color(0, 0, 0, 0),
@@ -274,12 +302,12 @@ func _refresh_chrome() -> void:
 	_status_rate.text = "%s/с" % Economy.format_qi(BigNum.from_float(GameState.last_prod))
 	var rank: Dictionary = Content.data.rank_at(run.rank_index)
 	_status_rank.text = str(rank.get("name_ru", ""))
-	var nxt := Economy.next_rank(run, EconomyCore.STAGE1_CAP)
+	var nxt := Economy.next_rank(run, EconomyCore.STAGE_CAP)
 	if nxt.is_empty():
 		_cta_btn.text = "Перерождение\nскоро"
 		_cta_btn.disabled = true
 	else:
-		var cost := BigNum.from_float(float(nxt["cost_qi"]))
+		var cost := BigNum.from_float(Economy.breakthrough_cost_of(run))
 		_cta_btn.text = "Прорыв\n%s" % Economy.format_qi(cost)
 		_cta_btn.disabled = run.qi.cmp(cost) < 0
 
@@ -290,17 +318,38 @@ func _pulse() -> void:
 	tw.tween_property(_flash, "color:a", 0.0, 0.45)
 
 
+func _on_feature(feature_id: String) -> void:
+	if GameState.screenshot_mode or GameState.run == null:
+		return
+	if GameState.run.reveal_seen.has(feature_id):
+		return
+	if not REVEALS.has(feature_id):
+		return
+	GameState.run.reveal_seen[feature_id] = true
+	var spec: Dictionary = REVEALS[feature_id]
+	spec["id"] = feature_id
+	_reveal.push(spec)
+	_pulse()
+
+
 func _capture_shot() -> void:
 	var img := get_viewport().get_texture().get_image()
-	var spec: Dictionary = TABS[_shot_i]
-	var path := _shot_dir.trim_suffix("/") + "/tab_%s.png" % str(spec["id"])
-	var err := img.save_png(path)
-	if err != OK:
-		push_error("Screenshot failed %s (%s)" % [path, error_string(err)])
-	_shot_i += 1
-	_shot_pending = false
-	_shot_timer = 0.0
-	if _shot_i >= TABS.size():
-		get_tree().quit(0 if err == OK else 1)
+	var err := OK
+	if _shot_i < TABS.size():
+		var spec: Dictionary = TABS[_shot_i]
+		err = img.save_png(_shot_dir.trim_suffix("/") + "/tab_%s.png" % str(spec["id"]))
+		_shot_i += 1
+		_shot_pending = false
+		_shot_timer = 0.0
+		if err != OK:
+			push_error("Screenshot failed (%s)" % error_string(err))
+		if _shot_i < TABS.size():
+			_show_tab(_shot_i)
+		else:
+			_show_tab(5)
+			_rebirth_modal.show_offer()
 		return
-	_show_tab(_shot_i)
+	err = img.save_png(_shot_dir.trim_suffix("/") + "/rebirth_confirm.png")
+	if err != OK:
+		push_error("Screenshot failed (%s)" % error_string(err))
+	get_tree().quit(0 if err == OK else 1)
