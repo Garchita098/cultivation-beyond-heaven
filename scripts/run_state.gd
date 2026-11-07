@@ -64,6 +64,8 @@ var reality_mode: String = "still"
 var path_switch_count: int = 0
 var sacrifice_count: int = 0
 var mechanic_counts: Dictionary = {}
+var achievements: Dictionary = {}
+var stats: Dictionary = {}
 
 
 func _init() -> void:
@@ -139,6 +141,9 @@ static func from_save_dict(data: Dictionary) -> RunState:
 	run.reveal_seen = _flag_dict(data.get("reveal_seen", []))
 	run.dao_marks = float(data.get("dao_marks", 0.0))
 	run.ascension_count = int(data.get("ascension_count", 0))
+	run.achievements = _flag_dict(data.get("achievements", []))
+	var stats_v = data.get("stats", {})
+	run.stats = stats_v.duplicate(true) if typeof(stats_v) == TYPE_DICTIONARY else {}
 	var layer = data.get("stage3", {})
 	if typeof(layer) == TYPE_DICTIONARY:
 		run._read_layer(layer)
@@ -187,6 +192,8 @@ func to_save_dict(save_version: int) -> Dictionary:
 		"dao_marks": dao_marks,
 		"ascension_count": ascension_count,
 		"stage3": _write_layer(),
+		"achievements": _flag_list(achievements),
+		"stats": stats.duplicate(true),
 		"meta": {},
 	}
 
@@ -373,6 +380,8 @@ func _copy_layer_to_sim(sim: SimState) -> void:
 	sim.path_switch_count = path_switch_count
 	sim.sacrifice_count = sacrifice_count
 	sim.mechanic_counts = mechanic_counts.duplicate()
+	sim.achievements = achievements.duplicate()
+	sim.stats = stats.duplicate(true)
 
 
 func _copy_layer_from_sim(sim: SimState) -> void:
@@ -410,6 +419,8 @@ func _copy_layer_from_sim(sim: SimState) -> void:
 	path_switch_count = sim.path_switch_count
 	sacrifice_count = sim.sacrifice_count
 	mechanic_counts = sim.mechanic_counts.duplicate()
+	achievements = sim.achievements.duplicate()
+	stats = sim.stats.duplicate(true)
 
 
 func _finite(bn: BigNum) -> float:

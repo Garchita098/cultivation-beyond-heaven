@@ -41,6 +41,9 @@ var _rebirth_modal: Control
 var _path_sheet: Control
 var _ascension_modal: Control
 var _world_sheet: Control
+var _achievements: Control
+var _toast: PanelContainer
+var _toast_label: Label
 
 var _shooting: bool = false
 var _shot_dir: String = ""
@@ -121,6 +124,12 @@ func _ready() -> void:
 	EventBus.open_world_sheet.connect(_world_sheet.show_world)
 	EventBus.feature_unlocked.connect(_on_feature)
 	EventBus.rebirth_done.connect(func(_c): _pulse())
+	_achievements = preload("res://scenes/achievements_sheet.gd").new()
+	_achievements.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_achievements)
+	_build_toast(theme)
+	overlay.add_child(_toast)
+	EventBus.achievement_unlocked.connect(_show_toast)
 
 	var args := OS.get_cmdline_user_args()
 	var idx := args.find("--screenshots")
@@ -204,6 +213,44 @@ func _build_status(theme: CBHTheme) -> void:
 	_status_rank.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	CBHTheme.style_label(_status_rank, theme.font_sans, 15, CBHTheme.COL_GOLD)
 	row.add_child(_status_rank)
+	var goals := Button.new()
+	goals.text = "Цели"
+	goals.focus_mode = Control.FOCUS_NONE
+	goals.custom_minimum_size = Vector2(84, 48)
+	goals.add_theme_font_size_override("font_size", 14)
+	goals.pressed.connect(func(): _achievements.show_sheet())
+	row.add_child(goals)
+
+
+func _build_toast(theme: CBHTheme) -> void:
+	_toast = PanelContainer.new()
+	_toast.visible = false
+	_toast.anchor_left = 0.08
+	_toast.anchor_right = 0.92
+	_toast.offset_top = 78.0
+	_toast.offset_bottom = 156.0
+	_toast.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_toast.add_theme_stylebox_override("panel", CBHTheme.flat(Color("1A2438"), CBHTheme.COL_GOLD, 16, 1))
+	_toast_label = Label.new()
+	_toast_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_toast_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	CBHTheme.style_label(_toast_label, theme.font_bold, 18, CBHTheme.COL_GOLD)
+	_toast.add_child(_toast_label)
+
+
+func _show_toast(achievement_id: String) -> void:
+	var title := achievement_id
+	for ach in Content.data.achievements:
+		if str(ach["id"]) == achievement_id:
+			title = str(ach.get("name_ru", title))
+			break
+	_toast_label.text = "Достижение: %s" % title
+	_toast.visible = true
+	_toast.modulate.a = 1.0
+	var tw := create_tween()
+	tw.tween_interval(1.6)
+	tw.tween_property(_toast, "modulate:a", 0.0, 0.45)
+	tw.tween_callback(func(): _toast.visible = false)
 
 
 func _build_content() -> void:

@@ -12,6 +12,7 @@ import os
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
+import achievements
 import stage3
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data")
@@ -108,6 +109,9 @@ class GameState:
     path_switch_count: int = 0
     sacrifice_count: int = 0
     mechanic_counts: Dict[str, int] = field(default_factory=dict)
+    achievements: set = field(default_factory=set)
+    stats: Dict[str, Any] = field(default_factory=dict)
+    fresh_achievements: List[str] = field(default_factory=list)
     _talent_sig: str = ""
 
 
@@ -127,6 +131,7 @@ class Economy:
         self.worlds_doc = load_json("worlds.json")
         self.worlds_by_id = {w["id"]: w for w in self.worlds_doc["worlds"]}
         self.research = load_json("research.json")
+        self.achievements = load_json("achievements.json")["achievements"]
         self.ranks_by_id = {r["id"]: r for r in self.ranks}
         self.shop_by_id = {s["id"]: s for s in self.rebirth["shop"]}
         self.roots_by_id = {r["id"]: r for r in self.talents["roots"]}
@@ -307,6 +312,9 @@ class Economy:
         bonus += self.talent_mods(state)["offline"]
         bonus += self.artifact_mods(state)["offline"]
         bonus += stage3.extra_offline_bonus(self, state)
+        extra = achievements.offline_bonus(self, state)
+        if extra:
+            bonus += extra
         return bonus
 
     def cost_reduction(self, state: GameState) -> float:
@@ -328,6 +336,7 @@ class Economy:
         return stage3.adjust_cost(self, state, cost, u["base_cost"], u["growth"], lvl, reduction)
 
     def production(self, state: GameState) -> float:
+        achievements.sync(self, state)
         self.refresh_derived(state)
         base = float(self.balance["base_qi_per_sec"])
         tmods = self.talent_mods(state)
@@ -362,12 +371,16 @@ class Economy:
             * amods["mult"]
             * speed_mult
         )
-        return stage3.adjust_prod(
+        out = stage3.adjust_prod(
             self,
             state,
             prod,
             {"flat_sum": flat_sum, "mult_add": mult_add, "speed_mult": speed_mult},
         )
+        bonus = achievements.qi_mult(self, state)
+        if bonus != 1.0:
+            out *= bonus
+        return out
 
     def breakthrough_cost(self, state: GameState) -> Optional[float]:
         nxt = self.next_rank(state)
@@ -1101,6 +1114,7 @@ class Economy:
         state.time_sec += dt
         stage3.advance(self, state, dt, gained, offline=False)
         stage3.clamp_state(self, state)
+        achievements.track_tick(state, dt)
         if not state.history or state.time_sec - state.history[-1][0] >= 5.0:
             state.history.append((state.time_sec, prod, state.rank_index))
 
@@ -1129,6 +1143,8 @@ class Economy:
             state.qi += gained
             state.lifetime_qi += gained
             state.time_sec += absent
+            achievements.on_offline(state, absent)
+            achievements.track_tick(state, absent)
             return {
                 "gained": gained,
                 "absent_sec": absent,
@@ -1156,6 +1172,8 @@ class Economy:
             elapsed += dt
             remaining -= dt
         state.time_sec += absent
+        achievements.on_offline(state, absent)
+        achievements.track_tick(state, absent)
         eff = self._offline_eff(state)
         return {
             "gained": gained_total,

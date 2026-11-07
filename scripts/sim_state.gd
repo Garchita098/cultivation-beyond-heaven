@@ -64,6 +64,9 @@ var reality_mode: String = "still"
 var path_switch_count: int = 0
 var sacrifice_count: int = 0
 var mechanic_counts: Dictionary = {}
+var achievements: Dictionary = {}
+var stats: Dictionary = {}
+var fresh_achievements: Array = []
 var _talent_sig: String = ""
 
 

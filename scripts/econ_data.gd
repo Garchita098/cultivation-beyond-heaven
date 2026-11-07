@@ -16,6 +16,7 @@ var paths_by_id: Dictionary = {}
 var automation: Dictionary = {}
 var research: Dictionary = {}
 var worlds_doc: Dictionary = {}
+var achievements: Array = []
 
 
 func rank_at(index: int) -> Dictionary:

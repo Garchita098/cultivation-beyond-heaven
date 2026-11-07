@@ -33,6 +33,7 @@ static func production_bn(data: EconData, rank_index: int, levels: Dictionary, k
 
 
 static func production_state(data: EconData, state: SimState) -> float:
+	Achievements.sync(data, state)
 	refresh_derived(data, state)
 	var base := float(data.balance["base_qi_per_sec"])
 	var tmods := talent_mods(data, state)
@@ -67,7 +68,11 @@ static func production_state(data: EconData, state: SimState) -> float:
 		* float(amods["mult"])
 		* speed_mult
 	)
-	return Stage3Rules.adjust_prod(data, state, prod, {"flat_sum": flat_sum, "mult_add": mult_add, "speed_mult": speed_mult})
+	var out := Stage3Rules.adjust_prod(data, state, prod, {"flat_sum": flat_sum, "mult_add": mult_add, "speed_mult": speed_mult})
+	var bonus := Achievements.qi_mult(data, state)
+	if bonus != 1.0:
+		out *= bonus
+	return out
 
 
 static func upgrade_cost(data: EconData, levels: Dictionary, uid: String) -> float:
@@ -120,6 +125,9 @@ static func offline_bonus(data: EconData, state: SimState) -> float:
 	bonus += float(talent_mods(data, state)["offline"])
 	bonus += float(artifact_mods(data, state)["offline"])
 	bonus += Stage3Rules.extra_offline_bonus(data, state)
+	var ach_off := Achievements.offline_bonus(data, state)
+	if ach_off:
+		bonus += ach_off
 	return bonus
 
 
@@ -1149,6 +1157,8 @@ static func apply_offline(data: EconData, state: SimState, absent_sec: float) ->
 		state.qi += gained
 		state.lifetime_qi += gained
 		state.time_sec += absent
+		Achievements.on_offline(state, absent)
+		Achievements.track_tick(state, absent)
 		return {
 			"gained": gained,
 			"absent_sec": absent,
@@ -1176,6 +1186,8 @@ static func apply_offline(data: EconData, state: SimState, absent_sec: float) ->
 		elapsed += dt
 		remaining -= dt
 	state.time_sec += absent
+	Achievements.on_offline(state, absent)
+	Achievements.track_tick(state, absent)
 	return {
 		"gained": gained_total,
 		"absent_sec": absent,
@@ -1212,6 +1224,7 @@ static func tick(data: EconData, state: SimState, dt: float) -> void:
 	state.time_sec += dt
 	Stage3Rules.advance(data, state, dt, gained, false)
 	Stage3Rules.clamp_state(data, state)
+	Achievements.track_tick(state, dt)
 
 
 static func _mark(state: SimState, key: String) -> void:

@@ -23,9 +23,11 @@ func _ready() -> void:
 func tick(delta: float) -> void:
 	if run == null or delta <= 0.0 or not Content.valid:
 		return
+	var before := run.achievements.duplicate()
 	var sim := run.to_sim()
 	EconomyCore.tick(Content.data, sim, delta)
 	run.apply_sim(sim, true)
+	_emit_achievements(before)
 	last_prod = EconomyCore.production_state(Content.data, sim)
 	if not is_finite(last_prod) or last_prod < 0.0:
 		push_error("Qi production is not a finite non-negative number")
@@ -219,11 +221,13 @@ func set_auto_rebirth(min_rank: int, min_karma: int) -> void:
 func _mutate(action: Callable) -> bool:
 	if run == null or not Content.valid:
 		return false
+	var before_ach := run.achievements.duplicate()
 	var sim := run.to_sim()
 	var before_unlock := run.unlocked.duplicate()
 	if not bool(action.call(sim)):
 		return false
 	run.apply_sim(sim, false)
+	_emit_achievements(before_ach)
 	last_prod = Economy.production_float(run)
 	for k in run.unlocked.keys():
 		if run.unlocked[k] and not before_unlock.has(k):
@@ -234,6 +238,14 @@ func _mutate(action: Callable) -> bool:
 
 func _emit_new_unlocks() -> void:
 	pass
+
+
+func _emit_achievements(before: Dictionary) -> void:
+	if run == null:
+		return
+	for key in run.achievements.keys():
+		if not before.has(key):
+			EventBus.achievement_unlocked.emit(str(key))
 
 
 func catch_up_offline() -> void:

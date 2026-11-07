@@ -33,6 +33,7 @@ func _all() -> bool:
 	_test_stage2_cases()
 	_test_offline_automation()
 	_test_stage3()
+	_test_achievements()
 	return _fails.is_empty()
 
 
@@ -186,21 +187,29 @@ func _test_save_migration() -> void:
 	var migrated: Dictionary = save.migrate(original)
 	if int(original["save_version"]) != 1:
 		_fail("migrate mutated caller")
-	elif int(migrated["save_version"]) != 4 or int(migrated["highest_rank_index"]) != 12:
+	elif int(migrated["save_version"]) != 5 or int(migrated["highest_rank_index"]) != 12:
 		_fail("v1->current missing highest_rank_index")
 	elif str(migrated["qi"]) != "1.5e10":
 		_fail("v1 qi changed %s" % str(migrated["qi"]))
 	elif typeof(migrated.get("talents_owned")) != TYPE_ARRAY or typeof(migrated.get("shop_levels")) != TYPE_DICTIONARY:
 		_fail("v1->v4 missing stage 2 fields")
 	elif typeof(migrated.get("stage3")) != TYPE_DICTIONARY or int(migrated.get("ascension_count", -1)) != 0:
-		_fail("v1->v4 missing stage 3 fields")
+		_fail("v1->v5 missing stage 3 fields")
+	elif typeof(migrated.get("achievements")) != TYPE_ARRAY or typeof(migrated.get("stats")) != TYPE_DICTIONARY:
+		_fail("v1->v5 missing achievements")
 	else:
-		_ok("migrate v1 stage-1 save through v4")
+		_ok("migrate v1 stage-1 save through v5")
 	var again: Dictionary = save.migrate(migrated)
-	if int(again["save_version"]) != 4 or int(again["highest_rank_index"]) != 12:
-		_fail("migrate v4 not idempotent")
+	if int(again["save_version"]) != 5 or int(again["highest_rank_index"]) != 12:
+		_fail("migrate v5 not idempotent")
 	else:
-		_ok("migrate v4 idempotent")
+		_ok("migrate v5 idempotent")
+	var v4 := {"save_version": 4, "qi": "3", "lifetime_qi": "4", "rank_index": 2, "upgrade_levels": {}, "karma_shards": "0", "rebirth_count": 0, "unlocked": ["upgrades_basic"], "world_id": "mortal_world", "ascension_count": 1, "stage3": {}, "meta": {}}
+	var from_v4: Dictionary = save.migrate(v4)
+	if int(from_v4["save_version"]) != 5 or typeof(from_v4.get("achievements")) != TYPE_ARRAY or int(from_v4.get("ascension_count", 0)) != 1:
+		_fail("v4 did not migrate to v5")
+	else:
+		_ok("migrate v4 save to v5")
 
 	var stage1 := {
 		"save_version": 2,
@@ -223,7 +232,7 @@ func _test_save_migration() -> void:
 	}
 	var from_stage1: Dictionary = save.migrate(stage1)
 	var stage1_run := RunState.from_save_dict(from_stage1)
-	if int(from_stage1["save_version"]) != 4:
+	if int(from_stage1["save_version"]) != 5:
 		_fail("stage-1 v2 did not become v3")
 	elif not stage1_run.qi.nearly(BigNum.from_save_string("8.5e6")) or stage1_run.rank_index != 9:
 		_fail("stage-1 qi/rank lost")
@@ -234,11 +243,11 @@ func _test_save_migration() -> void:
 	elif int(stage1_run.shop_levels.get("karma_prod_1", 0)) != 0:
 		_fail("stage-1 invented shop levels")
 	else:
-		_ok("migrate stage-1 v2 save to v4")
+		_ok("migrate stage-1 v2 save to v5")
 
 	var legacy: Dictionary = save.migrate({"save_version": 0, "qi": 100, "rank": 1})
 	var legacy_run := RunState.from_save_dict(legacy)
-	if int(legacy["save_version"]) != 4 or not legacy_run.qi.nearly(BigNum.from_float(100.0)):
+	if int(legacy["save_version"]) != 5 or not legacy_run.qi.nearly(BigNum.from_float(100.0)):
 		_fail("v0 numeric qi migration %s" % str(legacy.get("qi")))
 	elif legacy_run.rank_index != 1:
 		_fail("v0 rank")
@@ -272,10 +281,10 @@ func _test_save_migration() -> void:
 	else:
 		_ok("save/load roundtrip")
 	var doc: Dictionary = save.load_document(dir)
-	if int(doc["data"]["save_version"]) != 4:
+	if int(doc["data"]["save_version"]) != 5:
 		_fail("saved version")
 	else:
-		_ok("saved document is v4")
+		_ok("saved document is v5")
 
 	var latest := dir + "save_latest.json"
 	var file := FileAccess.open(latest, FileAccess.WRITE)
@@ -804,6 +813,29 @@ func _test_stage3() -> void:
 		_fail("magnitude cap")
 	else:
 		_ok("qi clamps at the float cap")
+
+
+func _test_achievements() -> void:
+	var data: EconData = preload("res://autoload/content.gd").data
+	if data.achievements.size() < 40:
+		_fail("achievement count %d" % data.achievements.size())
+		return
+	_ok("achievements loaded %d" % data.achievements.size())
+	var early := SimState.new()
+	early.highest_rank_index = 15
+	early.rebirth_count = 2
+	early.time_sec = 4000.0
+	Achievements.sync(data, early)
+	if Achievements.qi_mult(data, early) != 1.0:
+		_fail("early achievement bonus %s" % str(Achievements.qi_mult(data, early)))
+	else:
+		_ok("no qi bonus in the golden window")
+	early.ascension_count = 1
+	Achievements.sync(data, early)
+	if Achievements.qi_mult(data, early) <= 1.0:
+		_fail("ascension achievement missing")
+	else:
+		_ok("ascension achievement grants qi")
 
 
 func _close(a: float, b: float) -> bool:
