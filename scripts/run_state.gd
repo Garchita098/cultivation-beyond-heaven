@@ -69,6 +69,9 @@ var stats: Dictionary = {}
 var heavenly_rites: Dictionary = {}
 var void_seals: Dictionary = {}
 var chaos_attunements: Dictionary = {}
+var notation: String = "letters"
+var sound_on: bool = true
+var reduced_effects: bool = false
 
 
 func _init() -> void:
@@ -147,6 +150,12 @@ static func from_save_dict(data: Dictionary) -> RunState:
 	run.achievements = _flag_dict(data.get("achievements", []))
 	var stats_v = data.get("stats", {})
 	run.stats = stats_v.duplicate(true) if typeof(stats_v) == TYPE_DICTIONARY else {}
+	var prefs = data.get("prefs", {})
+	if typeof(prefs) == TYPE_DICTIONARY:
+		run.notation = str(prefs.get("notation", "letters"))
+		run.sound_on = bool(prefs.get("sound", true))
+		run.reduced_effects = bool(prefs.get("reduced_effects", false))
+	Prefs.apply_run(run)
 	var layer = data.get("stage3", {})
 	if typeof(layer) == TYPE_DICTIONARY:
 		run._read_layer(layer)
@@ -197,6 +206,11 @@ func to_save_dict(save_version: int) -> Dictionary:
 		"stage3": _write_layer(),
 		"achievements": _flag_list(achievements),
 		"stats": stats.duplicate(true),
+		"prefs": {
+			"notation": notation,
+			"sound": sound_on,
+			"reduced_effects": reduced_effects,
+		},
 		"meta": {},
 	}
 

@@ -108,7 +108,7 @@ func _process(delta: float) -> void:
 	if not visible:
 		return
 	_float_t += delta
-	if _hero != null and _hero.texture != null:
+	if _hero != null and _hero.texture != null and not Prefs.reduced_effects:
 		var bob := sin(_float_t * 1.35) * 6.0
 		_hero.offset_top = 28.0 + bob
 		_hero.offset_bottom = -12.0 + bob

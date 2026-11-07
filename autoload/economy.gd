@@ -23,4 +23,4 @@ func next_rank(run: RunState, stage_cap: int = EconomyCore.STAGE_CAP) -> Diction
 
 
 func format_qi(bn: BigNum) -> String:
-	return BigNum.format(bn, Content.sci_from())
+	return BigNum.format(bn, Prefs.sci_from())

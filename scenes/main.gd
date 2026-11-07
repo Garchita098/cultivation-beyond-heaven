@@ -43,6 +43,7 @@ var _ascension_modal: Control
 var _world_sheet: Control
 var _achievements: Control
 var _stats: Control
+var _settings: Control
 var _toast: PanelContainer
 var _toast_label: Label
 
@@ -131,6 +132,9 @@ func _ready() -> void:
 	_stats = preload("res://scenes/stats_sheet.gd").new()
 	_stats.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	overlay.add_child(_stats)
+	_settings = preload("res://scenes/settings_sheet.gd").new()
+	_settings.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_settings)
 	_build_toast(theme)
 	overlay.add_child(_toast)
 	EventBus.achievement_unlocked.connect(_show_toast)
@@ -158,7 +162,7 @@ func _process(delta: float) -> void:
 		if _world_bg.texture != null:
 			using_pack = str(_world_bg.texture.resource_path).begins_with("res://assets/art/")
 		_world_bg.modulate = Color(1, 1, 1, 0.92) if using_pack else tint
-		var drift := sin(_bg_time * 0.15) * 10.0
+		var drift := 0.0 if Prefs.reduced_effects else sin(_bg_time * 0.15) * 10.0
 		_world_bg.offset_left = -24.0 + drift
 		_world_bg.offset_right = 24.0 + drift
 	if not _shooting:
@@ -231,6 +235,13 @@ func _build_status(theme: CBHTheme) -> void:
 	stats_btn.add_theme_font_size_override("font_size", 14)
 	stats_btn.pressed.connect(func(): _stats.show_sheet())
 	row.add_child(stats_btn)
+	var gear := Button.new()
+	gear.text = "Ещё"
+	gear.focus_mode = Control.FOCUS_NONE
+	gear.custom_minimum_size = Vector2(68, 48)
+	gear.add_theme_font_size_override("font_size", 14)
+	gear.pressed.connect(func(): _settings.show_sheet())
+	row.add_child(gear)
 
 
 func _build_toast(theme: CBHTheme) -> void:

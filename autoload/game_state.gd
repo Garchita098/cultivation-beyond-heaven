@@ -159,6 +159,28 @@ func try_skip() -> bool:
 	)
 
 
+func export_text() -> String:
+	if run == null:
+		return ""
+	Prefs.write_run(run)
+	return JSON.stringify(run.to_save_dict(SaveSystem.CURRENT_VERSION))
+
+
+func import_text(text: String) -> bool:
+	var parsed = JSON.parse_string(text.strip_edges())
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return false
+	var migrated: Dictionary = SaveSystem.migrate(parsed)
+	if bool(migrated.get("meta", {}).get("future_version", false)):
+		return false
+	run = RunState.from_save_dict(migrated)
+	run.timestamp_unix = int(Time.get_unix_time_from_system())
+	SaveSystem.save_run(run)
+	last_prod = Economy.production_float(run)
+	EventBus.state_changed.emit()
+	return true
+
+
 func try_buy_layer(kind: String) -> bool:
 	return _mutate(func(sim: SimState) -> bool:
 		return Stage3Rules.buy_layer(Content.data, sim, kind)
