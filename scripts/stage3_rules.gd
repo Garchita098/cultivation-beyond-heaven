@@ -108,7 +108,11 @@ static func law_slots(data: EconData, state: SimState) -> int:
 			if not state.artifacts_owned.has(str(aid)):
 				continue
 			n += 1
-	return mini(3, n)
+	var cap := 3
+	if state.void_seals.has("second_pen") or state.chaos_attunements.has("braid"):
+		n += 1
+		cap = 4
+	return mini(cap, n)
 
 
 static func _prod_dirty(state: SimState) -> bool:
@@ -289,7 +293,67 @@ static func adjust_prod(data: EconData, state: SimState, prod: float, parts: Dic
 	var marks := float(data.worlds_doc["ascension"]["perm_mult_per_mark"])
 	mult *= 1.0 + float(state.dao_marks) * marks
 	mult *= qi_keep(data, state)
+	var extra := layer_qi_mult(data, state)
+	if extra != 1.0:
+		mult *= extra
 	return clamp_num(data, prod * mult)
+
+
+static func layer_qi_mult(data: EconData, state: SimState) -> float:
+	var m := 1.0
+	var echo := float(data.balance.get("ascension_echo", 0.0))
+	if echo > 0.0 and state.ascension_count > 0:
+		m *= 1.0 + echo * float(state.ascension_count)
+	m *= _bag_mult(data, state, "heavenly_world", "rites", state.heavenly_rites)
+	m *= _bag_mult(data, state, "void_dimension", "seals", state.void_seals)
+	m *= _bag_mult(data, state, "chaos_origin", "attunements", state.chaos_attunements)
+	return m
+
+
+static func _bag_mult(data: EconData, state: SimState, world_id: String, key: String, owned: Dictionary) -> float:
+	if owned.is_empty():
+		return 1.0
+	var mult := 1.0
+	for spec in world_def(data, world_id).get(key, []):
+		if not owned.has(str(spec["id"])):
+			continue
+		if str(spec.get("effect", "")) == "qi_mult":
+			mult *= float(spec["value"])
+	return mult
+
+
+static func buy_layer(data: EconData, state: SimState, kind: String) -> bool:
+	var world_id := ""
+	var key := ""
+	var owned: Dictionary = {}
+	match kind:
+		"rite":
+			world_id = "heavenly_world"
+			key = "rites"
+			owned = state.heavenly_rites
+		"seal":
+			world_id = "void_dimension"
+			key = "seals"
+			owned = state.void_seals
+		"attune":
+			world_id = "chaos_origin"
+			key = "attunements"
+			owned = state.chaos_attunements
+		_:
+			return false
+	for spec in world_def(data, world_id).get(key, []):
+		var id := str(spec["id"])
+		if owned.has(id):
+			continue
+		var cost := float(spec["cost"])
+		var have := float(state.world_res.get(str(spec["cost_key"]), 0.0))
+		if have + 1e-9 < cost:
+			return false
+		state.world_res[str(spec["cost_key"])] = have - cost
+		owned[id] = true
+		EconomyCore._mark(state, "layer:" + id)
+		return true
+	return false
 
 
 static func adjust_cost(data: EconData, state: SimState, cost: float, base_cost: float, growth: float, level: int, reduction: float) -> float:
@@ -327,6 +391,13 @@ static func adjust_breakthrough(data: EconData, state: SimState, cost: float) ->
 	var tithe := has_rule(data, state, "time_log")
 	if not tithe.is_empty():
 		cost *= 1.2
+		dirty = true
+	var scale := float(data.balance.get("ascension_cost_scale", 1.0))
+	if scale != 1.0 and state.ascension_count > 0:
+		cost *= pow(scale, float(state.ascension_count))
+		var later := float(data.balance.get("ascension_later_scale", 1.0))
+		if state.ascension_count >= 2 and later != 1.0:
+			cost *= pow(later, float(state.ascension_count - 1))
 		dirty = true
 	if not dirty:
 		return cost

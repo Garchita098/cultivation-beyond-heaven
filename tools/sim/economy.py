@@ -114,6 +114,9 @@ class GameState:
     achievements: set = field(default_factory=set)
     stats: Dict[str, Any] = field(default_factory=dict)
     fresh_achievements: List[str] = field(default_factory=list)
+    heavenly_rites: set = field(default_factory=set)
+    void_seals: set = field(default_factory=set)
+    chaos_attunements: set = field(default_factory=set)
     _talent_sig: str = ""
 
     def __setattr__(self, name, value):

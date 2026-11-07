@@ -1365,6 +1365,11 @@
           "milestone": "rank:integration_peak",
           "time_sec": 118200.0,
           "time": "32.83h"
+        },
+        {
+          "milestone": "rank:mahayana_early",
+          "time_sec": 118200.0,
+          "time": "32.83h"
         }
       ],
       "longest_wait_sec": 29400.0,
@@ -1421,7 +1426,7 @@
         "rank_index": 0,
         "rebirths": 5,
         "karma": 43.0,
-        "lifetime_qi": 1.121268461910307e+17,
+        "lifetime_qi": 1.814486426434613e+17,
         "talents": 9,
         "artifacts": 7,
         "shop_mult": 1.4,

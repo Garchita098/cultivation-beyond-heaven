@@ -14,6 +14,10 @@ The stage 4 brief asked to import `cbh_art.tar.gz` (heroes, five world backgroun
 
 Until those files exist, the game keeps the stage-1 silhouette shader, `bg_mortal_night.png`, and the existing tab and upgrade icons. World changes still tint that background (spirit jade, heavenly gold, void violet, chaos scarlet) and the cultivator card drifts a few pixels so the portrait is not a static block.
 
-## Still to land on this branch
+## Live numbers
 
-Achievements, statistics, the uncapped live tick, late-world balance, settings, and the export pass follow in later commits. Save version stays 4 until the achievement commit bumps it.
+Qi past 1e300 is a mantissa and an exponent in both the sim and the Godot tick. Early values stay on the float path, so golden ticks still match. Save version is 5.
+
+## Worlds after the first ascension
+
+Heavenly rites, void seals, and chaos attunements are bought with that world's resource and change pressure, dust, forge slots, or Qi. Breakthrough costs after an ascension use `ascension_cost_scale` and `ascension_later_scale`. See `docs/BALANCE_NOTES.md`.

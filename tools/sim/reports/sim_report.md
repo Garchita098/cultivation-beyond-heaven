@@ -86,9 +86,9 @@ Pure paths span 1.47h – 1.70h (spread 1.154, cap 1.25).
 | World | Essence | Fragments | Dust | Seeds | Tribulations |
 |-------|---------|-----------|------|-------|--------------|
 | spirit_world | 7.379e+09 | 0 | 0 | 2 | 0 |
-| heavenly_world | 9.616e+09 | 4.2 | 0 | 2 | 2 |
-| void_dimension | 2.937e+09 | 0 | 2.385e+09 | 2 | 0 |
-| chaos_origin | 3.452e+09 | 0 | 0 | 5 | 0 |
+| heavenly_world | 9.616e+09 | 2.2 | 0 | 2 | 2 |
+| void_dimension | 4.315e+09 | 0 | 3.512e+09 | 2 | 0 |
+| chaos_origin | 3.847e+09 | 0 | 0 | 3 | 0 |
 
 Notation supports exponent 1000000 (`1.23e1000000`). Live Qi keeps exponents past 300 instead of clamping at 1e300.
 

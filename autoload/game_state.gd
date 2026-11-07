@@ -159,6 +159,12 @@ func try_skip() -> bool:
 	)
 
 
+func try_buy_layer(kind: String) -> bool:
+	return _mutate(func(sim: SimState) -> bool:
+		return Stage3Rules.buy_layer(Content.data, sim, kind)
+	)
+
+
 func try_ascend() -> bool:
 	return _mutate(func(sim: SimState) -> bool:
 		return Stage3Rules.do_ascension(Content.data, sim)

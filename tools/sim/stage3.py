@@ -143,7 +143,66 @@ def law_slots(eco, state) -> int:
             if aid not in state.artifacts_owned:
                 continue
             n += 1
-    return min(3, n)
+    cap = 3
+    if "second_pen" in getattr(state, "void_seals", ()) or "braid" in getattr(state, "chaos_attunements", ()):
+        n += 1
+        cap = 4
+    return min(cap, n)
+
+
+def layer_qi_mult(eco, state) -> float:
+    m = 1.0
+    echo = float(eco.balance.get("ascension_echo", 0.0))
+    if echo and int(state.ascension_count) > 0:
+        m *= 1.0 + echo * float(state.ascension_count)
+    m *= _bag_mult(eco, state, "heavenly_world", "rites", state.heavenly_rites)
+    m *= _bag_mult(eco, state, "void_dimension", "seals", state.void_seals)
+    m *= _bag_mult(eco, state, "chaos_origin", "attunements", state.chaos_attunements)
+    return m
+
+
+def _bag_mult(eco, state, world_id: str, key: str, owned) -> float:
+    if not owned:
+        return 1.0
+    m = 1.0
+    for spec in world_def(eco, world_id).get(key, []):
+        if spec["id"] not in owned:
+            continue
+        if spec.get("effect") == "qi_mult":
+            m *= float(spec["value"])
+    return m
+
+
+def layer_effect(eco, state, world_id: str, key: str, owned, effect: str, fallback: float) -> float:
+    if not owned:
+        return fallback
+    for spec in world_def(eco, world_id).get(key, []):
+        if spec.get("effect") == effect and spec["id"] in owned:
+            return float(spec["value"])
+    return fallback
+
+
+def buy_layer(eco, state, kind: str) -> bool:
+    table = {
+        "rite": ("heavenly_world", "rites", state.heavenly_rites),
+        "seal": ("void_dimension", "seals", state.void_seals),
+        "attune": ("chaos_origin", "attunements", state.chaos_attunements),
+    }
+    if kind not in table:
+        return False
+    world_id, key, owned = table[kind]
+    for spec in world_def(eco, world_id).get(key, []):
+        if spec["id"] in owned:
+            continue
+        have = float(state.world_res.get(spec["cost_key"], 0.0))
+        cost = float(spec["cost"])
+        if have + 1e-9 < cost:
+            return False
+        state.world_res[spec["cost_key"]] = have - cost
+        owned.add(spec["id"])
+        eco._mark(state, "layer:" + spec["id"])
+        return True
+    return False
 
 
 def _prod_dirty(state) -> bool:
@@ -327,6 +386,9 @@ def adjust_prod(eco, state, prod: float, parts: dict) -> float:
     marks = float(worlds_doc(eco)["ascension"]["perm_mult_per_mark"])
     mult *= 1.0 + float(state.dao_marks) * marks
     mult *= qi_keep(eco, state)
+    extra = layer_qi_mult(eco, state)
+    if extra != 1.0:
+        mult *= extra
     out = prod * mult
     return clamp(eco, out)
 
@@ -366,6 +428,14 @@ def adjust_breakthrough(eco, state, cost: Optional[float]) -> Optional[float]:
     tithe = has_rule(eco, state, "time_log")
     if tithe:
         cost *= 1.2
+        dirty = True
+    scale = float(eco.balance.get("ascension_cost_scale", 1.0))
+    steps = int(state.ascension_count)
+    if scale != 1.0 and steps > 0:
+        cost *= scale ** steps
+        later = float(eco.balance.get("ascension_later_scale", 1.0))
+        if steps >= 2 and later != 1.0:
+            cost *= later ** (steps - 1)
         dirty = True
     if not dirty:
         return cost
@@ -1116,6 +1186,9 @@ def maintain(eco, state) -> None:
             "time_lord": "qi_or_time",
         }.get(state.path_id, "soft_growth")
         slot_law(eco, state, prefer)
+    kind = {"heavenly_world": "rite", "void_dimension": "seal", "chaos_origin": "attune"}.get(state.world_id)
+    if kind:
+        buy_layer(eco, state, kind)
     if state.world_id == "void_dimension" and not state.active_rewrite:
         if float(state.world_res.get("void_dust", 0.0)) >= float(world_def(eco, "void_dimension")["rewrite_cost"]):
             buy_void_rewrite(eco, state)

@@ -29,6 +29,22 @@ What moved the 27m pause: lower `foundation_peak` / `core_*` costs, `meridian_op
 
 5. **Цены рангов stage 3 снижены.** Черновик (void 2e20 при множителе ×2 после души) был стеной. Кривая от void_early 4e13 идёт геометрически до beyond 2e23. Потолок живой экономики — 1e300 (float64). Нотация сейва держит экспоненту 1e6.
 
+## Stage 4 — after the first ascension (2026-11-07)
+
+First-ascension times are unchanged (sword 1.61h, demon 1.47h, immortal 1.68h, devourer 1.57h, time lord 1.70h, spread 1.154). Post-ascension breakthrough costs are multiplied by `ascension_cost_scale` (2.2) per ascension already completed, and from the second ascension onward also by `ascension_later_scale` (140). Each ascension also adds `ascension_echo` (1.0, so +100% Qi per ascension).
+
+Active bots, one decision per second, gaps measured after the first ascension:
+
+| Path | 1st | 2nd | 3rd | Longest purchase gap after 1st |
+|------|-----|-----|-----|--------------------------------|
+| heavenly sword | 1.61h | 1.83h | 1.93h | 3.4m |
+| demon emperor | 1.47h | 3.58h | 4.18h | 12.3m |
+| world devourer | 1.57h | 3.64h | still in Heavenly at 4.2h | 11.2m |
+| immortal | 1.68h | not within 4h | — | 12.8m |
+| time lord | 1.70h | not within 4h | — | 14.1m |
+
+Heavenly rites, void seals, and chaos attunements are bought from that world's resource. The sword clears Heavenly in a few minutes because bursts outrun the cost scale. The demon stays about 24 minutes and buys all four rites. Immortal and time lord are still on the spirit-world ladder at 4h; their longest gap stays under about 15 minutes. A 9h run at a harsher scale showed those two paths can sit on Integration / Mahayana for a long time, so the shipped scale keeps that gate crossable.
+
 ## Как крутить
 
 - Ранний пейсинг: `ranks.json` costs mortal_* / qi_*

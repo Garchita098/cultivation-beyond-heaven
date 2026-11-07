@@ -66,6 +66,9 @@ var sacrifice_count: int = 0
 var mechanic_counts: Dictionary = {}
 var achievements: Dictionary = {}
 var stats: Dictionary = {}
+var heavenly_rites: Dictionary = {}
+var void_seals: Dictionary = {}
+var chaos_attunements: Dictionary = {}
 
 
 func _init() -> void:
@@ -300,6 +303,9 @@ func _read_layer(layer: Dictionary) -> void:
 	reality_mode = str(layer.get("reality_mode", "still"))
 	path_switch_count = int(layer.get("path_switch_count", 0))
 	sacrifice_count = int(layer.get("sacrifice_count", 0))
+	heavenly_rites = _flag_dict(layer.get("heavenly_rites", []))
+	void_seals = _flag_dict(layer.get("void_seals", []))
+	chaos_attunements = _flag_dict(layer.get("chaos_attunements", []))
 	mechanic_counts = {}
 	var counts = layer.get("mechanic_counts", {})
 	if typeof(counts) == TYPE_DICTIONARY:
@@ -341,6 +347,9 @@ func _write_layer() -> Dictionary:
 		"path_switch_count": path_switch_count,
 		"sacrifice_count": sacrifice_count,
 		"mechanic_counts": mechanic_counts.duplicate(),
+		"heavenly_rites": _flag_list(heavenly_rites),
+		"void_seals": _flag_list(void_seals),
+		"chaos_attunements": _flag_list(chaos_attunements),
 	}
 
 
@@ -382,6 +391,9 @@ func _copy_layer_to_sim(sim: SimState) -> void:
 	sim.mechanic_counts = mechanic_counts.duplicate()
 	sim.achievements = achievements.duplicate()
 	sim.stats = stats.duplicate(true)
+	sim.heavenly_rites = heavenly_rites.duplicate()
+	sim.void_seals = void_seals.duplicate()
+	sim.chaos_attunements = chaos_attunements.duplicate()
 
 
 func _copy_layer_from_sim(sim: SimState) -> void:
@@ -421,6 +433,9 @@ func _copy_layer_from_sim(sim: SimState) -> void:
 	mechanic_counts = sim.mechanic_counts.duplicate()
 	achievements = sim.achievements.duplicate()
 	stats = sim.stats.duplicate(true)
+	heavenly_rites = sim.heavenly_rites.duplicate()
+	void_seals = sim.void_seals.duplicate()
+	chaos_attunements = sim.chaos_attunements.duplicate()
 
 
 func _finite(bn: BigNum) -> float:
