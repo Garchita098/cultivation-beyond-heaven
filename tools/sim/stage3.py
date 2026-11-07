@@ -8,6 +8,8 @@ from __future__ import annotations
 import math
 from typing import Any, Dict, List, Optional
 
+import mag
+
 CAP_DEFAULT = 1e300
 
 PATH_IDS = (
@@ -33,12 +35,16 @@ def cap_of(eco) -> float:
     return float(eco.balance.get("magnitude_cap", CAP_DEFAULT))
 
 
-def clamp(eco, value: float) -> float:
-    if not math.isfinite(value) or value < 0.0:
+def clamp(eco, value):
+    """World resources stay finite. Qi past the old cap is kept."""
+    if isinstance(value, mag.Mag):
+        if value.e > 0:
+            return 0.0 if value.v < 0.0 else value
+        value = value.v
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0.0:
         return 0.0
-    limit = cap_of(eco)
-    if value > limit:
-        return limit
+    if value > cap_of(eco):
+        return mag.Mag.from_large(value)
     return value
 
 
@@ -779,10 +785,9 @@ def can_ascend(eco, state) -> bool:
 
 def ascension_gain(eco, state) -> int:
     cfg = worlds_doc(eco)["ascension"]
-    lq = max(1.0, state.lifetime_qi)
     raw = (
         1.0
-        + (math.log(lq) / math.log(10.0)) / float(cfg["gain_log_div"])
+        + mag.log10_qty(state.lifetime_qi) / float(cfg["gain_log_div"])
         + state.highest_rank_index * float(cfg["gain_per_rank"])
         + state.ascension_count * float(cfg["gain_per_ascension"])
     )

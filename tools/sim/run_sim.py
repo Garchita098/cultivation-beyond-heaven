@@ -23,6 +23,7 @@ from bots import (  # noqa: E402
     TalentFocused,
 )
 import stage3  # noqa: E402
+from mag import is_finite_qty, plain_qty  # noqa: E402
 from economy import Economy, GameState, fresh_state  # noqa: E402
 
 REPORT_DIR = os.path.join(os.path.dirname(__file__), "reports")
@@ -202,15 +203,18 @@ def milestone_table(state: GameState, eco: Economy) -> List[dict]:
 
 
 def magnitude_ok(state: GameState, eco: Economy) -> List[str]:
+    from mag import Mag, is_finite_qty
+
     issues = []
     prod = eco.production(state)
     for name, val in (("qi", state.qi), ("lifetime_qi", state.lifetime_qi), ("prod", prod), ("karma", state.karma_shards)):
-        if not math.isfinite(val):
+        if not is_finite_qty(val):
             issues.append(f"{name} not finite")
-        if val < -1e-6:
+        if isinstance(val, Mag):
+            if val.v < 0.0:
+                issues.append(f"{name} negative")
+        elif val < -1e-6:
             issues.append(f"{name} negative")
-    if abs(state.qi) > 1e300 or abs(prod) > 1e300:
-        issues.append("magnitude exceeds 1e300")
     return issues
 
 
@@ -264,13 +268,13 @@ def pacing_issues_for(name: str, state: GameState, eco: Economy, walls: list) ->
 def final_blob(eco: Economy, st: GameState) -> dict:
     return {
         "time": st.time_sec,
-        "qi": st.qi,
-        "prod": eco.production(st),
+        "qi": plain_qty(st.qi),
+        "prod": plain_qty(eco.production(st)),
         "rank": eco.rank(st)["id"],
         "rank_index": st.rank_index,
         "rebirths": st.rebirth_count,
         "karma": st.karma_shards,
-        "lifetime_qi": st.lifetime_qi,
+        "lifetime_qi": plain_qty(st.lifetime_qi),
         "talents": len(st.talents_owned),
         "artifacts": len(st.artifacts_owned),
         "shop_mult": st.shop_mult,
@@ -331,7 +335,7 @@ def _probe_world(eco: Economy, world_id: str) -> dict:
         stage3.maintain(eco, st)
     return {
         "world": world_id,
-        "qi": st.qi,
+        "qi": plain_qty(st.qi),
         "essence": float(st.world_res.get("spirit_essence", 0.0)),
         "fragments": float(st.world_res.get("dao_fragments", 0.0)),
         "dust": float(st.world_res.get("void_dust", 0.0)),
@@ -339,7 +343,7 @@ def _probe_world(eco: Economy, world_id: str) -> dict:
         "tribulations": st.tribulation_cycle,
         "laws": list(st.slotted_laws),
         "rank": st.rank_index,
-        "finite": math.isfinite(st.qi) and st.qi <= float(eco.balance["magnitude_cap"]),
+        "finite": is_finite_qty(st.qi),
     }
 
 
@@ -369,7 +373,7 @@ def run_stage3(eco: Economy, md: List[str]) -> List[str]:
             failed.append("path did not ascend")
         else:
             times.append(asc)
-        if not math.isfinite(st.qi) or st.qi > float(eco.balance["magnitude_cap"]):
+        if not is_finite_qty(st.qi):
             failed.append("path magnitude")
         lw, lk = longest_wait(st)
         if lw > float(eco.balance["walls"]["late_game_max_idle_sec"]):
@@ -424,11 +428,13 @@ def run_stage3(eco: Economy, md: List[str]) -> List[str]:
     text = format_bn(m, e)
     if text != "1.23e1000000":
         failed.append(f"notation {text}")
+    from mag import Mag
+
     huge = fresh_state()
     huge.qi = 1e308
     stage3.clamp_state(eco, huge)
-    if huge.qi > float(eco.balance["magnitude_cap"]) + 1.0:
-        failed.append("float cap")
+    if not isinstance(huge.qi, Mag) or huge.qi.log10() < 300:
+        failed.append("huge qi was destroyed")
 
     md.append("")
     md.append("## Stage 3 — time to first ascension")
@@ -468,7 +474,7 @@ def run_stage3(eco: Economy, md: List[str]) -> List[str]:
             f"| {name} | {probe['essence']:.4g} | {probe['fragments']:.4g} | {probe['dust']:.4g} | {probe['seeds']:.4g} | {probe['tribulations']} |"
         )
     md.append("")
-    md.append("Notation supports exponent 1000000 (`1.23e1000000`). Live Qi is clamped at 1e300 because the economy runs in float64.")
+    md.append("Notation supports exponent 1000000 (`1.23e1000000`). Live Qi keeps exponents past 300 instead of clamping at 1e300.")
     md.append("")
     if failed:
         md.append("## Stage 3 issues")

@@ -13,6 +13,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from bots import RebirthEarly  # noqa: E402
 from economy import Economy, GameState  # noqa: E402
+from mag import plain_qty  # noqa: E402
 
 HERE = os.path.dirname(__file__)
 GOLDEN = os.path.join(HERE, "reports", "golden_ticks.json")
@@ -44,7 +45,7 @@ def run_samples(eco: Economy, max_sec: float) -> dict:
                 samples.append(
                     {
                         "t": t,
-                        "qi": state.qi,
+                        "qi": plain_qty(state.qi),
                         "prod": eco.production(state),
                         "rank_index": state.rank_index,
                         "rank_id": eco.rank(state)["id"],

@@ -300,49 +300,49 @@
         },
         {
           "milestone": "rank:nascent_mid",
-          "time_sec": 4184.0,
+          "time_sec": 4176.5,
           "time": "1.16h"
         },
         {
           "milestone": "rank:nascent_late",
-          "time_sec": 5255.0,
-          "time": "1.46h"
+          "time_sec": 5237.0,
+          "time": "1.45h"
         },
         {
           "milestone": "rank:nascent_peak",
-          "time_sec": 6826.0,
-          "time": "1.90h"
+          "time_sec": 6792.5,
+          "time": "1.89h"
         },
         {
           "milestone": "rank:soul_xform_early",
-          "time_sec": 7868.0,
-          "time": "2.19h"
+          "time_sec": 7809.0,
+          "time": "2.17h"
         },
         {
           "milestone": "rank:soul_xform_mid",
-          "time_sec": 8758.0,
-          "time": "2.43h"
+          "time_sec": 8677.5,
+          "time": "2.41h"
         },
         {
           "milestone": "rank:soul_xform_late",
-          "time_sec": 9767.5,
-          "time": "2.71h"
+          "time_sec": 9662.5,
+          "time": "2.68h"
         }
       ],
-      "longest_wait_sec": 437.0,
-      "longest_wait_until": "upgrade:foundation_mantra:L56",
+      "longest_wait_sec": 432.5,
+      "longest_wait_until": "upgrade:meridian_opening:L96",
       "walls": [],
       "magnitude_issues": [],
       "pacing_issues": [],
       "final": {
         "time": 10800.0,
-        "qi": 4306265193744.772,
-        "prod": 14017537170.0,
+        "qi": 4648638634148.308,
+        "prod": 14609159285.175,
         "rank": "soul_xform_late",
         "rank_index": 22,
         "rebirths": 0,
         "karma": 0.0,
-        "lifetime_qi": 24467194030871.52,
+        "lifetime_qi": 26351657703915.37,
         "talents": 4,
         "artifacts": 1,
         "shop_mult": 1.0,
@@ -484,29 +484,29 @@
         },
         {
           "milestone": "rank:nascent_mid",
-          "time_sec": 4945.0,
+          "time_sec": 4934.0,
           "time": "1.37h"
         },
         {
           "milestone": "rank:nascent_late",
-          "time_sec": 6381.5,
+          "time_sec": 6356.0,
           "time": "1.77h"
         }
       ],
-      "longest_wait_sec": 233.5,
+      "longest_wait_sec": 231.0,
       "longest_wait_until": "rank:nascent_late",
       "walls": [],
       "magnitude_issues": [],
       "pacing_issues": [],
       "final": {
         "time": 7200.0,
-        "qi": 17407383762.307594,
-        "prod": 770451563.7,
+        "qi": 15757985174.284431,
+        "prod": 781480886.8230001,
         "rank": "nascent_late",
         "rank_index": 18,
         "rebirths": 0,
         "karma": 0.0,
-        "lifetime_qi": 1355624085695.5803,
+        "lifetime_qi": 1381653395021.4956,
         "talents": 4,
         "artifacts": 1,
         "shop_mult": 1.0,
@@ -655,7 +655,7 @@
       "final": {
         "time": 4991.0,
         "qi": 0.0,
-        "prod": 11.16972204328134,
+        "prod": 11.50481370457978,
         "rank": "mortal_early",
         "rank_index": 0,
         "rebirths": 5,
@@ -727,23 +727,23 @@
         },
         {
           "milestone": "rebirth:2",
-          "time_sec": 4699.5,
-          "time": "1.31h"
+          "time_sec": 4687.0,
+          "time": "1.30h"
         },
         {
           "milestone": "rebirth:3",
-          "time_sec": 5367.0,
+          "time_sec": 5347.5,
           "time": "1.49h"
         },
         {
           "milestone": "rebirth:4",
-          "time_sec": 5830.0,
-          "time": "1.62h"
+          "time_sec": 5806.5,
+          "time": "1.61h"
         },
         {
           "milestone": "rebirth:5",
-          "time_sec": 6164.5,
-          "time": "1.71h"
+          "time_sec": 6136.5,
+          "time": "1.70h"
         },
         {
           "milestone": "rank:nascent_early",
@@ -811,20 +811,20 @@
           "time": "42.2m"
         }
       ],
-      "longest_wait_sec": 1242.5,
-      "longest_wait_until": "upgrade:foundation_pill:L28",
+      "longest_wait_sec": 1230.5,
+      "longest_wait_until": "upgrade:foundation_mantra:L41",
       "walls": [],
       "magnitude_issues": [],
       "pacing_issues": [],
       "final": {
-        "time": 6164.5,
+        "time": 6136.5,
         "qi": 0.0,
-        "prod": 11.817242161732432,
+        "prod": 12.28993184820173,
         "rank": "mortal_early",
         "rank_index": 0,
         "rebirths": 5,
         "karma": 53.0,
-        "lifetime_qi": 183297464325.72116,
+        "lifetime_qi": 183185081862.48682,
         "talents": 9,
         "artifacts": 7,
         "shop_mult": 1.4,
@@ -835,10 +835,10 @@
         },
         "rebirth_times": [
           3424.5,
-          4699.5,
-          5367.0,
-          5830.0,
-          6164.5
+          4687.0,
+          5347.5,
+          5806.5,
+          6136.5
         ]
       }
     },
@@ -983,7 +983,7 @@
       "final": {
         "time": 4991.0,
         "qi": 0.0,
-        "prod": 11.16972204328134,
+        "prod": 11.50481370457978,
         "rank": "mortal_early",
         "rank_index": 0,
         "rebirths": 5,
@@ -1146,7 +1146,7 @@
       "final": {
         "time": 4909.0,
         "qi": 0.0,
-        "prod": 11.382478653629557,
+        "prod": 11.723953013238443,
         "rank": "mortal_early",
         "rank_index": 0,
         "rebirths": 5,
@@ -1193,8 +1193,8 @@
         },
         {
           "milestone": "rank:foundation_late",
-          "time_sec": 29827.0,
-          "time": "8.29h"
+          "time_sec": 29810.0,
+          "time": "8.28h"
         },
         {
           "milestone": "rank:core_early",
@@ -1233,7 +1233,7 @@
         },
         {
           "milestone": "rebirth:5",
-          "time_sec": 147294.0,
+          "time_sec": 147260.0,
           "time": "40.91h"
         },
         {
@@ -1248,8 +1248,8 @@
         },
         {
           "milestone": "artifact:jade_slip",
-          "time_sec": 29827.0,
-          "time": "8.29h"
+          "time_sec": 29810.0,
+          "time": "8.28h"
         },
         {
           "milestone": "rank:mortal_mid",
@@ -1288,8 +1288,8 @@
         },
         {
           "milestone": "rank:foundation_peak",
-          "time_sec": 58800.0,
-          "time": "16.33h"
+          "time_sec": 29981.5,
+          "time": "8.33h"
         },
         {
           "milestone": "rank:core_mid",
@@ -1313,8 +1313,8 @@
         },
         {
           "milestone": "rank:nascent_peak",
-          "time_sec": 118200.0,
-          "time": "32.83h"
+          "time_sec": 117600.0,
+          "time": "32.67h"
         },
         {
           "milestone": "rank:soul_xform_early",
@@ -1379,9 +1379,9 @@
           "next_event": "rank:foundation_early"
         },
         {
-          "from": 29997.0,
+          "from": 29981.5,
           "to": 58800.0,
-          "gap_sec": 28803.0,
+          "gap_sec": 28818.5,
           "phase": "mid",
           "threshold": 1800,
           "next_event": "rank:core_early"
@@ -1414,14 +1414,14 @@
       "magnitude_issues": [],
       "pacing_issues": [],
       "final": {
-        "time": 147294.0,
+        "time": 147260.0,
         "qi": 0.0,
-        "prod": 9.336336591620398,
+        "prod": 10.862526452202214,
         "rank": "mortal_early",
         "rank_index": 0,
         "rebirths": 5,
-        "karma": 42.0,
-        "lifetime_qi": 7.274206011747734e+16,
+        "karma": 43.0,
+        "lifetime_qi": 1.121268461910307e+17,
         "talents": 9,
         "artifacts": 7,
         "shop_mult": 1.4,
@@ -1435,7 +1435,7 @@
           88200.0,
           117600.0,
           147000.0,
-          147294.0
+          147260.0
         ]
       },
       "note": "longest_wait includes 8h offline sleeps; active-player walls are not this bot"

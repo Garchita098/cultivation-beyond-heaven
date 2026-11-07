@@ -20,8 +20,7 @@ static func clamp_num(data: EconData, value: float) -> float:
 
 
 static func clamp_state(data: EconData, state: SimState) -> void:
-	state.qi = clamp_num(data, state.qi)
-	state.lifetime_qi = clamp_num(data, state.lifetime_qi)
+	Ledger.sanitize(state)
 	for key in RESOURCE_KEYS:
 		state.world_res[key] = clamp_num(data, float(state.world_res.get(key, 0.0)))
 
@@ -748,10 +747,9 @@ static func can_ascend(data: EconData, state: SimState) -> bool:
 
 static func ascension_gain(data: EconData, state: SimState) -> int:
 	var cfg: Dictionary = data.worlds_doc["ascension"]
-	var lq := maxf(1.0, state.lifetime_qi)
 	var raw := (
 		1.0
-		+ (log(lq) / log(10.0)) / float(cfg["gain_log_div"])
+		+ Ledger.log10_life(state) / float(cfg["gain_log_div"])
 		+ float(state.highest_rank_index) * float(cfg["gain_per_rank"])
 		+ float(state.ascension_count) * float(cfg["gain_per_ascension"])
 	)
@@ -766,8 +764,9 @@ static func do_ascension(data: EconData, state: SimState) -> bool:
 	state.dao_marks += float(gain)
 	state.ascension_count += 1
 	state.world_id = nxt
-	state.qi = 0.0
+	Ledger.set_qi_float(state, 0.0)
 	state.lifetime_qi = 0.0
+	state.life_e = 0
 	state.upgrade_levels = {}
 	state.karma_shards = 0.0
 	state.shop_levels = {}

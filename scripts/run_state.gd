@@ -200,8 +200,8 @@ func to_save_dict(save_version: int) -> Dictionary:
 
 func to_sim() -> SimState:
 	var sim := SimState.new()
-	sim.qi = _finite(qi)
-	sim.lifetime_qi = _finite(lifetime_qi)
+	Ledger.from_bn(sim, qi, false)
+	Ledger.from_bn(sim, lifetime_qi, true)
 	sim.rank_index = rank_index
 	sim.highest_rank_index = highest_rank_index
 	sim.upgrade_levels = upgrade_levels.duplicate()
@@ -230,9 +230,9 @@ func to_sim() -> SimState:
 
 
 func apply_sim(sim: SimState, copy_lifetime: bool = false) -> void:
-	qi = BigNum.from_float(sim.qi)
+	qi = Ledger.to_bn(sim, false)
 	if copy_lifetime:
-		lifetime_qi = BigNum.from_float(sim.lifetime_qi)
+		lifetime_qi = Ledger.to_bn(sim, true)
 		time_sec = sim.time_sec
 	rank_index = sim.rank_index
 	highest_rank_index = sim.highest_rank_index

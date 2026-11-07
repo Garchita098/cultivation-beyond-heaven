@@ -809,10 +809,33 @@ func _test_stage3() -> void:
 	var capped := SimState.new()
 	capped.qi = 1e308
 	Stage3Rules.clamp_state(data, capped)
-	if capped.qi > float(data.balance["magnitude_cap"]):
-		_fail("magnitude cap")
+	var kept := Ledger.to_bn(capped, false)
+	if kept.exponent < 300:
+		_fail("huge qi was destroyed e=%d" % kept.exponent)
 	else:
-		_ok("qi clamps at the float cap")
+		_ok("qi past 1e300 is kept e=%d" % kept.exponent)
+	var huge := SimState.new()
+	Ledger.set_qi_parts(huge, 1.5, 400)
+	Ledger.add_qi_parts(huge, 1.5, 400)
+	var summed := Ledger.to_bn(huge, false)
+	if summed.exponent != 400 or absf(summed.mantissa - 3.0) > 1e-6:
+		_fail("scaled add %s e%d" % [str(summed.mantissa), summed.exponent])
+	else:
+		_ok("scaled add 1.5e400")
+	EconomyCore.tick(data, huge, 0.25)
+	var after := Ledger.to_bn(huge, false)
+	if after.exponent < 400:
+		_fail("tick destroyed huge qi")
+	else:
+		_ok("tick keeps exponent 400")
+	var bridge := RunState.new()
+	bridge.qi = BigNum.normalize(2.5, 420)
+	var sim := bridge.to_sim()
+	bridge.apply_sim(sim, true)
+	if bridge.qi.exponent != 420 or absf(bridge.qi.mantissa - 2.5) > 1e-6:
+		_fail("run bridge lost exponent")
+	else:
+		_ok("run state keeps exponent 420")
 
 
 func _test_achievements() -> void:

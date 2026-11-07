@@ -13,7 +13,9 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import achievements
+import mag
 import stage3
+from mag import Mag
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data")
 
@@ -113,6 +115,11 @@ class GameState:
     stats: Dict[str, Any] = field(default_factory=dict)
     fresh_achievements: List[str] = field(default_factory=list)
     _talent_sig: str = ""
+
+    def __setattr__(self, name, value):
+        if name in ("qi", "lifetime_qi") and not isinstance(value, Mag):
+            value = Mag.of(value)
+        object.__setattr__(self, name, value)
 
 
 class Economy:
@@ -728,12 +735,11 @@ class Economy:
 
     def karma_gain(self, state: GameState) -> int:
         f = self.rebirth["formula"]
-        lq = max(1.0, state.lifetime_qi)
         # log(x)/log(10) matches GDScript. math.log10 can disagree at the floor boundary.
         return int(
             math.floor(
                 f["base"]
-                + (math.log(lq) / math.log(10.0)) / f["from_lifetime_qi_log10_div"]
+                + mag.log10_qty(state.lifetime_qi) / f["from_lifetime_qi_log10_div"]
                 + state.highest_rank_index * f["from_highest_rank_index"]
             )
         )
