@@ -3,6 +3,8 @@ extends Control
 
 var _shader_rect: ColorRect
 var _mat: ShaderMaterial
+var _hero: TextureRect
+var _float_t: float = 0.0
 var _rank_label: Label
 var _qi_label: Label
 var _rate_label: Label
@@ -42,6 +44,14 @@ func _ready() -> void:
 	_mat.shader = shader
 	_shader_rect.material = _mat
 	col.add_child(_shader_rect)
+	_hero = TextureRect.new()
+	_hero.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_hero.offset_top = 40.0
+	_hero.offset_bottom = -20.0
+	_hero.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_hero.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_hero.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_shader_rect.add_child(_hero)
 
 	_qi_label = Label.new()
 	_qi_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -94,9 +104,15 @@ func _ready() -> void:
 	actions.add_child(world_btn)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if not visible:
 		return
+	_float_t += delta
+	if _hero != null and _hero.texture != null:
+		var bob := sin(_float_t * 1.35) * 6.0
+		_hero.offset_top = 28.0 + bob
+		_hero.offset_bottom = -12.0 + bob
+		_hero.scale = Vector2.ONE * (1.0 + sin(_float_t * 1.1) * 0.012)
 	refresh()
 
 
@@ -120,6 +136,11 @@ func refresh() -> void:
 		progress = clampf(run.qi.ratio_to(cost), 0.0, 1.0)
 		_bar.value = progress
 		_next_label.text = "%s  ·  %s" % [str(nxt.get("name_ru", "")), Economy.format_qi(cost)]
+	if _hero != null:
+		var hero_tex := ArtBank.hero(run)
+		if _hero.texture != hero_tex:
+			_hero.texture = hero_tex
+		_hero.visible = hero_tex != null
 	if _mat:
 		_mat.set_shader_parameter("tier", _tier(rank))
 		_mat.set_shader_parameter("progress", progress)

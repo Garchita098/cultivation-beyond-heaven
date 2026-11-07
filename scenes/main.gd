@@ -27,6 +27,8 @@ const REVEALS := {
 var _status_qi: Label
 var _status_rate: Label
 var _status_rank: Label
+var _world_bg: TextureRect
+var _bg_time: float = 0.0
 var _content: Control
 var _cta: Control
 var _cta_btn: Button
@@ -58,6 +60,22 @@ func _ready() -> void:
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
+	_world_bg = TextureRect.new()
+	_world_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_world_bg.offset_left = -24.0
+	_world_bg.offset_right = 24.0
+	_world_bg.offset_top = -16.0
+	_world_bg.offset_bottom = 16.0
+	_world_bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_world_bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	_world_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_world_bg.modulate = Color(1, 1, 1, 0.55)
+	add_child(_world_bg)
+	var shade := ColorRect.new()
+	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	shade.color = Color(0.043, 0.055, 0.09, 0.55)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(shade)
 
 	_build_status(theme)
 	_build_content()
@@ -116,6 +134,20 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if GameState.run == null:
 		return
+	_bg_time += delta
+	if _world_bg != null:
+		var world_id := GameState.run.world_id
+		var tex := ArtBank.world_background(world_id)
+		if _world_bg.texture != tex:
+			_world_bg.texture = tex
+		var tint := ArtBank.world_tint(world_id)
+		var using_pack := false
+		if _world_bg.texture != null:
+			using_pack = str(_world_bg.texture.resource_path).begins_with("res://assets/art/")
+		_world_bg.modulate = Color(1, 1, 1, 0.92) if using_pack else tint
+		var drift := sin(_bg_time * 0.15) * 10.0
+		_world_bg.offset_left = -24.0 + drift
+		_world_bg.offset_right = 24.0 + drift
 	if not _shooting:
 		GameState.tick(delta)
 		if not GameState.screenshot_mode:
@@ -155,8 +187,7 @@ func _build_status(theme: CBHTheme) -> void:
 	qi_icon.custom_minimum_size = Vector2(28, 28)
 	qi_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	qi_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	if ResourceLoader.exists("res://assets/icons/ui/icon_qi.png"):
-		qi_icon.texture = load("res://assets/icons/ui/icon_qi.png")
+	qi_icon.texture = ArtBank.qi_icon()
 	row.add_child(qi_icon)
 	_status_qi = Label.new()
 	_status_qi.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -240,9 +271,9 @@ func _build_nav(theme: CBHTheme) -> void:
 		btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
 		btn.add_theme_font_size_override("font_size", 13)
 		btn.add_theme_font_override("font", theme.font_sans)
-		var icon_path := "res://assets/icons/tabs/%s.png" % str(spec["id"])
-		if ResourceLoader.exists(icon_path):
-			btn.icon = load(icon_path)
+		var tab_icon := ArtBank.tab_icon(str(spec["id"]))
+		if tab_icon != null:
+			btn.icon = tab_icon
 			btn.expand_icon = true
 			btn.add_theme_constant_override("icon_max_width", 28)
 		btn.text = str(spec["label"])

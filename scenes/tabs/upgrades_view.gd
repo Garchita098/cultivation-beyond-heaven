@@ -77,9 +77,7 @@ func _make_row(uid: String, u: Dictionary) -> PanelContainer:
 	icon.custom_minimum_size = Vector2(48, 48)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	var tex_path := "res://assets/icons/upgrades/%s.png" % uid
-	if ResourceLoader.exists(tex_path):
-		icon.texture = load(tex_path)
+	icon.texture = ArtBank.upgrade_icon(uid)
 	row.add_child(icon)
 
 	var text_col := VBoxContainer.new()
