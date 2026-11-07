@@ -56,6 +56,25 @@ static func track_tick(state: SimState, dt: float) -> void:
 		state.stats["worlds"] = worlds
 
 
+static func on_rebirth(state: SimState) -> void:
+	var start := float(state.stats.get("segment_start", 0.0))
+	var dur := state.time_sec - start
+	var best := float(state.stats.get("best_rebirth_sec", 0.0))
+	if dur > 1.0 and (best <= 0.0 or dur < best):
+		state.stats["best_rebirth_sec"] = dur
+	state.stats["segment_start"] = state.time_sec
+
+
+static func on_ascension(state: SimState) -> void:
+	var start := float(state.stats.get("asc_segment_start", 0.0))
+	var dur := state.time_sec - start
+	var best := float(state.stats.get("fastest_ascension_sec", 0.0))
+	if dur > 1.0 and (best <= 0.0 or dur < best):
+		state.stats["fastest_ascension_sec"] = dur
+	state.stats["asc_segment_start"] = state.time_sec
+	state.stats["segment_start"] = state.time_sec
+
+
 static func on_offline(state: SimState, absent: float) -> void:
 	if absent <= 0.0:
 		return

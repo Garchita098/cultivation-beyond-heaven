@@ -42,6 +42,7 @@ var _path_sheet: Control
 var _ascension_modal: Control
 var _world_sheet: Control
 var _achievements: Control
+var _stats: Control
 var _toast: PanelContainer
 var _toast_label: Label
 
@@ -127,6 +128,9 @@ func _ready() -> void:
 	_achievements = preload("res://scenes/achievements_sheet.gd").new()
 	_achievements.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	overlay.add_child(_achievements)
+	_stats = preload("res://scenes/stats_sheet.gd").new()
+	_stats.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_stats)
 	_build_toast(theme)
 	overlay.add_child(_toast)
 	EventBus.achievement_unlocked.connect(_show_toast)
@@ -220,6 +224,13 @@ func _build_status(theme: CBHTheme) -> void:
 	goals.add_theme_font_size_override("font_size", 14)
 	goals.pressed.connect(func(): _achievements.show_sheet())
 	row.add_child(goals)
+	var stats_btn := Button.new()
+	stats_btn.text = "Счёт"
+	stats_btn.focus_mode = Control.FOCUS_NONE
+	stats_btn.custom_minimum_size = Vector2(76, 48)
+	stats_btn.add_theme_font_size_override("font_size", 14)
+	stats_btn.pressed.connect(func(): _stats.show_sheet())
+	row.add_child(stats_btn)
 
 
 func _build_toast(theme: CBHTheme) -> void:

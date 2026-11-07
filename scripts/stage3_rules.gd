@@ -791,6 +791,7 @@ static func do_ascension(data: EconData, state: SimState) -> bool:
 	EconomyCore._apply_start_rank(data, state)
 	state.last_purchase_or_unlock_time = state.time_sec
 	EconomyCore._mark(state, "ascension:%d" % state.ascension_count)
+	Achievements.on_ascension(state)
 	EconomyCore._mark(state, "world:" + nxt)
 	return true
 

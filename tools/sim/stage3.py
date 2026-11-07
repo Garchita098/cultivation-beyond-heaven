@@ -822,6 +822,8 @@ def do_ascension(eco, state) -> bool:
     eco._apply_start_rank(state)
     state.last_purchase_or_unlock_time = state.time_sec
     eco._mark(state, "ascension:%d" % state.ascension_count)
+    import achievements as _achievements
+    _achievements.on_ascension(state)
     eco._mark(state, "world:" + nxt)
     return True
 

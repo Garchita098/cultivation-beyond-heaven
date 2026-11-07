@@ -803,6 +803,7 @@ static func do_rebirth(data: EconData, state: SimState) -> bool:
 	state.rank_index = 0
 	_apply_start_rank(data, state)
 	state.last_purchase_or_unlock_time = state.time_sec
+	Achievements.on_rebirth(state)
 	Stage3Rules.on_rebirth(data, state)
 	_mark(state, "rebirth:%d" % state.rebirth_count)
 	_mark(state, "first_rebirth")

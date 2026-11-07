@@ -779,6 +779,7 @@ class Economy:
         state.rank_index = 0
         self._apply_start_rank(state)
         state.last_purchase_or_unlock_time = state.time_sec
+        achievements.on_rebirth(state)
         stage3.on_rebirth(self, state)
         self._mark(state, "rebirth:%d" % state.rebirth_count)
         self._mark(state, "first_rebirth")

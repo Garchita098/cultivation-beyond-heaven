@@ -63,6 +63,25 @@ def track_tick(state, dt: float) -> None:
         worlds.append(state.world_id)
 
 
+def on_rebirth(state) -> None:
+    start = float(state.stats.get("segment_start", 0.0))
+    dur = float(state.time_sec) - start
+    best = float(state.stats.get("best_rebirth_sec", 0.0))
+    if dur > 1.0 and (best <= 0.0 or dur < best):
+        state.stats["best_rebirth_sec"] = dur
+    state.stats["segment_start"] = float(state.time_sec)
+
+
+def on_ascension(state) -> None:
+    start = float(state.stats.get("asc_segment_start", 0.0))
+    dur = float(state.time_sec) - start
+    best = float(state.stats.get("fastest_ascension_sec", 0.0))
+    if dur > 1.0 and (best <= 0.0 or dur < best):
+        state.stats["fastest_ascension_sec"] = dur
+    state.stats["asc_segment_start"] = float(state.time_sec)
+    state.stats["segment_start"] = float(state.time_sec)
+
+
 def on_offline(state, absent: float) -> None:
     if absent <= 0.0:
         return
