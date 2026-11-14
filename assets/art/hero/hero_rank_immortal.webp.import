@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dha2aa74r2uak"
-path="res://.godot/imported/hero_rank_immortal.webp-6955c7f9542ae08c24339d719bb408bf.ctex"
+path.s3tc="res://.godot/imported/hero_rank_immortal.webp-6955c7f9542ae08c24339d719bb408bf.s3tc.ctex"
+path.etc2="res://.godot/imported/hero_rank_immortal.webp-6955c7f9542ae08c24339d719bb408bf.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/art/hero/hero_rank_immortal.webp"
-dest_files=["res://.godot/imported/hero_rank_immortal.webp-6955c7f9542ae08c24339d719bb408bf.ctex"]
+dest_files=["res://.godot/imported/hero_rank_immortal.webp-6955c7f9542ae08c24339d719bb408bf.s3tc.ctex", "res://.godot/imported/hero_rank_immortal.webp-6955c7f9542ae08c24339d719bb408bf.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

@@ -4,6 +4,7 @@ extends Node
 
 var run: RunState
 var last_prod: float = 1.0
+var _tick_acc: float = 0.0
 var pending_offline: Dictionary = {}
 var screenshot_mode: bool = false
 
@@ -23,9 +24,25 @@ func _ready() -> void:
 func tick(delta: float) -> void:
 	if run == null or delta <= 0.0 or not Content.valid:
 		return
+	# Fixed economy step. Drawing at 60fps only accumulates time. A hitch
+	# runs at most 20 steps (5s) so one frame cannot stall the phone.
+	_tick_acc += delta
+	var step := float(Content.data.balance.get("tick_seconds", 0.25))
+	if step <= 0.0:
+		step = 0.25
+	var steps := 0
+	while _tick_acc >= step and steps < 20:
+		_tick_acc -= step
+		_step(step)
+		steps += 1
+	if _tick_acc > step * 40.0:
+		_tick_acc = step
+
+
+func _step(step: float) -> void:
 	var before := run.achievements.duplicate()
 	var sim := run.to_sim()
-	EconomyCore.tick(Content.data, sim, delta)
+	EconomyCore.tick(Content.data, sim, step)
 	run.apply_sim(sim, true)
 	_emit_achievements(before)
 	last_prod = EconomyCore.production_state(Content.data, sim)
