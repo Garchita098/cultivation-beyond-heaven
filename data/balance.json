@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "base_qi_per_sec": 1.0,
+  "tick_seconds": 0.25,
+  "offline": {
+    "efficiency": 0.75,
+    "soft_cap_hours": 8,
+    "hard_cap_hours": 24,
+    "chunk_seconds": 60
+  },
+  "walls": {
+    "early_game_max_idle_sec": 600,
+    "mid_game_max_idle_sec": 1800,
+    "late_game_max_idle_sec": 3600,
+    "early_until_rank_index": 8,
+    "mid_until_rank_index": 20,
+    "meaningful_unlock_min_mult_gain": 1.05
+  },
+  "pacing_targets_sec": {
+    "first_upgrade": 15,
+    "first_breakthrough": 300,
+    "first_rebirth": 3600,
+    "first_rebirth_min": 2700,
+    "stage1_end_active": 5400,
+    "first_breakthrough_min": 60,
+    "rebirth_5_active": 14400,
+    "offline_rebirth_5_calendar": 259200,
+    "best_roi_mid_wait_max": 1200
+  },
+  "bignum": {
+    "suffixes": [
+      "",
+      "K",
+      "M",
+      "B",
+      "T",
+      "Qa",
+      "Qi",
+      "Sx",
+      "Sp",
+      "Oc"
+    ],
+    "scientific_from_exponent": 33,
+    "notation_max_exponent": 1000000
+  },
+  "magnitude_cap": 1e+300,
+  "path_pace_spread": 0.25,
+  "ascension_max_sec": 172800,
+  "ascension_echo": 1.0,
+  "stage4_max_idle_sec": 900,
+  "ascension_cost_scale": 2.2,
+  "ascension_later_scale": 140
+}

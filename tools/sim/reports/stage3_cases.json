@@ -1,0 +1,98 @@
+{
+  "sword": {
+    "outside": 27.0,
+    "burst": 180.0,
+    "burst_left": 10.0,
+    "bursts": 1
+  },
+  "demon": {
+    "before": 21.0,
+    "after": 110.77,
+    "qi": 659.9999999999999,
+    "permanent": 0.007,
+    "burst_left": 22.0
+  },
+  "immortal": {
+    "start": 5.487472874436099,
+    "after": 5.789283882530086,
+    "hours": 1.0000000000000013,
+    "qi": 20284.2616526385,
+    "chunked": true,
+    "eff": 1.0
+  },
+  "devour": {
+    "plain": 5.486,
+    "after": 7.4529,
+    "types": [
+      "artifact",
+      "upgrade"
+    ],
+    "bonus": 0.04,
+    "breath": 5
+  },
+  "time": {
+    "sped": 254.1,
+    "qi": 91476.0,
+    "qi_before": 0.0,
+    "bank": 120.0,
+    "charge": 0.0,
+    "speed_left": 150.0
+  },
+  "ascension": {
+    "gain": 6,
+    "marks": 6.0,
+    "world": "spirit_world",
+    "qi": 0.0,
+    "karma": 0.0,
+    "rank": 2,
+    "upgrades": {},
+    "path_id": "immortal",
+    "node": 1,
+    "talents": 1,
+    "artifacts": 1,
+    "ascensions": 1,
+    "shop": 0
+  },
+  "spirit": {
+    "prod": 12.5,
+    "qi": 125.0,
+    "essence": 2.5
+  },
+  "heaven": {
+    "plain": 89600.0,
+    "boon": 105728.0,
+    "boon_left": 28.799999999999997,
+    "fragments": 4.65,
+    "cycle": 1
+  },
+  "void": {
+    "qi": 913356.2485573814,
+    "dust": 173.4625028852371
+  },
+  "law": {
+    "base_cost": 32.10150063284224,
+    "soft_cost": 23.736572025767213,
+    "base_prod": 350.0,
+    "powered": 380.3572018841204
+  },
+  "reality": {
+    "plain": 6600.0,
+    "inverted": 2097.5610980303177,
+    "dilated": 8712.0
+  },
+  "dual": {
+    "essence": 0.128,
+    "qi": 80.0
+  },
+  "research": {
+    "done": true,
+    "progress": 0.0,
+    "order0": "quiet_meridians"
+  },
+  "offline_sword": {
+    "chunked": true,
+    "qi": 777.6000000000001,
+    "manual_qi": 777.6000000000001,
+    "bursts": 2
+  }
+}

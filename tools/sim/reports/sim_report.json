@@ -1,0 +1,1449 @@
+{
+  "best_strategy": "artifact_focused",
+  "targets": {
+    "first_upgrade": 15,
+    "first_breakthrough": 300,
+    "first_rebirth": 3600,
+    "first_rebirth_min": 2700,
+    "stage1_end_active": 5400,
+    "first_breakthrough_min": 60,
+    "rebirth_5_active": 14400,
+    "offline_rebirth_5_calendar": 259200,
+    "best_roi_mid_wait_max": 1200
+  },
+  "reports": {
+    "greedy_cheapest": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 221.0,
+          "time": "3.7m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 816.0,
+          "time": "13.6m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 2574.0,
+          "time": "42.9m"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 4052.5,
+          "time": "1.13h"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 5244.5,
+          "time": "1.46h"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth:2",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth:3",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth:4",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth:5",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "talent_roll:unlock",
+          "time_sec": 816.0,
+          "time": "13.6m"
+        },
+        {
+          "milestone": "artifact:jade_slip",
+          "time_sec": 4052.5,
+          "time": "1.13h"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 221.0,
+          "time": "3.7m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 354.0,
+          "time": "5.9m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 573.5,
+          "time": "9.6m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 1165.5,
+          "time": "19.4m"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 1770.5,
+          "time": "29.5m"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 2116.0,
+          "time": "35.3m"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 3230.0,
+          "time": "53.8m"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 4550.0,
+          "time": "1.26h"
+        },
+        {
+          "milestone": "rank:core_mid",
+          "time_sec": 6014.0,
+          "time": "1.67h"
+        },
+        {
+          "milestone": "rank:core_late",
+          "time_sec": 6868.0,
+          "time": "1.91h"
+        }
+      ],
+      "longest_wait_sec": 27.0,
+      "longest_wait_until": "rank:core_late",
+      "walls": [],
+      "magnitude_issues": [],
+      "pacing_issues": [],
+      "final": {
+        "time": 7200.0,
+        "qi": 526453044.7687023,
+        "prod": 37310530.25699999,
+        "rank": "core_late",
+        "rank_index": 14,
+        "rebirths": 0,
+        "karma": 0.0,
+        "lifetime_qi": 40016292577.93558,
+        "talents": 3,
+        "artifacts": 1,
+        "shop_mult": 1.0,
+        "shop_levels": {},
+        "rebirth_times": []
+      }
+    },
+    "best_roi": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 490.5,
+          "time": "8.2m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 1323.5,
+          "time": "22.1m"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 1788.5,
+          "time": "29.8m"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 2161.5,
+          "time": "36.0m"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": 2756.5,
+          "time": "45.9m"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": 2756.5,
+          "time": "45.9m"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth:2",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth:3",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth:4",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth:5",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": 3424.5,
+          "time": "57.1m"
+        },
+        {
+          "milestone": "talent_roll:unlock",
+          "time_sec": 490.5,
+          "time": "8.2m"
+        },
+        {
+          "milestone": "artifact:jade_slip",
+          "time_sec": 1788.5,
+          "time": "29.8m"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 176.5,
+          "time": "2.9m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 323.0,
+          "time": "5.4m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 635.5,
+          "time": "10.6m"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 879.5,
+          "time": "14.7m"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 1107.5,
+          "time": "18.5m"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 1526.5,
+          "time": "25.4m"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 1966.0,
+          "time": "32.8m"
+        },
+        {
+          "milestone": "rank:core_mid",
+          "time_sec": 2354.0,
+          "time": "39.2m"
+        },
+        {
+          "milestone": "rank:core_late",
+          "time_sec": 2530.5,
+          "time": "42.2m"
+        },
+        {
+          "milestone": "rank:nascent_mid",
+          "time_sec": 4176.5,
+          "time": "1.16h"
+        },
+        {
+          "milestone": "rank:nascent_late",
+          "time_sec": 5237.0,
+          "time": "1.45h"
+        },
+        {
+          "milestone": "rank:nascent_peak",
+          "time_sec": 6792.5,
+          "time": "1.89h"
+        },
+        {
+          "milestone": "rank:soul_xform_early",
+          "time_sec": 7809.0,
+          "time": "2.17h"
+        },
+        {
+          "milestone": "rank:soul_xform_mid",
+          "time_sec": 8677.5,
+          "time": "2.41h"
+        },
+        {
+          "milestone": "rank:soul_xform_late",
+          "time_sec": 9662.5,
+          "time": "2.68h"
+        }
+      ],
+      "longest_wait_sec": 432.5,
+      "longest_wait_until": "upgrade:meridian_opening:L96",
+      "walls": [],
+      "magnitude_issues": [],
+      "pacing_issues": [],
+      "final": {
+        "time": 10800.0,
+        "qi": 4648638634148.308,
+        "prod": 14609159285.175,
+        "rank": "soul_xform_late",
+        "rank_index": 22,
+        "rebirths": 0,
+        "karma": 0.0,
+        "lifetime_qi": 26351657703915.37,
+        "talents": 4,
+        "artifacts": 1,
+        "shop_mult": 1.0,
+        "shop_levels": {},
+        "rebirth_times": []
+      }
+    },
+    "rush_breakthrough": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 96.5,
+          "time": "1.6m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 405.5,
+          "time": "6.8m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 1265.0,
+          "time": "21.1m"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 1783.0,
+          "time": "29.7m"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 2207.5,
+          "time": "36.8m"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": 2981.5,
+          "time": "49.7m"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": 2981.5,
+          "time": "49.7m"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth:2",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth:3",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth:4",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rebirth:5",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": 3863.5,
+          "time": "1.07h"
+        },
+        {
+          "milestone": "talent_roll:unlock",
+          "time_sec": 405.5,
+          "time": "6.8m"
+        },
+        {
+          "milestone": "artifact:jade_slip",
+          "time_sec": 1783.0,
+          "time": "29.7m"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 96.5,
+          "time": "1.6m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 178.5,
+          "time": "3.0m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 287.0,
+          "time": "4.8m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 547.5,
+          "time": "9.1m"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 772.5,
+          "time": "12.9m"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 1039.5,
+          "time": "17.3m"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 1484.0,
+          "time": "24.7m"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 1977.0,
+          "time": "33.0m"
+        },
+        {
+          "milestone": "rank:core_mid",
+          "time_sec": 2442.5,
+          "time": "40.7m"
+        },
+        {
+          "milestone": "rank:core_late",
+          "time_sec": 2669.5,
+          "time": "44.5m"
+        },
+        {
+          "milestone": "rank:nascent_mid",
+          "time_sec": 4934.0,
+          "time": "1.37h"
+        },
+        {
+          "milestone": "rank:nascent_late",
+          "time_sec": 6356.0,
+          "time": "1.77h"
+        }
+      ],
+      "longest_wait_sec": 231.0,
+      "longest_wait_until": "rank:nascent_late",
+      "walls": [],
+      "magnitude_issues": [],
+      "pacing_issues": [],
+      "final": {
+        "time": 7200.0,
+        "qi": 15757985174.284431,
+        "prod": 781480886.8230001,
+        "rank": "nascent_late",
+        "rank_index": 18,
+        "rebirths": 0,
+        "karma": 0.0,
+        "lifetime_qi": 1381653395021.4956,
+        "talents": 4,
+        "artifacts": 1,
+        "shop_mult": 1.0,
+        "shop_levels": {},
+        "rebirth_times": []
+      }
+    },
+    "rebirth_early": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 490.5,
+          "time": "8.2m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 1323.5,
+          "time": "22.1m"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 1788.5,
+          "time": "29.8m"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 2161.5,
+          "time": "36.0m"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": 2756.5,
+          "time": "45.9m"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": 2756.5,
+          "time": "45.9m"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": 2756.5,
+          "time": "45.9m"
+        },
+        {
+          "milestone": "rebirth:2",
+          "time_sec": 3805.5,
+          "time": "1.06h"
+        },
+        {
+          "milestone": "rebirth:3",
+          "time_sec": 4341.0,
+          "time": "1.21h"
+        },
+        {
+          "milestone": "rebirth:4",
+          "time_sec": 4715.0,
+          "time": "1.31h"
+        },
+        {
+          "milestone": "rebirth:5",
+          "time_sec": 4991.0,
+          "time": "1.39h"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "talent_roll:unlock",
+          "time_sec": 490.5,
+          "time": "8.2m"
+        },
+        {
+          "milestone": "artifact:jade_slip",
+          "time_sec": 1788.5,
+          "time": "29.8m"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 176.5,
+          "time": "2.9m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 323.0,
+          "time": "5.4m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 635.5,
+          "time": "10.6m"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 879.5,
+          "time": "14.7m"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 1107.5,
+          "time": "18.5m"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 1526.5,
+          "time": "25.4m"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 1966.0,
+          "time": "32.8m"
+        },
+        {
+          "milestone": "rank:core_mid",
+          "time_sec": 2354.0,
+          "time": "39.2m"
+        },
+        {
+          "milestone": "rank:core_late",
+          "time_sec": 2530.5,
+          "time": "42.2m"
+        }
+      ],
+      "longest_wait_sec": 1049.0,
+      "longest_wait_until": "rebirth:2",
+      "walls": [],
+      "magnitude_issues": [],
+      "pacing_issues": [],
+      "final": {
+        "time": 4991.0,
+        "qi": 0.0,
+        "prod": 11.50481370457978,
+        "rank": "mortal_early",
+        "rank_index": 0,
+        "rebirths": 5,
+        "karma": 49.0,
+        "lifetime_qi": 35753750605.00472,
+        "talents": 8,
+        "artifacts": 7,
+        "shop_mult": 1.4,
+        "shop_levels": {
+          "karma_prod_1": 4,
+          "karma_offline": 0,
+          "karma_start_qi": 0
+        },
+        "rebirth_times": [
+          2756.5,
+          3805.5,
+          4341.0,
+          4715.0,
+          4991.0
+        ]
+      }
+    },
+    "rebirth_late": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 490.5,
+          "time": "8.2m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 1323.5,
+          "time": "22.1m"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 1788.5,
+          "time": "29.8m"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 2161.5,
+          "time": "36.0m"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": 2756.5,
+          "time": "45.9m"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": 2756.5,
+          "time": "45.9m"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": 3424.5,
+          "time": "57.1m"
+        },
+        {
+          "milestone": "rebirth:2",
+          "time_sec": 4687.0,
+          "time": "1.30h"
+        },
+        {
+          "milestone": "rebirth:3",
+          "time_sec": 5347.5,
+          "time": "1.49h"
+        },
+        {
+          "milestone": "rebirth:4",
+          "time_sec": 5806.5,
+          "time": "1.61h"
+        },
+        {
+          "milestone": "rebirth:5",
+          "time_sec": 6136.5,
+          "time": "1.70h"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": 3424.5,
+          "time": "57.1m"
+        },
+        {
+          "milestone": "talent_roll:unlock",
+          "time_sec": 490.5,
+          "time": "8.2m"
+        },
+        {
+          "milestone": "artifact:jade_slip",
+          "time_sec": 1788.5,
+          "time": "29.8m"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 176.5,
+          "time": "2.9m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 323.0,
+          "time": "5.4m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 635.5,
+          "time": "10.6m"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 879.5,
+          "time": "14.7m"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 1107.5,
+          "time": "18.5m"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 1526.5,
+          "time": "25.4m"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 1966.0,
+          "time": "32.8m"
+        },
+        {
+          "milestone": "rank:core_mid",
+          "time_sec": 2354.0,
+          "time": "39.2m"
+        },
+        {
+          "milestone": "rank:core_late",
+          "time_sec": 2530.5,
+          "time": "42.2m"
+        }
+      ],
+      "longest_wait_sec": 1230.5,
+      "longest_wait_until": "upgrade:foundation_mantra:L41",
+      "walls": [],
+      "magnitude_issues": [],
+      "pacing_issues": [],
+      "final": {
+        "time": 6136.5,
+        "qi": 0.0,
+        "prod": 12.28993184820173,
+        "rank": "mortal_early",
+        "rank_index": 0,
+        "rebirths": 5,
+        "karma": 53.0,
+        "lifetime_qi": 183185081862.48682,
+        "talents": 9,
+        "artifacts": 7,
+        "shop_mult": 1.4,
+        "shop_levels": {
+          "karma_prod_1": 4,
+          "karma_offline": 0,
+          "karma_start_qi": 0
+        },
+        "rebirth_times": [
+          3424.5,
+          4687.0,
+          5347.5,
+          5806.5,
+          6136.5
+        ]
+      }
+    },
+    "talent_focused": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 490.5,
+          "time": "8.2m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 1323.5,
+          "time": "22.1m"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 1788.5,
+          "time": "29.8m"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 2161.5,
+          "time": "36.0m"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": 2756.5,
+          "time": "45.9m"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": 2756.5,
+          "time": "45.9m"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": 2756.5,
+          "time": "45.9m"
+        },
+        {
+          "milestone": "rebirth:2",
+          "time_sec": 3805.5,
+          "time": "1.06h"
+        },
+        {
+          "milestone": "rebirth:3",
+          "time_sec": 4341.0,
+          "time": "1.21h"
+        },
+        {
+          "milestone": "rebirth:4",
+          "time_sec": 4715.0,
+          "time": "1.31h"
+        },
+        {
+          "milestone": "rebirth:5",
+          "time_sec": 4991.0,
+          "time": "1.39h"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "talent_roll:unlock",
+          "time_sec": 490.5,
+          "time": "8.2m"
+        },
+        {
+          "milestone": "artifact:jade_slip",
+          "time_sec": 1788.5,
+          "time": "29.8m"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 176.5,
+          "time": "2.9m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 323.0,
+          "time": "5.4m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 635.5,
+          "time": "10.6m"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 879.5,
+          "time": "14.7m"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 1107.5,
+          "time": "18.5m"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 1526.5,
+          "time": "25.4m"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 1966.0,
+          "time": "32.8m"
+        },
+        {
+          "milestone": "rank:core_mid",
+          "time_sec": 2354.0,
+          "time": "39.2m"
+        },
+        {
+          "milestone": "rank:core_late",
+          "time_sec": 2530.5,
+          "time": "42.2m"
+        }
+      ],
+      "longest_wait_sec": 1049.0,
+      "longest_wait_until": "rebirth:2",
+      "walls": [],
+      "magnitude_issues": [],
+      "pacing_issues": [],
+      "final": {
+        "time": 4991.0,
+        "qi": 0.0,
+        "prod": 11.50481370457978,
+        "rank": "mortal_early",
+        "rank_index": 0,
+        "rebirths": 5,
+        "karma": 49.0,
+        "lifetime_qi": 35753750605.00472,
+        "talents": 8,
+        "artifacts": 7,
+        "shop_mult": 1.4,
+        "shop_levels": {
+          "karma_prod_1": 4,
+          "karma_start_qi": 0
+        },
+        "rebirth_times": [
+          2756.5,
+          3805.5,
+          4341.0,
+          4715.0,
+          4991.0
+        ]
+      }
+    },
+    "artifact_focused": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 490.5,
+          "time": "8.2m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 1323.5,
+          "time": "22.1m"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 1788.5,
+          "time": "29.8m"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 2154.0,
+          "time": "35.9m"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": 2737.5,
+          "time": "45.6m"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": 2737.5,
+          "time": "45.6m"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": 2737.5,
+          "time": "45.6m"
+        },
+        {
+          "milestone": "rebirth:2",
+          "time_sec": 3760.0,
+          "time": "1.04h"
+        },
+        {
+          "milestone": "rebirth:3",
+          "time_sec": 4279.0,
+          "time": "1.19h"
+        },
+        {
+          "milestone": "rebirth:4",
+          "time_sec": 4641.5,
+          "time": "1.29h"
+        },
+        {
+          "milestone": "rebirth:5",
+          "time_sec": 4909.0,
+          "time": "1.36h"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": null,
+          "time": "not reached"
+        },
+        {
+          "milestone": "talent_roll:unlock",
+          "time_sec": 490.5,
+          "time": "8.2m"
+        },
+        {
+          "milestone": "artifact:jade_slip",
+          "time_sec": 1788.5,
+          "time": "29.8m"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 176.5,
+          "time": "2.9m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 323.0,
+          "time": "5.4m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 635.5,
+          "time": "10.6m"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 879.5,
+          "time": "14.7m"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 1107.5,
+          "time": "18.5m"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 1526.5,
+          "time": "25.4m"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 1963.0,
+          "time": "32.7m"
+        },
+        {
+          "milestone": "rank:core_mid",
+          "time_sec": 2342.5,
+          "time": "39.0m"
+        },
+        {
+          "milestone": "rank:core_late",
+          "time_sec": 2516.0,
+          "time": "41.9m"
+        }
+      ],
+      "longest_wait_sec": 1022.5,
+      "longest_wait_until": "rebirth:2",
+      "walls": [],
+      "magnitude_issues": [],
+      "pacing_issues": [],
+      "final": {
+        "time": 4909.0,
+        "qi": 0.0,
+        "prod": 11.723953013238443,
+        "rank": "mortal_early",
+        "rank_index": 0,
+        "rebirths": 5,
+        "karma": 49.0,
+        "lifetime_qi": 35736618309.50642,
+        "talents": 8,
+        "artifacts": 7,
+        "shop_mult": 1.4,
+        "shop_levels": {
+          "karma_prod_1": 4,
+          "karma_offline": 0,
+          "karma_start_qi": 0
+        },
+        "rebirth_times": [
+          2737.5,
+          3760.0,
+          4279.0,
+          4641.5,
+          4909.0
+        ]
+      }
+    },
+    "offline_heavy": {
+      "milestones": [
+        {
+          "milestone": "first_upgrade",
+          "time_sec": 6.0,
+          "time": "6.0s"
+        },
+        {
+          "milestone": "first_breakthrough",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:qi_early",
+          "time_sec": 490.5,
+          "time": "8.2m"
+        },
+        {
+          "milestone": "rank:foundation_early",
+          "time_sec": 29400.0,
+          "time": "8.17h"
+        },
+        {
+          "milestone": "rank:foundation_late",
+          "time_sec": 29810.0,
+          "time": "8.28h"
+        },
+        {
+          "milestone": "rank:core_early",
+          "time_sec": 58800.0,
+          "time": "16.33h"
+        },
+        {
+          "milestone": "rank:core_peak",
+          "time_sec": 58800.0,
+          "time": "16.33h"
+        },
+        {
+          "milestone": "rebirth_unlocked",
+          "time_sec": 58800.0,
+          "time": "16.33h"
+        },
+        {
+          "milestone": "first_rebirth",
+          "time_sec": 58800.0,
+          "time": "16.33h"
+        },
+        {
+          "milestone": "rebirth:2",
+          "time_sec": 88200.0,
+          "time": "24.50h"
+        },
+        {
+          "milestone": "rebirth:3",
+          "time_sec": 117600.0,
+          "time": "32.67h"
+        },
+        {
+          "milestone": "rebirth:4",
+          "time_sec": 147000.0,
+          "time": "40.83h"
+        },
+        {
+          "milestone": "rebirth:5",
+          "time_sec": 147260.0,
+          "time": "40.91h"
+        },
+        {
+          "milestone": "rank:nascent_early",
+          "time_sec": 58800.0,
+          "time": "16.33h"
+        },
+        {
+          "milestone": "talent_roll:unlock",
+          "time_sec": 490.5,
+          "time": "8.2m"
+        },
+        {
+          "milestone": "artifact:jade_slip",
+          "time_sec": 29810.0,
+          "time": "8.28h"
+        },
+        {
+          "milestone": "rank:mortal_mid",
+          "time_sec": 87.0,
+          "time": "1.4m"
+        },
+        {
+          "milestone": "rank:mortal_late",
+          "time_sec": 176.5,
+          "time": "2.9m"
+        },
+        {
+          "milestone": "rank:mortal_peak",
+          "time_sec": 323.0,
+          "time": "5.4m"
+        },
+        {
+          "milestone": "rank:qi_mid",
+          "time_sec": 29400.0,
+          "time": "8.17h"
+        },
+        {
+          "milestone": "rank:qi_late",
+          "time_sec": 29400.0,
+          "time": "8.17h"
+        },
+        {
+          "milestone": "rank:qi_peak",
+          "time_sec": 29400.0,
+          "time": "8.17h"
+        },
+        {
+          "milestone": "rank:foundation_mid",
+          "time_sec": 29400.0,
+          "time": "8.17h"
+        },
+        {
+          "milestone": "rank:foundation_peak",
+          "time_sec": 29981.5,
+          "time": "8.33h"
+        },
+        {
+          "milestone": "rank:core_mid",
+          "time_sec": 58800.0,
+          "time": "16.33h"
+        },
+        {
+          "milestone": "rank:core_late",
+          "time_sec": 58800.0,
+          "time": "16.33h"
+        },
+        {
+          "milestone": "rank:nascent_mid",
+          "time_sec": 117600.0,
+          "time": "32.67h"
+        },
+        {
+          "milestone": "rank:nascent_late",
+          "time_sec": 117600.0,
+          "time": "32.67h"
+        },
+        {
+          "milestone": "rank:nascent_peak",
+          "time_sec": 117600.0,
+          "time": "32.67h"
+        },
+        {
+          "milestone": "rank:soul_xform_early",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:soul_xform_mid",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:soul_xform_late",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:soul_xform_peak",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:void_early",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:void_mid",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:void_late",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:void_peak",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:integration_early",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:integration_peak",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        },
+        {
+          "milestone": "rank:mahayana_early",
+          "time_sec": 118200.0,
+          "time": "32.83h"
+        }
+      ],
+      "longest_wait_sec": 29400.0,
+      "longest_wait_until": "rebirth:2",
+      "walls": [
+        {
+          "from": 599.0,
+          "to": 29400.0,
+          "gap_sec": 28801.0,
+          "phase": "mid",
+          "threshold": 1800,
+          "next_event": "rank:foundation_early"
+        },
+        {
+          "from": 29981.5,
+          "to": 58800.0,
+          "gap_sec": 28818.5,
+          "phase": "mid",
+          "threshold": 1800,
+          "next_event": "rank:core_early"
+        },
+        {
+          "from": 58800.0,
+          "to": 88200.0,
+          "gap_sec": 29400.0,
+          "phase": "mid",
+          "threshold": 1800,
+          "next_event": "rebirth:2"
+        },
+        {
+          "from": 88800.0,
+          "to": 117600.0,
+          "gap_sec": 28800.0,
+          "phase": "mid",
+          "threshold": 1800,
+          "next_event": "rank:nascent_late"
+        },
+        {
+          "from": 118200.0,
+          "to": 147000.0,
+          "gap_sec": 28800.0,
+          "phase": "late",
+          "threshold": 3600,
+          "next_event": "rebirth:4"
+        }
+      ],
+      "magnitude_issues": [],
+      "pacing_issues": [],
+      "final": {
+        "time": 147260.0,
+        "qi": 0.0,
+        "prod": 10.862526452202214,
+        "rank": "mortal_early",
+        "rank_index": 0,
+        "rebirths": 5,
+        "karma": 43.0,
+        "lifetime_qi": 1.814486426434613e+17,
+        "talents": 9,
+        "artifacts": 7,
+        "shop_mult": 1.4,
+        "shop_levels": {
+          "karma_offline": 3,
+          "karma_prod_1": 4,
+          "karma_start_qi": 0
+        },
+        "rebirth_times": [
+          58800.0,
+          88200.0,
+          117600.0,
+          147000.0,
+          147260.0
+        ]
+      },
+      "note": "longest_wait includes 8h offline sleeps; active-player walls are not this bot"
+    }
+  }
+}

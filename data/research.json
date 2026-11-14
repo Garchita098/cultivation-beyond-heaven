@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "unlock_rebirths": 5,
+  "dual_flow_fraction": 0.08,
+  "inverted_exp_coeff": 0.08,
+  "inverted_exp_cap": 6,
+  "dilated_prod": 1.32,
+  "dilated_cost": 1.1,
+  "dilated_time": 1.25,
+  "authority_flat_coeff": 0.004,
+  "bank_breakthrough_sec": 30,
+  "laws": [
+    {"id": "flat_as_mult", "name_ru": "Плоское → степень", "rule": "flat_power", "value": 0.12},
+    {"id": "soft_growth", "name_ru": "Мягкая цена", "rule": "growth_exp", "value": 0.82},
+    {"id": "time_tithe", "name_ru": "Десятина времени", "rule": "time_log", "value": 0.07},
+    {"id": "batch_insight", "name_ru": "Пачка уровней", "rule": "bonus_level_every", "value": 5},
+    {"id": "qi_or_time", "name_ru": "Ци или время", "rule": "breakthrough_half_if_bank", "value": 0.5}
+  ],
+  "studies": [
+    {"id": "quiet_meridians", "name_ru": "Тихие меридианы", "seconds": 90, "effect": "auto_essence", "value": 0.25},
+    {"id": "batch_training", "name_ru": "Пачка тренировок", "seconds": 140, "effect": "auto_batch", "value": 5},
+    {"id": "longer_dream", "name_ru": "Долгий сон", "seconds": 180, "effect": "soft_cap_hours", "value": 2},
+    {"id": "law_primer", "name_ru": "Буква закона", "seconds": 220, "effect": "bonus_law_slot", "value": 1},
+    {"id": "tribulation_eye", "name_ru": "Глаз трибуляции", "seconds": 260, "effect": "pressure_mult", "value": 0.85},
+    {"id": "entropy_valve", "name_ru": "Клапан энтропии", "seconds": 260, "effect": "entropy_mult", "value": 0.75},
+    {"id": "time_ledger", "name_ru": "Книга времени", "seconds": 200, "effect": "bank_ratio", "value": 0.08},
+    {"id": "dao_grammar", "name_ru": "Грамматика Дао", "seconds": 320, "effect": "unlock_time_breakthrough", "value": 1}
+  ]
+}

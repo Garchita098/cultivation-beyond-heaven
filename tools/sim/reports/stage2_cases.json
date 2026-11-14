@@ -1,0 +1,55 @@
+{
+  "roll_81001": {
+    "root_id": "water_root",
+    "rarity": "uncommon",
+    "roll": 0.07965005866717548
+  },
+  "roll_82001": {
+    "root_id": "fire_root",
+    "rarity": "common",
+    "roll": 0.03371992171276361
+  },
+  "shop_prod_costs": [
+    1,
+    1,
+    2,
+    3,
+    5,
+    7,
+    11
+  ],
+  "rebirth": {
+    "qi": 0.0,
+    "rank_index": 0,
+    "karma": 14.0,
+    "rebirths": 1,
+    "upgrades": {},
+    "talents": 2,
+    "talent_uids": [
+      "t1",
+      "t2"
+    ],
+    "artifacts": [
+      "jade_slip",
+      "spirit_stone_pouch"
+    ],
+    "artifact_levels": {
+      "jade_slip": 1,
+      "spirit_stone_pouch": 0
+    },
+    "path_id": "heavenly_sword",
+    "shop_mult": 1.1,
+    "unlocked_shop": true
+  },
+  "offline_auto": {
+    "chunked": true,
+    "gained": 4595375.7,
+    "qi": 983.9538823224066,
+    "breath": 63,
+    "rank_index": 12
+  },
+  "path_hook_prod": {
+    "plain": 1.12,
+    "with_path": 1.18
+  }
+}

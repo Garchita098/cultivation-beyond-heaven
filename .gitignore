@@ -1,5 +1,6 @@
 # Godot 4
 .godot/
+*.uid
 /android/
 *.translation
 
@@ -9,6 +10,10 @@
 *.aab
 *.keystore
 *.jks
+
+# Python
+__pycache__/
+*.pyc
 
 # OS / editor
 .DS_Store

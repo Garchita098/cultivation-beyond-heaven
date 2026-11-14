@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "auto_rebirth_defaults": {
+    "min_rank_index": 15,
+    "min_karma_gain": 1
+  },
+  "unlock_order": [
+    {
+      "id": "auto_buy_upgrades",
+      "name_ru": "Автопокупка улучшений",
+      "unlock": {"type": "rank", "id": "core_early"},
+      "order": 1,
+      "desc_ru": "Покупает самое дешёвое / лучший ROI улучшение при наличии Ци."
+    },
+    {
+      "id": "auto_breakthrough",
+      "name_ru": "Автопрорыв",
+      "unlock": {"type": "rebirths", "min": 3},
+      "order": 2,
+      "desc_ru": "Автоматически пробивает ранг при достаточном Ци."
+    },
+    {
+      "id": "auto_equip_talents",
+      "name_ru": "Автоэкипировка талантов",
+      "unlock": {"type": "rebirths", "min": 5},
+      "order": 3,
+      "desc_ru": "Держит топ-N талантов по силе эффекта."
+    },
+    {
+      "id": "auto_rebirth",
+      "name_ru": "Авто-Rebirth",
+      "unlock": {"type": "rebirths", "min": 10},
+      "order": 4,
+      "desc_ru": "Перерождается при достижении целевого ранга или порога кармы."
+    },
+    {
+      "id": "auto_path_burst",
+      "name_ru": "Авто-активация пути",
+      "unlock": {"type": "path_level", "min": 5},
+      "order": 5,
+      "desc_ru": "Для Меча/Демона/Времени — авто-использование зарядов."
+    },
+    {
+      "id": "auto_world_balance",
+      "name_ru": "Автобаланс ресурсов мира",
+      "unlock": {"type": "ascension", "min": 1},
+      "order": 6,
+      "desc_ru": "Поддерживает целевое соотношение Ци / вторичного ресурса."
+    },
+    {
+      "id": "auto_rule_forge",
+      "name_ru": "Авто-кузница правил",
+      "unlock": {"type": "rank", "id": "law_weaver"},
+      "order": 7,
+      "desc_ru": "Подбирает пресеты законов под выбранную стратегию забега."
+    }
+  ]
+}

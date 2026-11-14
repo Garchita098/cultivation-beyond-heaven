@@ -1,0 +1,560 @@
+{
+  "schema_version": 1,
+  "ranks": [
+    {
+      "id": "mortal_early",
+      "major": "mortal",
+      "sub": "early",
+      "name_en": "Mortal · Early",
+      "name_ru": "Смертный · Ранний",
+      "index": 0,
+      "cost_qi": 0,
+      "prod_mult": 1.0,
+      "unlocks": [
+        "upgrades_basic"
+      ],
+      "stage": 1
+    },
+    {
+      "id": "mortal_mid",
+      "major": "mortal",
+      "sub": "mid",
+      "name_en": "Mortal · Mid",
+      "name_ru": "Смертный · Средний",
+      "index": 1,
+      "cost_qi": 280,
+      "prod_mult": 1.5,
+      "unlocks": [],
+      "stage": 1
+    },
+    {
+      "id": "mortal_late",
+      "major": "mortal",
+      "sub": "late",
+      "name_en": "Mortal · Late",
+      "name_ru": "Смертный · Поздний",
+      "index": 2,
+      "cost_qi": 900,
+      "prod_mult": 2.2,
+      "unlocks": [
+        "upgrade_meridian"
+      ],
+      "stage": 1
+    },
+    {
+      "id": "mortal_peak",
+      "major": "mortal",
+      "sub": "peak",
+      "name_en": "Mortal · Peak",
+      "name_ru": "Смертный · Пик",
+      "index": 3,
+      "cost_qi": 3500,
+      "prod_mult": 3.2,
+      "unlocks": [],
+      "stage": 1
+    },
+    {
+      "id": "qi_early",
+      "major": "qi_practitioner",
+      "sub": "early",
+      "name_en": "Qi Practitioner · Early",
+      "name_ru": "Практик Ци · Ранний",
+      "index": 4,
+      "cost_qi": 12000.0,
+      "prod_mult": 5.0,
+      "unlocks": [
+        "spiritual_roots",
+        "upgrade_spirit_sense"
+      ],
+      "stage": 1
+    },
+    {
+      "id": "qi_mid",
+      "major": "qi_practitioner",
+      "sub": "mid",
+      "name_en": "Qi Practitioner · Mid",
+      "name_ru": "Практик Ци · Средний",
+      "index": 5,
+      "cost_qi": 40000.0,
+      "prod_mult": 7.5,
+      "unlocks": [],
+      "stage": 1
+    },
+    {
+      "id": "qi_late",
+      "major": "qi_practitioner",
+      "sub": "late",
+      "name_en": "Qi Practitioner · Late",
+      "name_ru": "Практик Ци · Поздний",
+      "index": 6,
+      "cost_qi": 160000.0,
+      "prod_mult": 11.0,
+      "unlocks": [
+        "upgrade_qi_sea"
+      ],
+      "stage": 1
+    },
+    {
+      "id": "qi_peak",
+      "major": "qi_practitioner",
+      "sub": "peak",
+      "name_en": "Qi Practitioner · Peak",
+      "name_ru": "Практик Ци · Пик",
+      "index": 7,
+      "cost_qi": 650000.0,
+      "prod_mult": 16.0,
+      "unlocks": [],
+      "stage": 1
+    },
+    {
+      "id": "foundation_early",
+      "major": "foundation",
+      "sub": "early",
+      "name_en": "Foundation · Early",
+      "name_ru": "Основание · Раннее",
+      "index": 8,
+      "cost_qi": 2500000.0,
+      "prod_mult": 25.0,
+      "unlocks": [
+        "techniques",
+        "upgrade_foundation_pill"
+      ],
+      "stage": 1
+    },
+    {
+      "id": "foundation_mid",
+      "major": "foundation",
+      "sub": "mid",
+      "name_en": "Foundation · Mid",
+      "name_ru": "Основание · Среднее",
+      "index": 9,
+      "cost_qi": 8000000.0,
+      "prod_mult": 38.0,
+      "unlocks": [],
+      "stage": 1
+    },
+    {
+      "id": "foundation_late",
+      "major": "foundation",
+      "sub": "late",
+      "name_en": "Foundation · Late",
+      "name_ru": "Основание · Позднее",
+      "index": 10,
+      "cost_qi": 25000000.0,
+      "prod_mult": 58.0,
+      "unlocks": [
+        "artifacts_basic"
+      ],
+      "stage": 1
+    },
+    {
+      "id": "foundation_peak",
+      "major": "foundation",
+      "sub": "peak",
+      "name_en": "Foundation · Peak",
+      "name_ru": "Основание · Пик",
+      "index": 11,
+      "cost_qi": 48000000.0,
+      "prod_mult": 90.0,
+      "unlocks": [],
+      "stage": 1
+    },
+    {
+      "id": "core_early",
+      "major": "core_formation",
+      "sub": "early",
+      "name_en": "Core Formation · Early",
+      "name_ru": "Золотое Ядро · Раннее",
+      "index": 12,
+      "cost_qi": 115000000.0,
+      "prod_mult": 150.0,
+      "unlocks": [
+        "automation_buy_upgrades",
+        "upgrade_core_flame"
+      ],
+      "stage": 1
+    },
+    {
+      "id": "core_mid",
+      "major": "core_formation",
+      "sub": "mid",
+      "name_en": "Core Formation · Mid",
+      "name_ru": "Золотое Ядро · Среднее",
+      "index": 13,
+      "cost_qi": 240000000.0,
+      "prod_mult": 250.0,
+      "unlocks": [],
+      "stage": 1
+    },
+    {
+      "id": "core_late",
+      "major": "core_formation",
+      "sub": "late",
+      "name_en": "Core Formation · Late",
+      "name_ru": "Золотое Ядро · Позднее",
+      "index": 14,
+      "cost_qi": 560000000.0,
+      "prod_mult": 420.0,
+      "unlocks": [],
+      "stage": 1
+    },
+    {
+      "id": "core_peak",
+      "major": "core_formation",
+      "sub": "peak",
+      "name_en": "Core Formation · Peak",
+      "name_ru": "Золотое Ядро · Пик",
+      "index": 15,
+      "cost_qi": 1500000000.0,
+      "prod_mult": 700.0,
+      "unlocks": [
+        "rebirth_unlock"
+      ],
+      "stage": 1
+    },
+    {
+      "id": "nascent_early",
+      "major": "nascent_soul",
+      "sub": "early",
+      "name_en": "Nascent Soul · Early",
+      "name_ru": "Душа Начала · Ранняя",
+      "index": 16,
+      "cost_qi": 8000000000.0,
+      "prod_mult": 1400.0,
+      "unlocks": [
+        "paths_preview"
+      ],
+      "stage": 2
+    },
+    {
+      "id": "nascent_mid",
+      "major": "nascent_soul",
+      "sub": "mid",
+      "name_en": "Nascent Soul · Mid",
+      "name_ru": "Душа Начала · Средняя",
+      "index": 17,
+      "cost_qi": 28000000000.0,
+      "prod_mult": 2500.0,
+      "unlocks": [],
+      "stage": 2
+    },
+    {
+      "id": "nascent_late",
+      "major": "nascent_soul",
+      "sub": "late",
+      "name_en": "Nascent Soul · Late",
+      "name_ru": "Душа Начала · Поздняя",
+      "index": 18,
+      "cost_qi": 90000000000.0,
+      "prod_mult": 4500.0,
+      "unlocks": [],
+      "stage": 2
+    },
+    {
+      "id": "nascent_peak",
+      "major": "nascent_soul",
+      "sub": "peak",
+      "name_en": "Nascent Soul · Peak",
+      "name_ru": "Душа Начала · Пик",
+      "index": 19,
+      "cost_qi": 280000000000.0,
+      "prod_mult": 8000.0,
+      "unlocks": [
+        "ascension_spirit_world"
+      ],
+      "stage": 2
+    },
+    {
+      "id": "soul_xform_early",
+      "major": "soul_transformation",
+      "sub": "early",
+      "name_en": "Soul Transformation · Early",
+      "name_ru": "Преображение Души · Раннее",
+      "index": 20,
+      "cost_qi": 500000000000.0,
+      "prod_mult": 15000.0,
+      "unlocks": [
+        "dual_flow"
+      ],
+      "stage": 2
+    },
+    {
+      "id": "soul_xform_mid",
+      "major": "soul_transformation",
+      "sub": "mid",
+      "name_en": "Soul Transformation · Mid",
+      "name_ru": "Преображение Души · Среднее",
+      "index": 21,
+      "cost_qi": 1800000000000.0,
+      "prod_mult": 30000.0,
+      "unlocks": [],
+      "stage": 2
+    },
+    {
+      "id": "soul_xform_late",
+      "major": "soul_transformation",
+      "sub": "late",
+      "name_en": "Soul Transformation · Late",
+      "name_ru": "Преображение Души · Позднее",
+      "index": 22,
+      "cost_qi": 4000000000000.0,
+      "prod_mult": 60000.0,
+      "unlocks": [],
+      "stage": 2
+    },
+    {
+      "id": "soul_xform_peak",
+      "major": "soul_transformation",
+      "sub": "peak",
+      "name_en": "Soul Transformation · Peak",
+      "name_ru": "Преображение Души · Пик",
+      "index": 23,
+      "cost_qi": 10000000000000.0,
+      "prod_mult": 120000.0,
+      "unlocks": [],
+      "stage": 2
+    },
+    {
+      "id": "void_early",
+      "major": "void_refinement",
+      "sub": "early",
+      "name_en": "Void Refinement · Early",
+      "name_ru": "Очищение Пустоты · Раннее",
+      "index": 24,
+      "cost_qi": 40000000000000.0,
+      "prod_mult": 200000.0,
+      "unlocks": [
+        "dao_laws"
+      ],
+      "stage": 3
+    },
+    {
+      "id": "void_mid",
+      "major": "void_refinement",
+      "sub": "mid",
+      "name_en": "Void Refinement · Mid",
+      "name_ru": "Очищение Пустоты · Среднее",
+      "index": 25,
+      "cost_qi": 120000000000000.0,
+      "prod_mult": 350000.0,
+      "unlocks": [],
+      "stage": 3
+    },
+    {
+      "id": "void_late",
+      "major": "void_refinement",
+      "sub": "late",
+      "name_en": "Void Refinement · Late",
+      "name_ru": "Очищение Пустоты · Позднее",
+      "index": 26,
+      "cost_qi": 350000000000000.0,
+      "prod_mult": 650000.0,
+      "unlocks": [],
+      "stage": 3
+    },
+    {
+      "id": "void_peak",
+      "major": "void_refinement",
+      "sub": "peak",
+      "name_en": "Void Refinement · Peak",
+      "name_ru": "Очищение Пустоты · Пик",
+      "index": 27,
+      "cost_qi": 1000000000000000.0,
+      "prod_mult": 1200000.0,
+      "unlocks": [],
+      "stage": 3
+    },
+    {
+      "id": "integration_early",
+      "major": "body_integration",
+      "sub": "early",
+      "name_en": "Body Integration · Early",
+      "name_ru": "Слияние Тела · Раннее",
+      "index": 28,
+      "cost_qi": 3225600000000000.5,
+      "prod_mult": 3000000.0,
+      "unlocks": [
+        "reality_stitch"
+      ],
+      "stage": 3
+    },
+    {
+      "id": "integration_peak",
+      "major": "body_integration",
+      "sub": "peak",
+      "name_en": "Body Integration · Peak",
+      "name_ru": "Слияние Тела · Пик",
+      "index": 29,
+      "cost_qi": 1.2096000000000002e+16,
+      "prod_mult": 6250000.0,
+      "unlocks": [],
+      "stage": 3
+    },
+    {
+      "id": "mahayana_early",
+      "major": "mahayana",
+      "sub": "early",
+      "name_en": "Mahayana · Early",
+      "name_ru": "Махаяна · Ранняя",
+      "index": 30,
+      "cost_qi": 4.536000000000001e+16,
+      "prod_mult": 13750000.0,
+      "unlocks": [],
+      "stage": 3
+    },
+    {
+      "id": "mahayana_peak",
+      "major": "mahayana",
+      "sub": "peak",
+      "name_en": "Mahayana · Peak",
+      "name_ru": "Махаяна · Пик",
+      "index": 31,
+      "cost_qi": 1.6128000000000003e+17,
+      "prod_mult": 30000000.0,
+      "unlocks": [
+        "tribulation_mechanic"
+      ],
+      "stage": 3
+    },
+    {
+      "id": "immortal_ascendant",
+      "major": "immortal",
+      "sub": "ascendant",
+      "name_en": "Immortal Ascendant",
+      "name_ru": "Вознесённый Бессмертный",
+      "index": 32,
+      "cost_qi": 6.048e+17,
+      "prod_mult": 68750000.0,
+      "unlocks": [
+        "heavenly_world"
+      ],
+      "stage": 3
+    },
+    {
+      "id": "true_immortal",
+      "major": "immortal",
+      "sub": "true",
+      "name_en": "True Immortal",
+      "name_ru": "Истинный Бессмертный",
+      "index": 33,
+      "cost_qi": 2.4192e+18,
+      "prod_mult": 150000000.0,
+      "unlocks": [],
+      "stage": 3
+    },
+    {
+      "id": "golden_immortal",
+      "major": "immortal",
+      "sub": "golden",
+      "name_en": "Golden Immortal",
+      "name_ru": "Золотой Бессмертный",
+      "index": 34,
+      "cost_qi": 9.072e+18,
+      "prod_mult": 350000000.0,
+      "unlocks": [],
+      "stage": 3
+    },
+    {
+      "id": "immortal_emperor",
+      "major": "immortal",
+      "sub": "emperor",
+      "name_en": "Immortal Emperor",
+      "name_ru": "Император Бессмертных",
+      "index": 35,
+      "cost_qi": 3.528e+19,
+      "prod_mult": 812500000.0,
+      "unlocks": [],
+      "stage": 3
+    },
+    {
+      "id": "heavenly_lord",
+      "major": "heavenly",
+      "sub": "lord",
+      "name_en": "Heavenly Lord",
+      "name_ru": "Небесный Владыка",
+      "index": 36,
+      "cost_qi": 1.4112e+20,
+      "prod_mult": 2000000000.0,
+      "unlocks": [
+        "dao_authority"
+      ],
+      "stage": 3
+    },
+    {
+      "id": "dimension_sovereign",
+      "major": "beyond",
+      "sub": "sovereign",
+      "name_en": "Dimension Sovereign",
+      "name_ru": "Повелитель Измерений",
+      "index": 37,
+      "cost_qi": 6.048e+20,
+      "prod_mult": 5000000000.0,
+      "unlocks": [
+        "reality_rules"
+      ],
+      "stage": 3
+    },
+    {
+      "id": "law_weaver",
+      "major": "beyond",
+      "sub": "weaver",
+      "name_en": "Law Weaver",
+      "name_ru": "Ткач Законов",
+      "index": 38,
+      "cost_qi": 2.5200000000000005e+21,
+      "prod_mult": 12500000000.0,
+      "unlocks": [
+        "law_rewrite"
+      ],
+      "stage": 3
+    },
+    {
+      "id": "reality_bender",
+      "major": "beyond",
+      "sub": "bender",
+      "name_en": "Reality Bender",
+      "name_ru": "Искажающий Реальность",
+      "index": 39,
+      "cost_qi": 1.0080000000000002e+22,
+      "prod_mult": 32500000000.0,
+      "unlocks": [],
+      "stage": 3
+    },
+    {
+      "id": "dao_embodiment",
+      "major": "beyond",
+      "sub": "dao",
+      "name_en": "Dao Embodiment",
+      "name_ru": "Воплощение Дао",
+      "index": 40,
+      "cost_qi": 4.536e+22,
+      "prod_mult": 87500000000.0,
+      "unlocks": [],
+      "stage": 3
+    },
+    {
+      "id": "beyond_heaven",
+      "major": "beyond",
+      "sub": "beyond",
+      "name_en": "Beyond Heaven",
+      "name_ru": "За Пределами Небес",
+      "index": 41,
+      "cost_qi": 2.016e+23,
+      "prod_mult": 250000000000.0,
+      "unlocks": [
+        "endgame_loop"
+      ],
+      "stage": 3
+    }
+  ],
+  "major_breakthrough_unlocks": {
+    "qi_practitioner": "Духовные корни и таланты",
+    "foundation": "Техники культивации",
+    "core_formation": "Автопокупка улучшений + Rebirth на пике",
+    "nascent_soul": "Предпросмотр путей + Ascension в Духовный мир на пике",
+    "void_refinement": "Законы Дао (изменение правил производства)",
+    "immortal": "Небесный мир",
+    "heavenly": "Авторитет Дао",
+    "beyond": "Переписывание правил реальности"
+  }
+}

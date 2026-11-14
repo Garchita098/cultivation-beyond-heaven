@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "currency_id": "karma_shards",
+  "currency_name_en": "Karma Shards",
+  "currency_name_ru": "Осколки Кармы",
+  "unlock_rank": "core_peak",
+  "min_rank_index_to_rebirth": 15,
+  "formula": {
+    "type": "log_scaled",
+    "base": 1,
+    "from_lifetime_qi_log10_div": 3.0,
+    "from_highest_rank_index": 0.5,
+    "comment": "karma = floor(base + log10(lifetime_qi)/div + highest_rank_index * from_highest_rank_index)"
+  },
+  "persists": ["karma_shards", "rebirth_count", "unlocked_features", "talents", "artifacts_owned", "path_choice", "automation_unlocked", "ascension_world", "research"],
+  "resets": ["qi", "upgrade_levels", "current_rank_index", "current_world_resources_except_ascension"],
+  "tiers": [
+    {
+      "id": "first_rebirth",
+      "min_rebirths": 1,
+      "name_ru": "Первое перерождение",
+      "unlocks": ["karma_shop_basic", "offline_efficiency_boost"],
+      "perm_mult_per_karma": 0.05,
+      "offline_efficiency_bonus": 0.05,
+      "notes": "+5% к производству Ци за каждый непотраченный Осколок Кармы (аддитивно к базе 1.0). Первое перерождение также +5% к эффективности оффлайна."
+    },
+    {
+      "id": "rebirth_3",
+      "min_rebirths": 3,
+      "name_ru": "Тройное колесо",
+      "unlocks": ["auto_breakthrough", "talent_reroll"],
+      "perm_mult_per_karma": 0.05
+    },
+    {
+      "id": "rebirth_5",
+      "min_rebirths": 5,
+      "name_ru": "Пять путей",
+      "unlocks": ["path_selection", "artifact_gacha_basic"],
+      "perm_mult_per_karma": 0.05
+    },
+    {
+      "id": "rebirth_10",
+      "min_rebirths": 10,
+      "name_ru": "Десять кругов",
+      "unlocks": ["auto_rebirth", "karma_shop_advanced", "start_rank_boost"],
+      "perm_mult_per_karma": 0.05,
+      "start_rank_bonus": 2
+    },
+    {
+      "id": "rebirth_25",
+      "min_rebirths": 25,
+      "name_ru": "Адепт Сансары",
+      "unlocks": ["ascension_gate", "dual_resource_gen"],
+      "perm_mult_per_karma": 0.05
+    }
+  ],
+  "talent_reroll_cost": 4,
+  "shop": [
+    {"id": "karma_prod_1", "name_ru": "Поток кармы", "cost": 1, "effect": "perm_mult_prod", "value": 0.10, "repeatable": true, "growth": 1.5},
+    {"id": "karma_start_qi", "name_ru": "Искра старта", "cost": 3, "effect": "starting_qi", "value": 100, "repeatable": true, "growth": 2.0, "max": 8},
+    {"id": "karma_offline", "name_ru": "Память сна", "cost": 5, "effect": "offline_efficiency", "value": 0.05, "max": 5, "growth": 1.8},
+    {"id": "karma_keep_upgrade", "name_ru": "Несгораемая тренировка", "cost": 15, "effect": "keep_one_upgrade_line", "value": 1, "max": 3, "growth": 1.0}
+  ]
+}

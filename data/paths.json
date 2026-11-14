@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "unlock_rebirths": 5,
+  "currency_per_hour": 10,
+  "switch_karma_base": 6,
+  "switch_level_scale": 1,
+  "paths": [
+    {
+      "id": "heavenly_sword",
+      "name_en": "Heavenly Sword Path",
+      "name_ru": "Небесный Меч",
+      "mechanic": "burst_cycles",
+      "tint": "#F0C75E",
+      "desc_ru": "Заряд, затем короткий всплеск. Вне всплеска клинок тише.",
+      "params": {
+        "charge_period_sec": 50,
+        "burst_duration_sec": 10,
+        "burst_mult_base": 6.0,
+        "burst_mult_per_path_level": 0.12,
+        "outside_burst_mult": 0.9
+      },
+      "level_currency": "sword_intent",
+      "currency_name_ru": "Намерение",
+      "stage": 3,
+      "nodes": [
+        {"id": "shorten_charge", "name_ru": "Короткий замах", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "charge_sec", "value": -6},
+        {"id": "extend_burst", "name_ru": "Длинный всплеск", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "burst_sec", "value": 2},
+        {"id": "echo_slash", "name_ru": "Эхо", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "burst_add", "value": 0.45},
+        {"id": "keen_edge", "name_ru": "Кромка", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "burst_flat", "value": 0.012}
+      ]
+    },
+    {
+      "id": "demon_emperor",
+      "name_en": "Demon Emperor Path",
+      "name_ru": "Демон-Император",
+      "mechanic": "sacrifice",
+      "tint": "#E85D5D",
+      "desc_ru": "Жертва Ци или ранга даёт постоянную силу. Без жертвы голод.",
+      "params": {
+        "idle_penalty_mult": 0.84,
+        "sacrifice_qi_fraction": 0.34,
+        "sacrifice_burst_mult": 4.4,
+        "sacrifice_burst_sec": 22,
+        "permanent_gain_per_sacrifice": 0.007,
+        "permanent_gain_cap": 1.15,
+        "fed_window_sec": 110,
+        "rank_permanent": 0.045
+      },
+      "level_currency": "demon_blood",
+      "currency_name_ru": "Кровь",
+      "stage": 3,
+      "nodes": [
+        {"id": "throne", "name_ru": "Трон", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "idle_add", "value": 0.04},
+        {"id": "blood_pact", "name_ru": "Пакт", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "perm_add", "value": 0.003},
+        {"id": "longer_feast", "name_ru": "Пир", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "fed_sec", "value": 25},
+        {"id": "rank_price", "name_ru": "Цена ранга", "max_level": 1, "cost": 2, "growth": 1, "effect": "rank_sacrifice", "value": 1}
+      ]
+    },
+    {
+      "id": "immortal",
+      "name_en": "Immortal Path",
+      "name_ru": "Бессмертный",
+      "mechanic": "compound_offline",
+      "tint": "#3DDBA0",
+      "desc_ru": "Медленный сложный процент и самый полный оффлайн.",
+      "params": {
+        "compound_rate_per_hour": 0.055,
+        "offline_efficiency_bonus": 0.25,
+        "offline_efficiency_cap": 1.0,
+        "active_play_mult": 0.96,
+        "starting_hours": 2.5
+      },
+      "level_currency": "longevity_dew",
+      "currency_name_ru": "Роса",
+      "stage": 3,
+      "nodes": [
+        {"id": "dew_rate", "name_ru": "Роса", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "compound_add", "value": 0.012},
+        {"id": "dream_body", "name_ru": "Сон", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "dream_mult", "value": 0.2},
+        {"id": "still_mind", "name_ru": "Покой", "max_level": 2, "cost": 1, "growth": 1.55, "effect": "active_add", "value": 0.02},
+        {"id": "eternity", "name_ru": "Вечность", "max_level": 1, "cost": 2, "growth": 1, "effect": "start_hours", "value": 4}
+      ]
+    },
+    {
+      "id": "world_devourer",
+      "name_en": "World Devourer Path",
+      "name_ru": "Пожиратель",
+      "mechanic": "absorb_resources",
+      "tint": "#C084FC",
+      "desc_ru": "Поглощает ресурсы и реликвии. Разнообразие кормит рост.",
+      "params": {
+        "absorb_ratio": 0.55,
+        "devour_mult_per_resource_type": 0.26,
+        "devour_mult_cap": 2.35,
+        "qi_convert_bonus": 1.2
+      },
+      "level_currency": "devour_cores",
+      "currency_name_ru": "Ядра",
+      "stage": 3,
+      "nodes": [
+        {"id": "wider_maw", "name_ru": "Пасть", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "per_type_add", "value": 0.04},
+        {"id": "artifact_hunger", "name_ru": "Голод", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "artifact_bonus", "value": 0.03},
+        {"id": "convert_qi", "name_ru": "Переплав", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "convert_add", "value": 0.25},
+        {"id": "memory", "name_ru": "Память", "max_level": 1, "cost": 2, "growth": 1, "effect": "types_persist", "value": 1}
+      ]
+    },
+    {
+      "id": "time_lord",
+      "name_en": "Time Lord Path",
+      "name_ru": "Владыка Времени",
+      "mechanic": "time_manipulation",
+      "tint": "#5CE1FF",
+      "desc_ru": "Окна скорости, банк оффлайна и перемотка накопленного времени.",
+      "params": {
+        "charge_per_offline_hour": 1.5,
+        "charge_per_active_hour": 10,
+        "skip_minutes_per_charge": 8,
+        "speed_mult_cost": 2,
+        "speed_mult_value": 3.3,
+        "speed_mult_duration_sec": 150,
+        "max_skip_per_day_minutes": 180,
+        "bank_ratio": 0.2
+      },
+      "level_currency": "chrono_sand",
+      "currency_name_ru": "Песок",
+      "stage": 3,
+      "nodes": [
+        {"id": "faster_sand", "name_ru": "Песок", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "charge_add", "value": 2},
+        {"id": "dilation", "name_ru": "Дилатация", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "speed_add", "value": 0.35},
+        {"id": "deeper_bank", "name_ru": "Сейф", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "bank_add", "value": 0.06},
+        {"id": "rewind", "name_ru": "Откат", "max_level": 3, "cost": 1, "growth": 1.55, "effect": "skip_add", "value": 0.12}
+      ]
+    }
+  ]
+}
