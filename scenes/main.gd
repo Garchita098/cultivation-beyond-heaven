@@ -28,7 +28,10 @@ var _status_qi: Label
 var _status_rate: Label
 var _status_rank: Label
 var _world_bg: TextureRect
+var _fog: ColorRect
+var _fog_mat: ShaderMaterial
 var _bg_time: float = 0.0
+var _last_status_qi: String = ""
 var _content: Control
 var _cta: Control
 var _cta_btn: Button
@@ -76,9 +79,16 @@ func _ready() -> void:
 	_world_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_world_bg.modulate = Color(1, 1, 1, 0.55)
 	add_child(_world_bg)
+	_fog = ColorRect.new()
+	_fog.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_fog.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_fog_mat = ShaderMaterial.new()
+	_fog_mat.shader = load("res://assets/shaders/world_fog.gdshader")
+	_fog.material = _fog_mat
+	add_child(_fog)
 	var shade := ColorRect.new()
 	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
-	shade.color = Color(0.043, 0.055, 0.09, 0.55)
+	shade.color = Color(0.043, 0.055, 0.09, 0.28)
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(shade)
 
@@ -162,9 +172,11 @@ func _process(delta: float) -> void:
 		if _world_bg.texture != null:
 			using_pack = str(_world_bg.texture.resource_path).begins_with("res://assets/art/")
 		_world_bg.modulate = Color(1, 1, 1, 0.92) if using_pack else tint
-		var drift := 0.0 if Prefs.reduced_effects else sin(_bg_time * 0.15) * 10.0
-		_world_bg.offset_left = -24.0 + drift
-		_world_bg.offset_right = 24.0 + drift
+		var drift := 0.0 if Prefs.reduced_effects else sin(_bg_time * 0.12) * 18.0
+		_world_bg.offset_left = -28.0 + drift
+		_world_bg.offset_right = 28.0 + drift
+		if _fog_mat != null:
+			_fog_mat.set_shader_parameter("reduced", 1.0 if Prefs.reduced_effects else 0.0)
 	if not _shooting:
 		GameState.tick(delta)
 		if not GameState.screenshot_mode:
@@ -381,7 +393,13 @@ func _show_tab(index: int) -> void:
 	var spec: Dictionary = TABS[index]
 	var id := str(spec["id"])
 	for key in _pages.keys():
-		(_pages[key] as Control).visible = key == id
+		var page: Control = _pages[key]
+		var show: bool = key == id
+		page.visible = show
+		if show and not Prefs.reduced_effects:
+			page.modulate.a = 0.0
+			var fade := create_tween()
+			fade.tween_property(page, "modulate:a", 1.0, 0.18)
 	var show_cta := bool(spec.get("cta", false))
 	_cta.visible = show_cta
 	_content.offset_bottom = -(NAV_H + (CTA_H if show_cta else 0.0))
@@ -413,7 +431,14 @@ func _refresh_chrome() -> void:
 	var run := GameState.run
 	if run == null or not Content.valid:
 		return
-	_status_qi.text = Economy.format_qi(run.qi)
+	var qi_text := Economy.format_qi(run.qi)
+	if qi_text != _last_status_qi and _last_status_qi != "" and not Prefs.reduced_effects:
+		_status_qi.pivot_offset = _status_qi.size * 0.5
+		_status_qi.scale = Vector2(1.08, 1.08)
+		var pop := create_tween()
+		pop.tween_property(_status_qi, "scale", Vector2.ONE, 0.18)
+	_last_status_qi = qi_text
+	_status_qi.text = qi_text
 	_status_rate.text = "%s/с" % Economy.format_qi(BigNum.from_float(GameState.last_prod))
 	var rank: Dictionary = Content.data.rank_at(run.rank_index)
 	_status_rank.text = str(rank.get("name_ru", ""))
@@ -428,9 +453,9 @@ func _refresh_chrome() -> void:
 
 
 func _pulse() -> void:
-	_flash.color.a = 0.45
+	_flash.color.a = 0.55
 	var tw := create_tween()
-	tw.tween_property(_flash, "color:a", 0.0, 0.45)
+	tw.tween_property(_flash, "color:a", 0.0, 0.55)
 
 
 func _on_feature(feature_id: String) -> void:
@@ -456,6 +481,15 @@ const _EXTRA_SHOTS := [
 	"world_void",
 	"world_chaos",
 	"tab_automation",
+	"rank_hero",
+	"bg_spirit",
+	"bg_heavenly",
+	"bg_void",
+	"bg_chaos",
+	"achievements",
+	"stats",
+	"settings",
+	"toast",
 ]
 
 
@@ -495,6 +529,10 @@ func _prepare_extra(index: int) -> void:
 	_path_sheet.visible = false
 	_ascension_modal.visible = false
 	_world_sheet.visible = false
+	_achievements.visible = false
+	_stats.visible = false
+	_settings.visible = false
+	_toast.visible = false
 	var name := str(_EXTRA_SHOTS[index])
 	if name == "rebirth_confirm":
 		_show_tab(5)
@@ -528,6 +566,36 @@ func _prepare_extra(index: int) -> void:
 			GameState.run.world_res["spirit_essence"] = 40.0
 		_show_tab(0)
 		_world_sheet.show_world()
+	elif name == "rank_hero":
+		_world_sheet.visible = false
+		GameState.run.path_joined = false
+		GameState.run.world_id = "mortal_world"
+		_show_tab(0)
+	elif name.begins_with("bg_"):
+		_world_sheet.visible = false
+		GameState.run.path_joined = true
+		GameState.run.path_id = "heavenly_sword"
+		var world_id: String = {
+			"bg_spirit": "spirit_world",
+			"bg_heavenly": "heavenly_world",
+			"bg_void": "void_dimension",
+			"bg_chaos": "chaos_origin",
+		}[name]
+		GameState.run.world_id = world_id
+		_show_tab(0)
+	elif name == "achievements":
+		_show_tab(0)
+		_achievements.show_sheet()
+	elif name == "stats":
+		_achievements.visible = false
+		_stats.show_sheet()
+	elif name == "settings":
+		_stats.visible = false
+		_settings.show_sheet()
+	elif name == "toast":
+		_settings.visible = false
+		_show_tab(0)
+		_show_toast("asc_1")
 	elif name == "tab_automation":
 		_world_sheet.visible = false
 		GameState.run.world_id = "mortal_world"

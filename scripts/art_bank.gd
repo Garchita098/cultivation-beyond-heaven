@@ -1,8 +1,6 @@
 class_name ArtBank
 extends RefCounted
 ## Resolves stage-4 art under res://assets/art/ and falls back to the stage-1 placeholders.
-## The generated pack (cbh_art.tar.gz) was not in this workspace, so the fallbacks are what ship
-## until those files are added at the paths below.
 
 
 static func texture(path: String) -> Texture2D:
@@ -40,6 +38,19 @@ static func upgrade_icon(uid: String) -> Texture2D:
 	if art != null:
 		return art
 	return texture("res://assets/icons/upgrades/%s.png" % mapped)
+
+
+static func artifact_icon(aid: String) -> Texture2D:
+	return icon("res://assets/art/icons/artifact_%s_64.png" % aid, "")
+
+
+static func path_icon(path_id: String) -> Texture2D:
+	return icon("res://assets/art/icons/path_%s_64.png" % path_id, "")
+
+
+static func root_icon(root_id: String) -> Texture2D:
+	var element := root_id.trim_suffix("_root")
+	return icon("res://assets/art/icons/root_%s_64.png" % element, "")
 
 
 static func qi_icon() -> Texture2D:

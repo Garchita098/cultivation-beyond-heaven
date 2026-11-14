@@ -75,6 +75,11 @@ func _path_button(path: Dictionary, run: RunState, theme: CBHTheme) -> Button:
 	var tint := CBHTheme.path_color(id)
 	var chosen := run != null and run.path_joined and run.path_id == id
 	button.text = str(path["name_ru"])
+	var emblem := ArtBank.path_icon(id)
+	if emblem != null:
+		button.icon = emblem
+		button.expand_icon = true
+		button.add_theme_constant_override("icon_max_width", 36)
 	var style := CBHTheme.flat(tint if chosen else CBHTheme.COL_PANEL, tint, 16, 2)
 	button.add_theme_stylebox_override("normal", style)
 	button.add_theme_stylebox_override("hover", style)

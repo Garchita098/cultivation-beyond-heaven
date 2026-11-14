@@ -2,17 +2,9 @@
 
 Stage 1–3 notes still apply unless this file replaces them.
 
-## Art pack was not in the workspace
+## Art
 
-The stage 4 brief asked to import `cbh_art.tar.gz` (heroes, five world backgrounds, 64/128 icons, `manifest.json`). That archive was not on disk when this branch was built: no `uploads/` copy, no `cbh_art/` tree, no contact sheet. This commit does not invent replacement illustrations and label them as that pack.
-
-`scripts/art_bank.gd` loads the pack if it is dropped in later:
-
-- `res://assets/art/hero/hero_path_*.webp` and `hero_rank_*.webp`
-- `res://assets/art/bg/bg_{mortal,spirit,heavenly,void,chaos}.webp`
-- `res://assets/art/icons/*_64.png`
-
-Until those files exist, the game keeps the stage-1 silhouette shader, `bg_mortal_night.png`, and the existing tab and upgrade icons. World changes still tint that background (spirit jade, heavenly gold, void violet, chaos scarlet) and the cultivator card drifts a few pixels so the portrait is not a static block.
+`assets/art/` holds the generated pack: hero webp (path and rank; `hero_default` dropped as a duplicate of `hero_base`), 720×1280 world webp (png and 360 copies dropped), and icons at 64 and 128. `ArtBank` still falls back to the stage-1 placeholders if a file is missing. The cultivator uses the path sprite when a path is joined, otherwise the rank sprite, with an additive path-tinted aura, float, and Qi motes behind it. Each world uses its background with a slow drift and fog. Text sits on dark panels.
 
 ## Live numbers
 

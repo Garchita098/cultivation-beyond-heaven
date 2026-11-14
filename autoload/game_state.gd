@@ -269,7 +269,7 @@ func _emit_new_unlocks() -> void:
 
 
 func _emit_achievements(before: Dictionary) -> void:
-	if run == null:
+	if run == null or screenshot_mode:
 		return
 	for key in run.achievements.keys():
 		if not before.has(key):
