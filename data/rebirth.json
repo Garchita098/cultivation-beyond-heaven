@@ -21,7 +21,8 @@
       "name_ru": "Первое перерождение",
       "unlocks": ["karma_shop_basic", "offline_efficiency_boost"],
       "perm_mult_per_karma": 0.05,
-      "notes": "+5% к производству Ци за каждый Осколок Кармы (аддитивно к базе 1.0)"
+      "offline_efficiency_bonus": 0.05,
+      "notes": "+5% к производству Ци за каждый непотраченный Осколок Кармы (аддитивно к базе 1.0). Первое перерождение также +5% к эффективности оффлайна."
     },
     {
       "id": "rebirth_3",
@@ -53,10 +54,11 @@
       "perm_mult_per_karma": 0.05
     }
   ],
+  "talent_reroll_cost": 4,
   "shop": [
-    {"id": "karma_prod_1", "cost": 1, "effect": "perm_mult_prod", "value": 0.10, "repeatable": true, "growth": 1.5},
-    {"id": "karma_start_qi", "cost": 3, "effect": "starting_qi", "value": 100, "repeatable": true, "growth": 2.0},
-    {"id": "karma_offline", "cost": 5, "effect": "offline_efficiency", "value": 0.05, "max": 5, "growth": 1.8},
-    {"id": "karma_keep_upgrade", "cost": 15, "effect": "keep_one_upgrade_line", "value": 1, "max": 3, "growth": 1.0}
+    {"id": "karma_prod_1", "name_ru": "Поток кармы", "cost": 1, "effect": "perm_mult_prod", "value": 0.10, "repeatable": true, "growth": 1.5},
+    {"id": "karma_start_qi", "name_ru": "Искра старта", "cost": 3, "effect": "starting_qi", "value": 100, "repeatable": true, "growth": 2.0, "max": 8},
+    {"id": "karma_offline", "name_ru": "Память сна", "cost": 5, "effect": "offline_efficiency", "value": 0.05, "max": 5, "growth": 1.8},
+    {"id": "karma_keep_upgrade", "name_ru": "Несгораемая тренировка", "cost": 15, "effect": "keep_one_upgrade_line", "value": 1, "max": 3, "growth": 1.0}
   ]
 }

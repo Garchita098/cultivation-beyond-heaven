@@ -3,28 +3,54 @@ extends Control
 
 const STATUS_H := 64.0
 const CTA_H := 124.0
-const NAV_H := 152.0
+const NAV_H := 120.0
 
 const TABS := [
-	{"id": "cultivation", "label": "Культ.", "cta": true},
-	{"id": "upgrades", "label": "Улучш.", "cta": false},
+	{"id": "cultivation", "label": "Культивация", "cta": true},
+	{"id": "upgrades", "label": "Улучшения", "cta": false},
 	{"id": "ranks", "label": "Ранги", "cta": true},
-	{"id": "talents", "label": "Таланты", "cta": false, "title": "Таланты", "blurb": "Духовные корни откроются позже.", "accent": "dao"},
-	{"id": "artifacts", "label": "Артеф.", "cta": false, "title": "Артефакты", "blurb": "Реликвии появятся на следующем этапе.", "accent": "gold"},
-	{"id": "rebirth", "label": "Карма", "cta": false, "title": "Перерождение", "blurb": "После пика Золотого Ядра.", "accent": "gold"},
-	{"id": "research", "label": "Дао", "cta": false, "title": "Исследования", "blurb": "Законы Дао — поздняя игра.", "accent": "dao"},
+	{"id": "talents", "label": "Корни", "cta": false, "need": "spiritual_roots"},
+	{"id": "artifacts", "label": "Артефакты", "cta": false, "need": "artifacts_basic"},
+	{"id": "rebirth", "label": "Карма", "cta": false, "need": "rebirth_unlock"},
+	{"id": "research", "label": "Дао", "cta": false, "need": "automation_buy_upgrades"},
 ]
+
+const REVEALS := {
+	"spiritual_roots": {"tab": 3, "title": "Духовные корни", "line": "Первый корень уже с вами", "color": Color("A78BFA")},
+	"artifacts_basic": {"tab": 4, "title": "Реликвия", "line": "Она уже в коллекции", "color": Color("F0C75E")},
+	"rebirth_unlock": {"tab": 5, "title": "Колесо кармы", "line": "Можно переродиться", "color": Color("F0C75E")},
+	"automation_buy_upgrades": {"tab": 6, "title": "Автоматизация", "line": "Тренировки покупаются сами", "color": Color("5CE1FF")},
+	"path_selection": {"tab": 5, "title": "Пять путей", "line": "Можно выбрать путь", "color": Color("A78BFA")},
+	"ascension_gate": {"tab": 5, "title": "Врата Вознесения", "line": "Новый мир ждёт", "color": Color("3DDBA0")},
+}
 
 var _status_qi: Label
 var _status_rate: Label
 var _status_rank: Label
+var _world_bg: TextureRect
+var _fog: ColorRect
+var _fog_mat: ShaderMaterial
+var _bg_time: float = 0.0
+var _last_status_qi: String = ""
 var _content: Control
 var _cta: Control
 var _cta_btn: Button
 var _pages: Dictionary = {}
 var _tab_buttons: Array = []
+var _tab_labels: Array = []
 var _current: int = 0
 var _flash: ColorRect
+var _reveal: Control
+var _rebirth_modal: Control
+var _path_sheet: Control
+var _ascension_modal: Control
+var _world_sheet: Control
+var _achievements: Control
+var _stats: Control
+var _settings: Control
+var _toast: PanelContainer
+var _toast_icon: TextureRect
+var _toast_label: Label
 
 var _shooting: bool = false
 var _shot_dir: String = ""
@@ -44,6 +70,29 @@ func _ready() -> void:
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
+	_world_bg = TextureRect.new()
+	_world_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_world_bg.offset_left = -24.0
+	_world_bg.offset_right = 24.0
+	_world_bg.offset_top = -16.0
+	_world_bg.offset_bottom = 16.0
+	_world_bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_world_bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	_world_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_world_bg.modulate = Color(1, 1, 1, 0.55)
+	add_child(_world_bg)
+	_fog = ColorRect.new()
+	_fog.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_fog.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_fog_mat = ShaderMaterial.new()
+	_fog_mat.shader = load("res://assets/shaders/world_fog.gdshader")
+	_fog.material = _fog_mat
+	add_child(_fog)
+	var shade := ColorRect.new()
+	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	shade.color = Color(0.043, 0.055, 0.09, 0.28)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(shade)
 
 	_build_status(theme)
 	_build_content()
@@ -64,6 +113,43 @@ func _ready() -> void:
 		modal.show_summary(GameState.pending_offline)
 	EventBus.offline_summary.connect(modal.show_summary)
 	EventBus.rank_up.connect(func(_i, _id): _pulse())
+	var overlay := CanvasLayer.new()
+	overlay.layer = 20
+	add_child(overlay)
+	_reveal = preload("res://scenes/reveal_overlay.gd").new()
+	_reveal.set_meta("on_open", _show_tab)
+	_reveal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_reveal)
+	_rebirth_modal = preload("res://scenes/rebirth_modal.gd").new()
+	_rebirth_modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_rebirth_modal)
+	_path_sheet = preload("res://scenes/path_sheet.gd").new()
+	_path_sheet.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_path_sheet)
+	_ascension_modal = preload("res://scenes/ascension_modal.gd").new()
+	_ascension_modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_ascension_modal)
+	_world_sheet = preload("res://scenes/world_sheet.gd").new()
+	_world_sheet.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_world_sheet)
+	EventBus.open_rebirth_confirm.connect(_rebirth_modal.show_offer)
+	EventBus.open_path_sheet.connect(_path_sheet.show_sheet)
+	EventBus.open_ascension_confirm.connect(_ascension_modal.show_offer)
+	EventBus.open_world_sheet.connect(_world_sheet.show_world)
+	EventBus.feature_unlocked.connect(_on_feature)
+	EventBus.rebirth_done.connect(func(_c): _pulse())
+	_achievements = preload("res://scenes/achievements_sheet.gd").new()
+	_achievements.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_achievements)
+	_stats = preload("res://scenes/stats_sheet.gd").new()
+	_stats.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_stats)
+	_settings = preload("res://scenes/settings_sheet.gd").new()
+	_settings.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(_settings)
+	_build_toast(theme)
+	overlay.add_child(_toast)
+	EventBus.achievement_unlocked.connect(_show_toast)
 
 	var args := OS.get_cmdline_user_args()
 	var idx := args.find("--screenshots")
@@ -77,9 +163,26 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if GameState.run == null:
 		return
+	_bg_time += delta
+	if _world_bg != null:
+		var world_id := GameState.run.world_id
+		var tex := ArtBank.world_background(world_id)
+		if _world_bg.texture != tex:
+			_world_bg.texture = tex
+		var tint := ArtBank.world_tint(world_id)
+		var using_pack := false
+		if _world_bg.texture != null:
+			using_pack = str(_world_bg.texture.resource_path).begins_with("res://assets/art/")
+		_world_bg.modulate = Color(1, 1, 1, 0.92) if using_pack else tint
+		var drift := 0.0 if Prefs.reduced_effects else sin(_bg_time * 0.12) * 18.0
+		_world_bg.offset_left = -28.0 + drift
+		_world_bg.offset_right = 28.0 + drift
+		if _fog_mat != null:
+			_fog_mat.set_shader_parameter("reduced", 1.0 if Prefs.reduced_effects else 0.0)
 	if not _shooting:
 		GameState.tick(delta)
-		Automation.try_act(GameState.run)
+		if not GameState.screenshot_mode:
+			Automation.try_act(GameState.run, delta)
 		SaveSystem.maybe_autosave(GameState.run, delta)
 	else:
 		GameState.tick(delta)
@@ -115,8 +218,7 @@ func _build_status(theme: CBHTheme) -> void:
 	qi_icon.custom_minimum_size = Vector2(28, 28)
 	qi_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	qi_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	if ResourceLoader.exists("res://assets/icons/ui/icon_qi.png"):
-		qi_icon.texture = load("res://assets/icons/ui/icon_qi.png")
+	qi_icon.texture = ArtBank.qi_icon()
 	row.add_child(qi_icon)
 	_status_qi = Label.new()
 	_status_qi.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -133,6 +235,73 @@ func _build_status(theme: CBHTheme) -> void:
 	_status_rank.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	CBHTheme.style_label(_status_rank, theme.font_sans, 15, CBHTheme.COL_GOLD)
 	row.add_child(_status_rank)
+	var goals := Button.new()
+	goals.text = "Цели"
+	goals.focus_mode = Control.FOCUS_NONE
+	goals.custom_minimum_size = Vector2(84, 48)
+	goals.add_theme_font_size_override("font_size", 14)
+	goals.pressed.connect(func(): _achievements.show_sheet())
+	row.add_child(goals)
+	var stats_btn := Button.new()
+	stats_btn.text = "Счёт"
+	stats_btn.focus_mode = Control.FOCUS_NONE
+	stats_btn.custom_minimum_size = Vector2(76, 48)
+	stats_btn.add_theme_font_size_override("font_size", 14)
+	stats_btn.pressed.connect(func(): _stats.show_sheet())
+	row.add_child(stats_btn)
+	var gear := Button.new()
+	gear.text = "Ещё"
+	gear.focus_mode = Control.FOCUS_NONE
+	gear.custom_minimum_size = Vector2(68, 48)
+	gear.add_theme_font_size_override("font_size", 14)
+	gear.pressed.connect(func(): _settings.show_sheet())
+	row.add_child(gear)
+
+
+func _build_toast(theme: CBHTheme) -> void:
+	_toast = PanelContainer.new()
+	_toast.visible = false
+	_toast.anchor_left = 0.06
+	_toast.anchor_right = 0.94
+	_toast.anchor_top = 0.0
+	_toast.anchor_bottom = 0.0
+	_toast.offset_top = 156.0
+	_toast.offset_bottom = 228.0
+	_toast.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_toast.add_theme_stylebox_override("panel", CBHTheme.flat(Color("1A2438"), CBHTheme.COL_GOLD, 16, 1))
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	_toast.add_child(row)
+	_toast_icon = TextureRect.new()
+	_toast_icon.custom_minimum_size = Vector2(40, 40)
+	_toast_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_toast_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	row.add_child(_toast_icon)
+	_toast_label = Label.new()
+	_toast_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_toast_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	CBHTheme.style_label(_toast_label, theme.font_bold, 18, CBHTheme.COL_GOLD)
+	row.add_child(_toast_label)
+
+
+func _show_toast(achievement_id: String) -> void:
+	var title := achievement_id
+	var found: Dictionary = {}
+	for ach in Content.data.achievements:
+		if str(ach["id"]) == achievement_id:
+			title = str(ach.get("name_ru", title))
+			found = ach
+			break
+	_toast_label.text = title
+	if _toast_icon != null:
+		_toast_icon.texture = ArtBank.achievement_icon(found if not found.is_empty() else {"id": achievement_id})
+	_toast.visible = true
+	_toast.modulate.a = 1.0
+	var tw := create_tween()
+	tw.tween_interval(1.6)
+	tw.tween_property(_toast, "modulate:a", 0.0, 0.45)
+	tw.tween_callback(func(): _toast.visible = false)
 
 
 func _build_content() -> void:
@@ -196,33 +365,44 @@ func _build_nav(theme: CBHTheme) -> void:
 		var btn := Button.new()
 		btn.focus_mode = Control.FOCUS_NONE
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		btn.custom_minimum_size = Vector2(0, 120)
-		btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
-		btn.add_theme_font_size_override("font_size", 13)
-		btn.add_theme_font_override("font", theme.font_sans)
-		var icon_path := "res://assets/icons/tabs/%s.png" % str(spec["id"])
-		if ResourceLoader.exists(icon_path):
-			btn.icon = load(icon_path)
-			btn.expand_icon = true
-			btn.add_theme_constant_override("icon_max_width", 28)
-		btn.text = str(spec["label"])
-		var locked := spec.has("title")
-		if locked:
-			btn.add_theme_color_override("font_color", CBHTheme.COL_MUTED)
+		btn.custom_minimum_size = Vector2(0, 104)
+		btn.text = ""
+		var stack := VBoxContainer.new()
+		stack.set_anchors_preset(Control.PRESET_FULL_RECT)
+		stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		stack.alignment = BoxContainer.ALIGNMENT_CENTER
+		stack.add_theme_constant_override("separation", 2)
+		btn.add_child(stack)
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(44, 44)
+		icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture = ArtBank.tab_icon(str(spec["id"]))
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		stack.add_child(icon)
+		var label := Label.new()
+		label.text = str(spec["label"])
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		label.visible = false
+		CBHTheme.style_label(label, theme.font_sans, 12, CBHTheme.COL_TEXT)
+		stack.add_child(label)
 		var index := i
 		btn.pressed.connect(func(): _show_tab(index))
 		row.add_child(btn)
 		_tab_buttons.append(btn)
+		_tab_labels.append(label)
 
 
 func _build_pages() -> void:
 	_pages["cultivation"] = preload("res://scenes/tabs/cultivation_view.gd").new()
 	_pages["upgrades"] = preload("res://scenes/tabs/upgrades_view.gd").new()
 	_pages["ranks"] = preload("res://scenes/tabs/ranks_view.gd").new()
-	_pages["talents"] = _locked("Таланты", "Духовные корни откроются позже.", CBHTheme.COL_DAO)
-	_pages["artifacts"] = _locked("Артефакты", "Реликвии появятся на следующем этапе.", CBHTheme.COL_GOLD)
-	_pages["rebirth"] = _locked("Перерождение", "После пика Золотого Ядра.", CBHTheme.COL_GOLD)
-	_pages["research"] = _locked("Исследования", "Законы Дао — поздняя игра.", CBHTheme.COL_DAO)
+	_pages["talents"] = preload("res://scenes/tabs/talents_view.gd").new()
+	_pages["artifacts"] = preload("res://scenes/tabs/artifacts_view.gd").new()
+	_pages["rebirth"] = preload("res://scenes/tabs/rebirth_view.gd").new()
+	_pages["research"] = preload("res://scenes/tabs/research_view.gd").new()
 	for id in _pages.keys():
 		var page: Control = _pages[id]
 		page.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -243,13 +423,30 @@ func _show_tab(index: int) -> void:
 	var spec: Dictionary = TABS[index]
 	var id := str(spec["id"])
 	for key in _pages.keys():
-		(_pages[key] as Control).visible = key == id
+		var page: Control = _pages[key]
+		var show: bool = key == id
+		page.visible = show
+		if show and not Prefs.reduced_effects:
+			page.modulate.a = 0.0
+			var fade := create_tween()
+			fade.tween_property(page, "modulate:a", 1.0, 0.18)
 	var show_cta := bool(spec.get("cta", false))
 	_cta.visible = show_cta
 	_content.offset_bottom = -(NAV_H + (CTA_H if show_cta else 0.0))
 	for i in _tab_buttons.size():
 		var btn: Button = _tab_buttons[i]
+		var spec_i: Dictionary = TABS[i]
+		var open := true
+		if spec_i.has("need") and GameState.run != null:
+			open = GameState.run.unlocked.has(str(spec_i["need"])) or GameState.run.rebirth_count > 0 and str(spec_i["id"]) == "rebirth"
 		var active := i == index
+		if i < _tab_labels.size():
+			var tab_label: Label = _tab_labels[i]
+			tab_label.visible = active
+			tab_label.add_theme_color_override("font_color", CBHTheme.COL_TEXT if open else CBHTheme.COL_MUTED)
+		var icon_node := btn.get_child(0).get_child(0) as CanvasItem
+		if icon_node != null:
+			icon_node.modulate = Color.WHITE if open else Color(0.55, 0.58, 0.66)
 		var style := CBHTheme.flat(
 			Color("182033") if active else Color(0, 0, 0, 0),
 			CBHTheme.COL_QI if active else Color(0, 0, 0, 0),
@@ -270,37 +467,178 @@ func _refresh_chrome() -> void:
 	var run := GameState.run
 	if run == null or not Content.valid:
 		return
-	_status_qi.text = Economy.format_qi(run.qi)
+	var qi_text := Economy.format_qi(run.qi)
+	if qi_text != _last_status_qi and _last_status_qi != "" and not Prefs.reduced_effects:
+		_status_qi.pivot_offset = _status_qi.size * 0.5
+		_status_qi.scale = Vector2(1.08, 1.08)
+		var pop := create_tween()
+		pop.tween_property(_status_qi, "scale", Vector2.ONE, 0.18)
+	_last_status_qi = qi_text
+	_status_qi.text = qi_text
 	_status_rate.text = "%s/с" % Economy.format_qi(BigNum.from_float(GameState.last_prod))
 	var rank: Dictionary = Content.data.rank_at(run.rank_index)
 	_status_rank.text = str(rank.get("name_ru", ""))
-	var nxt := Economy.next_rank(run, EconomyCore.STAGE1_CAP)
+	var nxt := Economy.next_rank(run, EconomyCore.STAGE_CAP)
 	if nxt.is_empty():
 		_cta_btn.text = "Перерождение\nскоро"
 		_cta_btn.disabled = true
 	else:
-		var cost := BigNum.from_float(float(nxt["cost_qi"]))
+		var cost := BigNum.from_float(Economy.breakthrough_cost_of(run))
 		_cta_btn.text = "Прорыв\n%s" % Economy.format_qi(cost)
 		_cta_btn.disabled = run.qi.cmp(cost) < 0
 
 
 func _pulse() -> void:
-	_flash.color.a = 0.45
+	_flash.color.a = 0.55
 	var tw := create_tween()
-	tw.tween_property(_flash, "color:a", 0.0, 0.45)
+	tw.tween_property(_flash, "color:a", 0.0, 0.55)
+
+
+func _on_feature(feature_id: String) -> void:
+	if GameState.screenshot_mode or GameState.run == null:
+		return
+	if GameState.run.reveal_seen.has(feature_id):
+		return
+	if not REVEALS.has(feature_id):
+		return
+	GameState.run.reveal_seen[feature_id] = true
+	var spec: Dictionary = REVEALS[feature_id]
+	spec["id"] = feature_id
+	_reveal.push(spec)
+	_pulse()
+
+
+const _EXTRA_SHOTS := [
+	"rebirth_confirm",
+	"path_select",
+	"ascension_confirm",
+	"world_spirit",
+	"world_heavenly",
+	"world_void",
+	"world_chaos",
+	"tab_automation",
+	"rank_hero",
+	"bg_spirit",
+	"bg_heavenly",
+	"bg_void",
+	"bg_chaos",
+	"achievements",
+	"stats",
+	"settings",
+	"toast",
+]
 
 
 func _capture_shot() -> void:
 	var img := get_viewport().get_texture().get_image()
-	var spec: Dictionary = TABS[_shot_i]
-	var path := _shot_dir.trim_suffix("/") + "/tab_%s.png" % str(spec["id"])
-	var err := img.save_png(path)
-	if err != OK:
-		push_error("Screenshot failed %s (%s)" % [path, error_string(err)])
-	_shot_i += 1
-	_shot_pending = false
-	_shot_timer = 0.0
-	if _shot_i >= TABS.size():
-		get_tree().quit(0 if err == OK else 1)
+	var err := OK
+	var dir := _shot_dir.trim_suffix("/")
+	if _shot_i < TABS.size():
+		var spec: Dictionary = TABS[_shot_i]
+		err = img.save_png(dir + "/tab_%s.png" % str(spec["id"]))
+		_shot_i += 1
+		_shot_pending = false
+		_shot_timer = 0.0
+		if _shot_i < TABS.size():
+			_show_tab(_shot_i)
+		else:
+			_prepare_extra(0)
+		if err != OK:
+			push_error("Screenshot failed (%s)" % error_string(err))
 		return
-	_show_tab(_shot_i)
+	var extra := _shot_i - TABS.size()
+	if extra < _EXTRA_SHOTS.size():
+		err = img.save_png(dir + "/%s.png" % str(_EXTRA_SHOTS[extra]))
+		_shot_i += 1
+		_shot_pending = false
+		_shot_timer = 0.0
+		if _shot_i - TABS.size() < _EXTRA_SHOTS.size():
+			_prepare_extra(_shot_i - TABS.size())
+		else:
+			get_tree().quit(0 if err == OK else 1)
+		return
+	get_tree().quit(0)
+
+
+func _prepare_extra(index: int) -> void:
+	_rebirth_modal.visible = false
+	_path_sheet.visible = false
+	_ascension_modal.visible = false
+	_world_sheet.visible = false
+	_achievements.visible = false
+	_stats.visible = false
+	_settings.visible = false
+	_toast.visible = false
+	var name := str(_EXTRA_SHOTS[index])
+	if name == "rebirth_confirm":
+		_show_tab(5)
+		_rebirth_modal.show_offer()
+	elif name == "path_select":
+		_show_tab(0)
+		_path_sheet.show_sheet()
+	elif name == "ascension_confirm":
+		_path_sheet.visible = false
+		_ascension_modal.show_offer()
+	elif name.begins_with("world_"):
+		_ascension_modal.visible = false
+		var world_id: String = {
+			"world_spirit": "spirit_world",
+			"world_heavenly": "heavenly_world",
+			"world_void": "void_dimension",
+			"world_chaos": "chaos_origin",
+		}[name]
+		GameState.run.world_id = world_id
+		if world_id == "void_dimension":
+			GameState.run.world_res["void_dust"] = 24.0
+			GameState.run.retain_seconds = 180.0
+		elif world_id == "chaos_origin":
+			GameState.run.world_res["chaos_seed"] = 3.0
+		elif world_id == "heavenly_world":
+			GameState.run.world_res["dao_fragments"] = 6.0
+			GameState.run.stance = "defy"
+			GameState.run.boon_left = 12.0
+		elif world_id == "spirit_world":
+			GameState.run.essence_ratio = 0.5
+			GameState.run.world_res["spirit_essence"] = 40.0
+		_show_tab(0)
+		_world_sheet.show_world()
+	elif name == "rank_hero":
+		_world_sheet.visible = false
+		GameState.run.path_joined = false
+		GameState.run.world_id = "mortal_world"
+		_show_tab(0)
+	elif name.begins_with("bg_"):
+		_world_sheet.visible = false
+		GameState.run.path_joined = true
+		GameState.run.path_id = "heavenly_sword"
+		var world_id: String = {
+			"bg_spirit": "spirit_world",
+			"bg_heavenly": "heavenly_world",
+			"bg_void": "void_dimension",
+			"bg_chaos": "chaos_origin",
+		}[name]
+		GameState.run.world_id = world_id
+		_show_tab(0)
+	elif name == "achievements":
+		_show_tab(0)
+		_achievements.show_sheet()
+	elif name == "stats":
+		_achievements.visible = false
+		GameState.run.world_id = "mortal_world"
+		var kept: Dictionary = GameState.run.stats
+		kept["worlds"] = ["mortal_world", "spirit_world"]
+		GameState.run.stats = kept
+		_stats.show_sheet()
+	elif name == "settings":
+		_stats.visible = false
+		_settings.show_sheet()
+	elif name == "toast":
+		_settings.visible = false
+		_show_tab(0)
+		_show_toast("asc_1")
+	elif name == "tab_automation":
+		_world_sheet.visible = false
+		GameState.run.world_id = "mortal_world"
+		_show_tab(6)
+		var page = _pages["research"]
+		page.show_mode("auto")

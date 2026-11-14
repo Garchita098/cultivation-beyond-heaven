@@ -114,7 +114,32 @@ roi    = d_prod / cost(level)
 payback_sec = cost / d_prod
 ```
 
-## 10. Детекция стен
+## 10. Stage 2 — таланты, артефакты, лавка, оффлайн с автоматизацией
+
+Числа только из JSON. `path_mult` остаётся `1` до Stage 3. `path_id` уже включает синергию корня и `path_match_effect_scale` артефакта.
+
+```
+talent_value = roll + level * effect_gain_per_level
+```
+
+Экипированные корни (до `max_equipped`) входят в формулу §2 по своему `effect_type`. `mult_prod` перемножается. Синергия стихий (`element_synergies`) — дополнительный множитель. Синергия `synergy_with` срабатывает, только если тег есть у выбранного `path_id`.
+
+Артефакт: `ev = effect_value * (1 + effect_gain_fraction * level)`, и `ev *= path_match_effect_scale`, если путь совпал. Эффекты путей без механики (`sacrifice_efficiency`, `absorb_rate`, `time_skip_charge`, `rule_slot`) дают `artifact_mult *= (1 + ev * stage2_hook_as_mult)`.
+
+Лавка кармы:
+
+```
+cost(level) = max(1, floor(cost * growth^level))
+shop_mult   = 1 + karma_prod_1.level * value
+```
+
+`karma_mult` считается от **непотраченных** осколков. Покупка, которая снижает производство, не совершается.
+
+Ролл корня детерминированный (`cbh_unit`, один и тот же в симе и в Godot): один раз на `qi_early`, один раз на каждый `milestone_ranks`, и один на каждое перерождение. Пустой слот заполняется сам. Реликвии выпадают по `drop_order` на `foundation_late` и на перерождении (`grant_per_rebirth`, с 5-го — `grant_per_rebirth_after_gacha`).
+
+Оффлайн: если включены автопокупка, автопрорыв или авто-rebirth, расчёт идёт чанками `chunk_seconds` с теми же решениями, что и в бою. Иначе — closed-form §6.
+
+## 11. Детекция стен
 
 Непрерывный интервал без покупки улучшения и без прорыва:
 
@@ -123,3 +148,38 @@ payback_sec = cost / d_prod
 - late: ≥ 3600 s
 
 Пороги — `balance.walls`.
+
+## 12. Stage 3 — пути, миры, исследования, вознесение
+
+Пока путь не выбран (`path_joined` ложь), мир смертный, нет законов и знаков Дао, производство и цены совпадают с §2–§10.
+
+```
+qi_per_sec = stage2_prod * path_mult * speed_window * law_rewrite * dao_mark_mult * qi_keep
+dao_mark_mult = 1 + dao_marks * perm_mult_per_mark
+qi_keep = 1 - essence_ratio          # только Spirit World, ratio ∈ {0, 0.25, 0.5, 0.75}
+```
+
+| Path | path_mult |
+|------|-----------|
+| heavenly_sword | вне всплеска `outside_burst_mult`; во всплеске `burst_mult_base + level * per_level + узлы`. Узел «Кромка» на время всплеска домножает на `(1 + flat_sum * value)` |
+| demon_emperor | без жертвы `idle_penalty * (1+permanent)`; после жертвы `1+permanent`; в окне жертвы `sacrifice_burst_mult * (1+permanent)`. Жертва сжигает долю Ци. Узел «Цена ранга» ещё снимает 1 подступень ранга |
+| immortal | `active_play_mult * (1+rate)^(starting_hours + cultivated_hours)`. Оффлайн-часы копят часы быстрее. Эффективность оффлайна +`offline_efficiency_bonus`, потолок `offline_efficiency_cap` |
+| world_devourer | `1 + min(cap-1, types * per_type) + devour_bonus`. Тип — поглощённое улучшение, реликвия или ресурс мира |
+| time_lord | прямой mult = 1. Окно скорости `speed_mult_value` на `speed_mult_duration_sec` за заряд. Time-skip тратит накопленные оффлайн-секунды (`bank_ratio` от отсутствия), не тап |
+
+Законы Дао (слот, не множитель «ещё ×k»):
+
+- `flat_power`: `(1+mult_add)` становится `(1+mult_add)^(1+value)`
+- `growth_exp`: цена `base * growth^(level * value)`
+- `time_log`: производство `* (1 + value * log10(1+hours))`, прорыв `* 1.2`
+- `bonus_level_every`: каждая N-я покупка даёт ещё уровень
+- `breakthrough_half_if_bank`: прорыв стоит половину Ци и списывает банк времени
+
+Режимы реальности (ранг Слияния Тела, `reality_stitch`):
+
+- dilated: производство `* dilated_prod`, цены `* dilated_cost`, часы `* dilated_time`
+- inverted: `(1+flat)*(1+mult)` заменяется на `(1+flat)*exp(min(cap, mult*coeff))`
+
+Миры: Spirit делит поток. Heavenly раз в `tribulation_interval_sec` сравнивает `log10(prod) + rank * weight` с давлением; успех открывает окно, где flat дополнительно входит множителем. Void срезает Ци выше `prod * retain_seconds` в пыль. Chaos копит семена и открывает слоты кузницы.
+
+Вознесение (rebirth ≥ 25 и ранг входа следующего мира) обнуляет Ци, тренировки, ранг, карму и лавку. Путь, корни, реликвии и исследования остаются. Награда — Знаки Дао. Оффлайн с путём или миром считается чанками. Живая экономика — float64 с потолком `balance.magnitude_cap` (1e300). Запись BigNum держит экспоненту до `notation_max_exponent` (1e6).

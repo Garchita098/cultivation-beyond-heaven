@@ -5,6 +5,7 @@ render_mode blend_mix, unshaded;
 uniform float tier = 0.0;
 uniform float progress = 0.0;
 uniform vec2 canvas_size = vec2(720.0, 760.0);
+uniform vec3 path_tint = vec3(-1.0, -1.0, -1.0);
 
 float hsh(float n) {
 	return fract(sin(n) * 43758.5453);
@@ -75,6 +76,9 @@ void fragment() {
 	col += vec3(0.18, 0.28, 0.32) * mist * 0.28;
 
 	vec3 aura = aura_rgb(tier);
+	if (path_tint.x >= 0.0) {
+		aura = mix(aura, path_tint, 0.72);
+	}
 	float pulse = 0.70 + 0.30 * sin(TIME * (1.35 + tier * 0.15));
 	float strength = 0.55 + tier * 0.22;
 	vec2 c = p - vec2(0.0, 0.02);

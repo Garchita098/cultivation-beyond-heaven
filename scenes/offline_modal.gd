@@ -67,12 +67,16 @@ func show_summary(summary: Dictionary) -> void:
 		return
 	_time.text = _format_absent(float(summary.get("absent_sec", 0.0)))
 	_gain.text = "+ %s Ци" % str(summary.get("gained_text", "0"))
+	if bool(summary.get("hard_capped", false)):
+		_gain.text += "\nучтены последние 24 часа"
 	var eff := float(summary.get("efficiency", 0.75))
 	var note := "Эффективность %d%%" % int(round(eff * 100.0))
 	if bool(summary.get("hard_capped", false)):
 		note += "  ·  учтено 24 ч"
 	elif bool(summary.get("soft_capped", false)):
 		note += "  ·  после 8 ч тише"
+	if bool(summary.get("chunked", false)):
+		note += "  ·  авто"
 	_note.text = note
 	visible = true
 

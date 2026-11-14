@@ -19,10 +19,13 @@
   "pacing_targets_sec": {
     "first_upgrade": 15,
     "first_breakthrough": 300,
-    "first_rebirth": 3900,
+    "first_rebirth": 3600,
+    "first_rebirth_min": 2700,
     "stage1_end_active": 5400,
-    "first_rebirth_min": 1800,
-    "first_breakthrough_min": 60
+    "first_breakthrough_min": 60,
+    "rebirth_5_active": 14400,
+    "offline_rebirth_5_calendar": 259200,
+    "best_roi_mid_wait_max": 1200
   },
   "bignum": {
     "suffixes": [
@@ -37,6 +40,14 @@
       "Sp",
       "Oc"
     ],
-    "scientific_from_exponent": 33
-  }
+    "scientific_from_exponent": 33,
+    "notation_max_exponent": 1000000
+  },
+  "magnitude_cap": 1e+300,
+  "path_pace_spread": 0.25,
+  "ascension_max_sec": 172800,
+  "ascension_echo": 1.0,
+  "stage4_max_idle_sec": 900,
+  "ascension_cost_scale": 2.2,
+  "ascension_later_scale": 140
 }

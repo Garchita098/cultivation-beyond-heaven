@@ -1,0 +1,1083 @@
+{
+  "game": "Cultivation: Beyond Heaven",
+  "resolution_logical": "720x1280",
+  "style": "painterly-but-clean 2D digital illustration, dark eastern fantasy",
+  "palette": {
+    "deep_bg": "#0B0E17",
+    "qi": "#5CE1FF",
+    "jade": "#3DDBA0",
+    "gold": "#F0C75E",
+    "dao_violet": "#A78BFA",
+    "demon_scarlet": "#E85D5D"
+  },
+  "notes": {
+    "heroes": "RGBA with luminance-keyed alpha from #000000; ~768px tall; use additive aura shaders behind",
+    "backgrounds": "720x1280 + 360x640 half-res; low-contrast center for UI overlay",
+    "icons": "128x128 masters + _64.png half-res; RGBA keyed",
+    "retries": [
+      "hero_path_world_devourer: 2 retries for stronger void vortex (v3 accepted)"
+    ],
+    "weak_assets": [
+      "hero_path_world_devourer: vortex improved but still more aura-halo than devouring maw",
+      "icons/artifact_talisman: may contain abstract rune strokes (not readable letters)",
+      "icons/artifact_lotus_seal: central geometric emblem may resemble a character form",
+      "sheet_tabs research scroll had illegible celestial marks in source (abstract)"
+    ],
+    "webp": "Optional lighter WebP copies of backgrounds included alongside PNG (quality ~82); use PNG for Godot import if preferred.",
+    "package": "cbh_art.tar.gz excludes raw/ generation sources; raw JPGs remain on disk under /workspace/cbh_art/raw/"
+  },
+  "heroes": [
+    {
+      "path": "hero/hero_base.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 585685
+    },
+    {
+      "path": "hero/hero_default.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 585685
+    },
+    {
+      "path": "hero/hero_path_demon_emperor.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 487616
+    },
+    {
+      "path": "hero/hero_path_heavenly_sword.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 692074
+    },
+    {
+      "path": "hero/hero_path_immortal.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 647006
+    },
+    {
+      "path": "hero/hero_path_time_lord.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 708559
+    },
+    {
+      "path": "hero/hero_path_world_devourer.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 720088
+    },
+    {
+      "path": "hero/hero_rank_dimension_lord.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 763502
+    },
+    {
+      "path": "hero/hero_rank_foundation.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 637901
+    },
+    {
+      "path": "hero/hero_rank_golden_core.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 633288
+    },
+    {
+      "path": "hero/hero_rank_immortal.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 662103
+    },
+    {
+      "path": "hero/hero_rank_mortal.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 496702
+    },
+    {
+      "path": "hero/hero_rank_nascent_soul.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 611606
+    },
+    {
+      "path": "hero/hero_rank_qi.png",
+      "w": 576,
+      "h": 768,
+      "mode": "RGBA",
+      "bytes": 620427
+    }
+  ],
+  "backgrounds": [
+    {
+      "path": "bg/bg_chaos.png",
+      "w": 720,
+      "h": 1280,
+      "mode": "RGB",
+      "bytes": 1567687
+    },
+    {
+      "path": "bg/bg_chaos_360.png",
+      "w": 360,
+      "h": 640,
+      "mode": "RGB",
+      "bytes": 432585
+    },
+    {
+      "path": "bg/bg_heavenly.png",
+      "w": 720,
+      "h": 1280,
+      "mode": "RGB",
+      "bytes": 986651
+    },
+    {
+      "path": "bg/bg_heavenly_360.png",
+      "w": 360,
+      "h": 640,
+      "mode": "RGB",
+      "bytes": 299097
+    },
+    {
+      "path": "bg/bg_mortal.png",
+      "w": 720,
+      "h": 1280,
+      "mode": "RGB",
+      "bytes": 768379
+    },
+    {
+      "path": "bg/bg_mortal_360.png",
+      "w": 360,
+      "h": 640,
+      "mode": "RGB",
+      "bytes": 261425
+    },
+    {
+      "path": "bg/bg_spirit.png",
+      "w": 720,
+      "h": 1280,
+      "mode": "RGB",
+      "bytes": 979292
+    },
+    {
+      "path": "bg/bg_spirit_360.png",
+      "w": 360,
+      "h": 640,
+      "mode": "RGB",
+      "bytes": 310861
+    },
+    {
+      "path": "bg/bg_void.png",
+      "w": 720,
+      "h": 1280,
+      "mode": "RGB",
+      "bytes": 872582
+    },
+    {
+      "path": "bg/bg_void_360.png",
+      "w": 360,
+      "h": 640,
+      "mode": "RGB",
+      "bytes": 270474
+    }
+  ],
+  "icons": [
+    {
+      "path": "icons/artifact_bell.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 18471
+    },
+    {
+      "path": "icons/artifact_bell_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 5476
+    },
+    {
+      "path": "icons/artifact_blood_chalice.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 17646
+    },
+    {
+      "path": "icons/artifact_blood_chalice_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 5580
+    },
+    {
+      "path": "icons/artifact_cauldron.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 18620
+    },
+    {
+      "path": "icons/artifact_cauldron_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 5520
+    },
+    {
+      "path": "icons/artifact_chaos_bead.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 40982
+    },
+    {
+      "path": "icons/artifact_chaos_bead_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 11903
+    },
+    {
+      "path": "icons/artifact_chrono_hourglass.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 28637
+    },
+    {
+      "path": "icons/artifact_chrono_hourglass_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 8452
+    },
+    {
+      "path": "icons/artifact_dao_compass.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 42120
+    },
+    {
+      "path": "icons/artifact_dao_compass_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 12102
+    },
+    {
+      "path": "icons/artifact_flying_sword_shard.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 30561
+    },
+    {
+      "path": "icons/artifact_flying_sword_shard_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 9784
+    },
+    {
+      "path": "icons/artifact_gourd.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 22151
+    },
+    {
+      "path": "icons/artifact_gourd_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 6824
+    },
+    {
+      "path": "icons/artifact_heavenly_mirror.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 40740
+    },
+    {
+      "path": "icons/artifact_heavenly_mirror_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 11158
+    },
+    {
+      "path": "icons/artifact_jade_slip.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 25598
+    },
+    {
+      "path": "icons/artifact_jade_slip_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 7324
+    },
+    {
+      "path": "icons/artifact_longevity_peach_seed.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 22581
+    },
+    {
+      "path": "icons/artifact_longevity_peach_seed_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 6530
+    },
+    {
+      "path": "icons/artifact_lotus_seal.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 21368
+    },
+    {
+      "path": "icons/artifact_lotus_seal_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 6098
+    },
+    {
+      "path": "icons/artifact_spirit_stone_pouch.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 31055
+    },
+    {
+      "path": "icons/artifact_spirit_stone_pouch_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 9235
+    },
+    {
+      "path": "icons/artifact_talisman.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 20871
+    },
+    {
+      "path": "icons/artifact_talisman_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 6465
+    },
+    {
+      "path": "icons/artifact_world_fang.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 26988
+    },
+    {
+      "path": "icons/artifact_world_fang_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 8126
+    },
+    {
+      "path": "icons/path_demon_emperor.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 29862
+    },
+    {
+      "path": "icons/path_demon_emperor_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 9428
+    },
+    {
+      "path": "icons/path_heavenly_sword.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 32320
+    },
+    {
+      "path": "icons/path_heavenly_sword_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 10374
+    },
+    {
+      "path": "icons/path_immortal.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 33665
+    },
+    {
+      "path": "icons/path_immortal_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 10422
+    },
+    {
+      "path": "icons/path_time_lord.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 33454
+    },
+    {
+      "path": "icons/path_time_lord_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 10250
+    },
+    {
+      "path": "icons/path_world_devourer.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 32602
+    },
+    {
+      "path": "icons/path_world_devourer_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 9796
+    },
+    {
+      "path": "icons/res_chaos_seeds.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 35146
+    },
+    {
+      "path": "icons/res_chaos_seeds_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 10541
+    },
+    {
+      "path": "icons/res_dao_marks.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 26502
+    },
+    {
+      "path": "icons/res_dao_marks_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 8174
+    },
+    {
+      "path": "icons/res_essence.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 23240
+    },
+    {
+      "path": "icons/res_essence_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 7168
+    },
+    {
+      "path": "icons/res_karma_shards.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 23792
+    },
+    {
+      "path": "icons/res_karma_shards_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 7373
+    },
+    {
+      "path": "icons/res_qi.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 33381
+    },
+    {
+      "path": "icons/res_qi_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 10157
+    },
+    {
+      "path": "icons/res_void_dust.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 21296
+    },
+    {
+      "path": "icons/res_void_dust_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 7751
+    },
+    {
+      "path": "icons/root_earth.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 35920
+    },
+    {
+      "path": "icons/root_earth_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 10436
+    },
+    {
+      "path": "icons/root_fire.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 26137
+    },
+    {
+      "path": "icons/root_fire_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 7920
+    },
+    {
+      "path": "icons/root_metal.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 26501
+    },
+    {
+      "path": "icons/root_metal_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 7992
+    },
+    {
+      "path": "icons/root_thunder.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 28011
+    },
+    {
+      "path": "icons/root_thunder_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 8695
+    },
+    {
+      "path": "icons/root_void.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 22221
+    },
+    {
+      "path": "icons/root_void_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 6588
+    },
+    {
+      "path": "icons/root_water.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 26073
+    },
+    {
+      "path": "icons/root_water_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 7747
+    },
+    {
+      "path": "icons/root_wood.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 29474
+    },
+    {
+      "path": "icons/root_wood_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 8989
+    },
+    {
+      "path": "icons/symbol_dao_circle.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 30963
+    },
+    {
+      "path": "icons/symbol_dao_circle_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 9408
+    },
+    {
+      "path": "icons/tab_artifacts.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 27012
+    },
+    {
+      "path": "icons/tab_artifacts_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 7877
+    },
+    {
+      "path": "icons/tab_cultivation.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 29329
+    },
+    {
+      "path": "icons/tab_cultivation_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 9257
+    },
+    {
+      "path": "icons/tab_ranks.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 28792
+    },
+    {
+      "path": "icons/tab_ranks_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 8406
+    },
+    {
+      "path": "icons/tab_rebirth.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 35264
+    },
+    {
+      "path": "icons/tab_rebirth_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 10815
+    },
+    {
+      "path": "icons/tab_research.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 34032
+    },
+    {
+      "path": "icons/tab_research_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 9704
+    },
+    {
+      "path": "icons/tab_talents.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 39295
+    },
+    {
+      "path": "icons/tab_talents_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 11227
+    },
+    {
+      "path": "icons/tab_upgrades.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 33605
+    },
+    {
+      "path": "icons/tab_upgrades_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 10261
+    },
+    {
+      "path": "icons/upg_body_tempering.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 28335
+    },
+    {
+      "path": "icons/upg_body_tempering_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 9306
+    },
+    {
+      "path": "icons/upg_breath_meditation.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 35649
+    },
+    {
+      "path": "icons/upg_breath_meditation_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 10651
+    },
+    {
+      "path": "icons/upg_core_flame.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 32473
+    },
+    {
+      "path": "icons/upg_core_flame_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 9607
+    },
+    {
+      "path": "icons/upg_foundation_pill.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 24218
+    },
+    {
+      "path": "icons/upg_foundation_pill_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 7415
+    },
+    {
+      "path": "icons/upg_insight_scroll.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 31627
+    },
+    {
+      "path": "icons/upg_insight_scroll_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 8988
+    },
+    {
+      "path": "icons/upg_meridian_opening.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 27213
+    },
+    {
+      "path": "icons/upg_meridian_opening_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 8101
+    },
+    {
+      "path": "icons/upg_nascent_echo.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 23622
+    },
+    {
+      "path": "icons/upg_nascent_echo_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 7157
+    },
+    {
+      "path": "icons/upg_qi_sea_expansion.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 28332
+    },
+    {
+      "path": "icons/upg_qi_sea_expansion_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 8313
+    },
+    {
+      "path": "icons/upg_spirit_sense.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 27156
+    },
+    {
+      "path": "icons/upg_spirit_sense_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 7854
+    },
+    {
+      "path": "icons/upg_swift_circulation.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 32994
+    },
+    {
+      "path": "icons/upg_swift_circulation_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 10739
+    },
+    {
+      "path": "icons/upg_void_attunement.png",
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA",
+      "bytes": 28928
+    },
+    {
+      "path": "icons/upg_void_attunement_64.png",
+      "w": 64,
+      "h": 64,
+      "mode": "RGBA",
+      "bytes": 9549
+    }
+  ],
+  "contact_sheet": {
+    "path": "contact_sheet.png",
+    "w": 1100,
+    "h": 1352,
+    "mode": "RGB",
+    "bytes": 842058
+  },
+  "id_mapping": {
+    "paths": [
+      "heavenly_sword",
+      "demon_emperor",
+      "immortal",
+      "world_devourer",
+      "time_lord"
+    ],
+    "worlds": {
+      "mortal": "bg_mortal",
+      "spirit": "bg_spirit",
+      "heavenly": "bg_heavenly",
+      "void": "bg_void",
+      "chaos": "bg_chaos"
+    },
+    "resources": [
+      "qi",
+      "karma_shards",
+      "dao_marks",
+      "essence",
+      "void_dust",
+      "chaos_seeds"
+    ],
+    "tabs": [
+      "cultivation",
+      "upgrades",
+      "ranks",
+      "talents",
+      "artifacts",
+      "rebirth",
+      "research"
+    ],
+    "artifacts_from_data": [
+      "jade_slip",
+      "spirit_stone_pouch",
+      "flying_sword_shard",
+      "blood_chalice",
+      "longevity_peach_seed",
+      "world_fang",
+      "chrono_hourglass",
+      "heavenly_mirror",
+      "dao_compass",
+      "chaos_bead"
+    ],
+    "artifacts_extra_concept": [
+      "gourd",
+      "talisman",
+      "bell",
+      "lotus_seal",
+      "cauldron"
+    ],
+    "roots": [
+      "fire",
+      "water",
+      "wood",
+      "metal",
+      "earth",
+      "thunder",
+      "void"
+    ],
+    "upgrades": [
+      "breath_meditation",
+      "body_tempering",
+      "meridian_opening",
+      "spirit_sense",
+      "qi_sea_expansion",
+      "foundation_pill",
+      "core_flame",
+      "swift_circulation",
+      "insight_scroll",
+      "nascent_echo",
+      "void_attunement"
+    ],
+    "ranks_hero": [
+      "mortal",
+      "qi",
+      "foundation",
+      "golden_core",
+      "nascent_soul",
+      "immortal",
+      "dimension_lord"
+    ]
+  },
+  "backgrounds_webp": [
+    {
+      "path": "bg/bg_chaos.webp",
+      "w": 720,
+      "h": 1280,
+      "bytes": 158130
+    },
+    {
+      "path": "bg/bg_chaos_360.webp",
+      "w": 360,
+      "h": 640,
+      "bytes": 49928
+    },
+    {
+      "path": "bg/bg_heavenly.webp",
+      "w": 720,
+      "h": 1280,
+      "bytes": 66888
+    },
+    {
+      "path": "bg/bg_heavenly_360.webp",
+      "w": 360,
+      "h": 640,
+      "bytes": 19912
+    },
+    {
+      "path": "bg/bg_mortal.webp",
+      "w": 720,
+      "h": 1280,
+      "bytes": 43292
+    },
+    {
+      "path": "bg/bg_mortal_360.webp",
+      "w": 360,
+      "h": 640,
+      "bytes": 14460
+    },
+    {
+      "path": "bg/bg_spirit.webp",
+      "w": 720,
+      "h": 1280,
+      "bytes": 69240
+    },
+    {
+      "path": "bg/bg_spirit_360.webp",
+      "w": 360,
+      "h": 640,
+      "bytes": 26586
+    },
+    {
+      "path": "bg/bg_void.webp",
+      "w": 720,
+      "h": 1280,
+      "bytes": 48796
+    },
+    {
+      "path": "bg/bg_void_360.webp",
+      "w": 360,
+      "h": 640,
+      "bytes": 15484
+    }
+  ]
+}
