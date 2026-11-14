@@ -103,6 +103,11 @@ func _slot(aid: String, theme: CBHTheme) -> Button:
 		button.add_theme_color_override("font_color", CBHTheme.COL_MUTED)
 	else:
 		button.text = str(art.get("name_ru", aid)).split(" ")[0]
+		var emblem := ArtBank.artifact_icon(aid)
+		if emblem != null:
+			button.icon = emblem
+			button.expand_icon = true
+			button.add_theme_constant_override("icon_max_width", 28)
 		button.add_theme_color_override("font_color", color)
 		button.pressed.connect(func():
 			_selected = aid
@@ -125,6 +130,11 @@ func _cell(aid: String, theme: CBHTheme) -> Button:
 		var lvl := int(GameState.run.artifacts_owned[aid])
 		var on := GameState.run.artifacts_equipped.has(aid)
 		button.text = "%s\n%s%d" % [str(art.get("name_ru", "")).split(" ")[0], "● " if on else "", lvl]
+		var emblem := ArtBank.artifact_icon(aid)
+		if emblem != null:
+			button.icon = emblem
+			button.expand_icon = true
+			button.add_theme_constant_override("icon_max_width", 28)
 		button.pressed.connect(func():
 			_selected = aid
 			GameState.toggle_artifact(aid)

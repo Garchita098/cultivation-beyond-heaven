@@ -118,6 +118,11 @@ func _slot(uid: String, theme: CBHTheme) -> Button:
 	else:
 		var root := _root(str(talent["root_id"]))
 		button.text = "%s\n+%d%%" % [str(ELEMENTS.get(str(root.get("element", "")), "")), int(round(_value(talent) * 100.0))]
+		var emblem := ArtBank.root_icon(str(talent["root_id"]))
+		if emblem != null:
+			button.icon = emblem
+			button.expand_icon = true
+			button.add_theme_constant_override("icon_max_width", 28)
 		button.add_theme_color_override("font_color", color)
 		button.pressed.connect(func():
 			_selected = uid
@@ -135,6 +140,11 @@ func _owned_row(talent: Dictionary, theme: CBHTheme) -> Button:
 	button.focus_mode = Control.FOCUS_NONE
 	button.custom_minimum_size = Vector2(0, 64)
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	var root_icon := ArtBank.root_icon(str(talent["root_id"]))
+	if root_icon != null:
+		button.icon = root_icon
+		button.expand_icon = true
+		button.add_theme_constant_override("icon_max_width", 32)
 	button.text = "%s   %s   +%d%%" % [
 		"●" if on else "○",
 		str(ELEMENTS.get(str(root.get("element", "")), root.get("name_ru", ""))),

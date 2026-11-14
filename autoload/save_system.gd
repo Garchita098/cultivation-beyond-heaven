@@ -1,7 +1,7 @@
 extends Node
 ## Versioned JSON saves. Write temp file, then rename. Corrupt files are kept as .bak.
 
-const CURRENT_VERSION := 3
+const CURRENT_VERSION := 5
 const LATEST_NAME := "save_latest.json"
 const AUTOSAVE_SEC := 20.0
 
@@ -26,6 +26,12 @@ static func migrate(data: Dictionary) -> Dictionary:
 	if version < 3:
 		d = _migrate_2_to_3(d)
 		version = 3
+	if version < 4:
+		d = _migrate_3_to_4(d)
+		version = 4
+	if version < 5:
+		d = _migrate_4_to_5(d)
+		version = 5
 	d["save_version"] = CURRENT_VERSION
 	return d
 
@@ -100,6 +106,30 @@ static func _migrate_2_to_3(d: Dictionary) -> Dictionary:
 	if typeof(d.get("meta")) != TYPE_DICTIONARY:
 		d["meta"] = {}
 	d["save_version"] = 3
+	return d
+
+
+static func _migrate_3_to_4(d: Dictionary) -> Dictionary:
+	if typeof(d.get("stage3")) != TYPE_DICTIONARY:
+		d["stage3"] = {}
+	if not d.has("dao_marks"):
+		d["dao_marks"] = 0.0
+	if not d.has("ascension_count"):
+		d["ascension_count"] = 0
+	if typeof(d.get("meta")) != TYPE_DICTIONARY:
+		d["meta"] = {}
+	d["save_version"] = 4
+	return d
+
+
+static func _migrate_4_to_5(d: Dictionary) -> Dictionary:
+	if typeof(d.get("achievements")) != TYPE_ARRAY:
+		d["achievements"] = []
+	if typeof(d.get("stats")) != TYPE_DICTIONARY:
+		d["stats"] = {}
+	if typeof(d.get("meta")) != TYPE_DICTIONARY:
+		d["meta"] = {}
+	d["save_version"] = 5
 	return d
 
 

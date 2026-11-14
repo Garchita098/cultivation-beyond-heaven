@@ -1,0 +1,542 @@
+{
+  "schema_version": 1,
+  "achievements": [
+    {
+      "id": "time_minute",
+      "name_ru": "Минута у лотоса",
+      "desc_ru": "Минута в игре",
+      "metric": "time_sec",
+      "goal": 60,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "time_hour",
+      "name_ru": "Час у лотоса",
+      "desc_ru": "Час в игре",
+      "metric": "time_sec",
+      "goal": 3600,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "time_six",
+      "name_ru": "Долгая стража",
+      "desc_ru": "Шесть часов в игре",
+      "metric": "time_sec",
+      "goal": 21600,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.02
+    },
+    {
+      "id": "rank_mortal",
+      "name_ru": "Смертный пик",
+      "desc_ru": "Пик смертного ранга",
+      "metric": "rank_index",
+      "goal": 3,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "rank_qi",
+      "name_ru": "Практик Ци",
+      "desc_ru": "Ранг практика Ци",
+      "metric": "rank_index",
+      "goal": 4,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "rank_qi_peak",
+      "name_ru": "Море Ци",
+      "desc_ru": "Пик Ци",
+      "metric": "rank_index",
+      "goal": 7,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "rank_foundation",
+      "name_ru": "Основание",
+      "desc_ru": "Ранг основания",
+      "metric": "rank_index",
+      "goal": 8,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "rank_foundation_peak",
+      "name_ru": "Твёрдое основание",
+      "desc_ru": "Пик основания",
+      "metric": "rank_index",
+      "goal": 11,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "rank_core",
+      "name_ru": "Золотое ядро",
+      "desc_ru": "Ядро сформировано",
+      "metric": "rank_index",
+      "goal": 12,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "rank_core_peak",
+      "name_ru": "Ядро на пике",
+      "desc_ru": "Пик ядра",
+      "metric": "rank_index",
+      "goal": 15,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "rank_nascent",
+      "name_ru": "Душа начала",
+      "desc_ru": "Шаг за ядро",
+      "metric": "rank_index",
+      "goal": 16,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.01
+    },
+    {
+      "id": "rank_nascent_peak",
+      "name_ru": "Врата духа",
+      "desc_ru": "Пик души начала",
+      "metric": "rank_index",
+      "goal": 19,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.015
+    },
+    {
+      "id": "rank_void",
+      "name_ru": "Очищение пустоты",
+      "desc_ru": "Ранг пустоты",
+      "metric": "rank_index",
+      "goal": 24,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.02
+    },
+    {
+      "id": "rank_immortal",
+      "name_ru": "Бессмертный",
+      "desc_ru": "Вознесённый бессмертный",
+      "metric": "rank_index",
+      "goal": 32,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.03
+    },
+    {
+      "id": "rank_heaven",
+      "name_ru": "Небесный владыка",
+      "desc_ru": "Небесный владыка",
+      "metric": "rank_index",
+      "goal": 36,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.03
+    },
+    {
+      "id": "rank_weaver",
+      "name_ru": "Ткач законов",
+      "desc_ru": "Ткач законов",
+      "metric": "rank_index",
+      "goal": 38,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.04
+    },
+    {
+      "id": "rank_beyond",
+      "name_ru": "За пределами небес",
+      "desc_ru": "Последний ранг",
+      "metric": "rank_index",
+      "goal": 41,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.05
+    },
+    {
+      "id": "reb_1",
+      "name_ru": "Первое колесо",
+      "desc_ru": "Одно перерождение",
+      "metric": "rebirths",
+      "goal": 1,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "reb_2",
+      "name_ru": "Второе колесо",
+      "desc_ru": "Два перерождения",
+      "metric": "rebirths",
+      "goal": 2,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "reb_5",
+      "name_ru": "Пять путей",
+      "desc_ru": "Пять перерождений",
+      "metric": "rebirths",
+      "goal": 5,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.01
+    },
+    {
+      "id": "reb_10",
+      "name_ru": "Десять колёс",
+      "desc_ru": "Десять перерождений",
+      "metric": "rebirths",
+      "goal": 10,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.015
+    },
+    {
+      "id": "reb_25",
+      "name_ru": "Карма созрела",
+      "desc_ru": "Двадцать пять перерождений",
+      "metric": "rebirths",
+      "goal": 25,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.02
+    },
+    {
+      "id": "reb_50",
+      "name_ru": "Колесо без края",
+      "desc_ru": "Пятьдесят перерождений",
+      "metric": "rebirths",
+      "goal": 50,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.03
+    },
+    {
+      "id": "asc_1",
+      "name_ru": "Первое вознесение",
+      "desc_ru": "Духовный мир",
+      "metric": "ascensions",
+      "goal": 1,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.04
+    },
+    {
+      "id": "asc_2",
+      "name_ru": "Небесные врата",
+      "desc_ru": "Второе вознесение",
+      "metric": "ascensions",
+      "goal": 2,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.05
+    },
+    {
+      "id": "asc_3",
+      "name_ru": "Шаг в пустоту",
+      "desc_ru": "Третье вознесение",
+      "metric": "ascensions",
+      "goal": 3,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.06
+    },
+    {
+      "id": "asc_4",
+      "name_ru": "Исток",
+      "desc_ru": "Четвёртое вознесение",
+      "metric": "ascensions",
+      "goal": 4,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.08
+    },
+    {
+      "id": "path_heavenly",
+      "name_ru": "Путь меча",
+      "desc_ru": "Выбран этот путь",
+      "metric": "path",
+      "goal": "heavenly_sword",
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "path_demon",
+      "name_ru": "Путь демона",
+      "desc_ru": "Выбран этот путь",
+      "metric": "path",
+      "goal": "demon_emperor",
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "path_immortal",
+      "name_ru": "Путь бессмертного",
+      "desc_ru": "Выбран этот путь",
+      "metric": "path",
+      "goal": "immortal",
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "path_world",
+      "name_ru": "Путь пожирателя",
+      "desc_ru": "Выбран этот путь",
+      "metric": "path",
+      "goal": "world_devourer",
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "path_time",
+      "name_ru": "Путь времени",
+      "desc_ru": "Выбран этот путь",
+      "metric": "path",
+      "goal": "time_lord",
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "world_spirit",
+      "name_ru": "Духовный мир",
+      "desc_ru": "Ступили в духовный мир",
+      "metric": "world",
+      "goal": "spirit_world",
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.02,
+      "min_ascension": 1
+    },
+    {
+      "id": "world_heaven",
+      "name_ru": "Небесный мир",
+      "desc_ru": "Ступили в небесный мир",
+      "metric": "world",
+      "goal": "heavenly_world",
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.03,
+      "min_ascension": 1
+    },
+    {
+      "id": "world_void",
+      "name_ru": "Пустота",
+      "desc_ru": "Ступили в пустоту",
+      "metric": "world",
+      "goal": "void_dimension",
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.04,
+      "min_ascension": 1
+    },
+    {
+      "id": "world_chaos",
+      "name_ru": "Исток хаоса",
+      "desc_ru": "Ступили в исток",
+      "metric": "world",
+      "goal": "chaos_origin",
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.05,
+      "min_ascension": 1
+    },
+    {
+      "id": "research_1",
+      "name_ru": "Первый трактат",
+      "desc_ru": "Одно исследование",
+      "metric": "research",
+      "goal": 1,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.01
+    },
+    {
+      "id": "research_4",
+      "name_ru": "Четыре закона",
+      "desc_ru": "Четыре исследования",
+      "metric": "research",
+      "goal": 4,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.015
+    },
+    {
+      "id": "research_8",
+      "name_ru": "Полная полка",
+      "desc_ru": "Все исследования",
+      "metric": "research",
+      "goal": 8,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.02
+    },
+    {
+      "id": "study_law",
+      "name_ru": "Буква закона",
+      "desc_ru": "Завершена буква закона",
+      "metric": "study",
+      "goal": "law_primer",
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.01
+    },
+    {
+      "id": "study_grammar",
+      "name_ru": "Грамматика Дао",
+      "desc_ru": "Завершена грамматика",
+      "metric": "study",
+      "goal": "dao_grammar",
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.015
+    },
+    {
+      "id": "arts_1",
+      "name_ru": "Первая реликвия",
+      "desc_ru": "Один артефакт",
+      "metric": "artifacts",
+      "goal": 1,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "arts_6",
+      "name_ru": "Сокровищница",
+      "desc_ru": "Шесть артефактов",
+      "metric": "artifacts",
+      "goal": 6,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.02
+    },
+    {
+      "id": "arts_10",
+      "name_ru": "Полная коллекция",
+      "desc_ru": "Десять артефактов",
+      "metric": "artifacts",
+      "goal": 10,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.03
+    },
+    {
+      "id": "off_hour",
+      "name_ru": "Час тишины",
+      "desc_ru": "Час оффлайн",
+      "metric": "offline_sec",
+      "goal": 3600,
+      "bonus_type": "offline",
+      "bonus_value": 0.02
+    },
+    {
+      "id": "off_8h",
+      "name_ru": "Ночная медитация",
+      "desc_ru": "Восемь часов оффлайн",
+      "metric": "offline_sec",
+      "goal": 28800,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.02
+    },
+    {
+      "id": "off_day",
+      "name_ru": "Сутки вне тела",
+      "desc_ru": "Сутки оффлайн",
+      "metric": "offline_sec",
+      "goal": 86400,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.03
+    },
+    {
+      "id": "life_12",
+      "name_ru": "Река Ци",
+      "desc_ru": "10^12 Ци за всё время",
+      "metric": "lifetime_exp",
+      "goal": 12,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "life_18",
+      "name_ru": "Океан Ци",
+      "desc_ru": "10^18 Ци за всё время",
+      "metric": "lifetime_exp",
+      "goal": 18,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.02
+    },
+    {
+      "id": "life_30",
+      "name_ru": "Небо Ци",
+      "desc_ru": "10^30 Ци за всё время",
+      "metric": "lifetime_exp",
+      "goal": 30,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.03
+    },
+    {
+      "id": "life_60",
+      "name_ru": "За числом",
+      "desc_ru": "10^60 Ци за всё время",
+      "metric": "lifetime_exp",
+      "goal": 60,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.04
+    },
+    {
+      "id": "life_120",
+      "name_ru": "Мантия бесконечности",
+      "desc_ru": "10^120 Ци за всё время",
+      "metric": "lifetime_exp",
+      "goal": 120,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.05
+    },
+    {
+      "id": "qi_15",
+      "name_ru": "Полные меридианы",
+      "desc_ru": "Держать 10^15 Ци",
+      "metric": "qi_exp",
+      "goal": 15,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "qi_24",
+      "name_ru": "Карман мира",
+      "desc_ru": "Держать 10^24 Ци",
+      "metric": "qi_exp",
+      "goal": 24,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.02
+    },
+    {
+      "id": "qi_40",
+      "name_ru": "За пределами счёта",
+      "desc_ru": "Держать 10^40 Ци",
+      "metric": "qi_exp",
+      "goal": 40,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.03
+    },
+    {
+      "id": "sac_1",
+      "name_ru": "Первая жертва",
+      "desc_ru": "Одна жертва",
+      "metric": "sacrifices",
+      "goal": 1,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0
+    },
+    {
+      "id": "sac_10",
+      "name_ru": "Десять жертв",
+      "desc_ru": "Десять жертв",
+      "metric": "sacrifices",
+      "goal": 10,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.015
+    },
+    {
+      "id": "trib_1",
+      "name_ru": "Первая трибуляция",
+      "desc_ru": "Одна трибуляция",
+      "metric": "tribulations",
+      "goal": 1,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.01,
+      "min_ascension": 1
+    },
+    {
+      "id": "trib_8",
+      "name_ru": "Восемь небес",
+      "desc_ru": "Восемь трибуляций",
+      "metric": "tribulations",
+      "goal": 8,
+      "bonus_type": "qi_mult",
+      "bonus_value": 0.02,
+      "min_ascension": 1
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 """Economy engine — mirrors docs/FORMULAS.md and data/*.json.
 
-Stage 2 adds karma shop, talent rolls, artifact drops, and automation.
-Path mechanics stay at mult 1 (Stage 3); path_id only gates synergy hooks.
+Stage 3 adds path rules, worlds, research, and ascension. A run with no joined
+path, the mortal world, and no laws still uses the stage-2 formula unchanged.
 """
 from __future__ import annotations
 
@@ -12,10 +12,15 @@ import os
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
+import achievements
+import mag
+import stage3
+from mag import Mag
+
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data")
 
 # Ranks with stage <= STAGE_CAP are playable. Later ranks stay on the ladder.
-STAGE_CAP = 2
+STAGE_CAP = 3
 
 # Path-only artifact effects. Until that path is live they contribute a fraction
 # of their value as a production multiplier (see artifacts.stage2_hook_as_mult).
@@ -26,7 +31,7 @@ HOOK_EFFECTS = {
     "rule_slot",
 }
 
-AUTO_ORDER_MAX = 4  # automation steps 1–4 are stage 2
+AUTO_ORDER_MAX = 7  # automation steps 1–7 are live in stage 3
 
 
 def load_json(name: str) -> dict:
@@ -71,6 +76,53 @@ class GameState:
     auto_buy_mode: str = "roi"
     auto_rebirth_min_rank: int = 15
     auto_rebirth_min_karma: int = 1
+    path_joined: bool = False
+    path_currency: float = 0.0
+    path_nodes: Dict[str, int] = field(default_factory=dict)
+    sword_charge: float = 0.0
+    burst_left: float = 0.0
+    demon_permanent: float = 0.0
+    demon_fed: float = 0.0
+    cultivated_hours: float = 0.0
+    devour_types: set = field(default_factory=set)
+    devour_bonus: float = 0.0
+    chrono_charge: float = 0.0
+    speed_left: float = 0.0
+    banked_sec: float = 0.0
+    skip_used_sec: float = 0.0
+    world_id: str = "mortal_world"
+    world_res: Dict[str, float] = field(default_factory=dict)
+    essence_ratio: float = 0.0
+    retain_seconds: float = 180.0
+    stance: str = "guard"
+    tribulation_t: float = 0.0
+    tribulation_cycle: int = 0
+    boon_left: float = 0.0
+    penalty_left: float = 0.0
+    chaos_pulse_t: float = 0.0
+    slotted_laws: List[str] = field(default_factory=list)
+    active_rewrite: str = ""
+    research_done: set = field(default_factory=set)
+    research_order: List[str] = field(default_factory=list)
+    research_progress: float = 0.0
+    dao_marks: float = 0.0
+    ascension_count: int = 0
+    reality_mode: str = "still"
+    path_switch_count: int = 0
+    sacrifice_count: int = 0
+    mechanic_counts: Dict[str, int] = field(default_factory=dict)
+    achievements: set = field(default_factory=set)
+    stats: Dict[str, Any] = field(default_factory=dict)
+    fresh_achievements: List[str] = field(default_factory=list)
+    heavenly_rites: set = field(default_factory=set)
+    void_seals: set = field(default_factory=set)
+    chaos_attunements: set = field(default_factory=set)
+    _talent_sig: str = ""
+
+    def __setattr__(self, name, value):
+        if name in ("qi", "lifetime_qi") and not isinstance(value, Mag):
+            value = Mag.of(value)
+        object.__setattr__(self, name, value)
 
 
 class Economy:
@@ -85,6 +137,11 @@ class Economy:
         self.artifacts_doc = load_json("artifacts.json")
         self.automation = load_json("automation.json")
         self.paths_doc = load_json("paths.json")
+        self.paths_by_id = {p["id"]: p for p in self.paths_doc["paths"]}
+        self.worlds_doc = load_json("worlds.json")
+        self.worlds_by_id = {w["id"]: w for w in self.worlds_doc["worlds"]}
+        self.research = load_json("research.json")
+        self.achievements = load_json("achievements.json")["achievements"]
         self.ranks_by_id = {r["id"]: r for r in self.ranks}
         self.shop_by_id = {s["id"]: s for s in self.rebirth["shop"]}
         self.roots_by_id = {r["id"]: r for r in self.talents["roots"]}
@@ -211,7 +268,7 @@ class Economy:
                 offline += ev
             elif et == "breakthrough_discount":
                 discount += ev
-            elif et in HOOK_EFFECTS:
+            elif et in HOOK_EFFECTS and not stage3.hook_consumed(self, state, et):
                 mult *= 1.0 + ev * hook_frac
         return {
             "mult": mult,
@@ -264,6 +321,10 @@ class Economy:
         bonus += float(item["value"]) * min(lvl, mx)
         bonus += self.talent_mods(state)["offline"]
         bonus += self.artifact_mods(state)["offline"]
+        bonus += stage3.extra_offline_bonus(self, state)
+        extra = achievements.offline_bonus(self, state)
+        if extra:
+            bonus += extra
         return bonus
 
     def cost_reduction(self, state: GameState) -> float:
@@ -279,10 +340,13 @@ class Economy:
     def upgrade_cost(self, state: GameState, uid: str) -> float:
         u = self.upgrades[uid]
         lvl = state.upgrade_levels.get(uid, 0)
+        reduction = self.cost_reduction(state)
         raw = u["base_cost"] * (u["growth"] ** lvl)
-        return raw * (1.0 - self.cost_reduction(state))
+        cost = raw * (1.0 - reduction)
+        return stage3.adjust_cost(self, state, cost, u["base_cost"], u["growth"], lvl, reduction)
 
     def production(self, state: GameState) -> float:
+        achievements.sync(self, state)
         self.refresh_derived(state)
         base = float(self.balance["base_qi_per_sec"])
         tmods = self.talent_mods(state)
@@ -306,8 +370,7 @@ class Economy:
         rank_mult = float(self.rank(state)["prod_mult"])
         perm = float(self.rebirth["tiers"][0]["perm_mult_per_karma"])
         karma_mult = 1.0 + state.karma_shards * perm
-        # path_mult stays 1 until Stage 3. path_id still feeds talent/artifact hooks.
-        return (
+        prod = (
             base
             * (1.0 + flat_sum)
             * (1.0 + mult_add)
@@ -318,13 +381,24 @@ class Economy:
             * amods["mult"]
             * speed_mult
         )
+        out = stage3.adjust_prod(
+            self,
+            state,
+            prod,
+            {"flat_sum": flat_sum, "mult_add": mult_add, "speed_mult": speed_mult},
+        )
+        bonus = achievements.qi_mult(self, state)
+        if bonus != 1.0:
+            out *= bonus
+        return out
 
     def breakthrough_cost(self, state: GameState) -> Optional[float]:
         nxt = self.next_rank(state)
         if nxt is None:
             return None
         disc = self.artifact_mods(state)["discount"]
-        return float(nxt["cost_qi"]) * (1.0 - disc)
+        cost = float(nxt["cost_qi"]) * (1.0 - disc)
+        return stage3.adjust_breakthrough(self, state, cost)
 
     # ----- upgrades / breakthrough -----
 
@@ -342,8 +416,15 @@ class Economy:
         if not self.can_buy_upgrade(state, uid):
             return False
         cost = self.upgrade_cost(state, uid)
+        u = self.upgrades[uid]
         state.qi -= cost
         state.upgrade_levels[uid] = state.upgrade_levels.get(uid, 0) + 1
+        extra = stage3.bonus_levels(self, state, int(state.upgrade_levels[uid]))
+        if extra:
+            mx = int(u.get("max_level") or 0)
+            nxt = int(state.upgrade_levels[uid]) + extra
+            if mx <= 0 or nxt <= mx:
+                state.upgrade_levels[uid] = nxt
         state.last_purchase_or_unlock_time = state.time_sec
         key = f"upgrade:{uid}:L{state.upgrade_levels[uid]}"
         if key not in state.milestones:
@@ -380,6 +461,9 @@ class Economy:
             return False
         nxt = self.next_rank(state)
         cost = self.breakthrough_cost(state)
+        spent = stage3.bank_spent_on_breakthrough(self, state)
+        if spent > 0.0:
+            state.banked_sec = max(0.0, state.banked_sec - spent)
         state.qi -= float(cost)
         state.rank_index += 1
         state.highest_rank_index = max(state.highest_rank_index, state.rank_index)
@@ -473,6 +557,13 @@ class Economy:
         owned = state.talents_owned
         cap = int(self.talents["max_equipped"])
         n = min(cap, len(owned))
+        sig = "|".join(
+            "%s:%s:%s:%s" % (t["uid"], t.get("level", 0), t.get("root_id"), t.get("roll"))
+            for t in owned
+        ) + "#%d#%s" % (n, state.path_id or "")
+        if n > 0 and sig == state._talent_sig and state.talents_equipped:
+            return
+        state._talent_sig = sig
         if n <= 0:
             state.talents_equipped = []
             return
@@ -647,12 +738,11 @@ class Economy:
 
     def karma_gain(self, state: GameState) -> int:
         f = self.rebirth["formula"]
-        lq = max(1.0, state.lifetime_qi)
         # log(x)/log(10) matches GDScript. math.log10 can disagree at the floor boundary.
         return int(
             math.floor(
                 f["base"]
-                + (math.log(lq) / math.log(10.0)) / f["from_lifetime_qi_log10_div"]
+                + mag.log10_qty(state.lifetime_qi) / f["from_lifetime_qi_log10_div"]
                 + state.highest_rank_index * f["from_highest_rank_index"]
             )
         )
@@ -698,6 +788,8 @@ class Economy:
         state.rank_index = 0
         self._apply_start_rank(state)
         state.last_purchase_or_unlock_time = state.time_sec
+        achievements.on_rebirth(state)
+        stage3.on_rebirth(self, state)
         self._mark(state, "rebirth:%d" % state.rebirth_count)
         self._mark(state, "first_rebirth")
         return True
@@ -725,6 +817,10 @@ class Economy:
             return state.rank_index >= need or state.highest_rank_index >= need
         if spec["type"] == "rebirths":
             return state.rebirth_count >= int(spec["min"])
+        if spec["type"] == "path_level":
+            return stage3.path_level(state) >= int(spec["min"])
+        if spec["type"] == "ascension":
+            return state.ascension_count >= int(spec["min"])
         return False
 
     def sync_automation_unlocks(self, state: GameState) -> None:
@@ -764,6 +860,7 @@ class Economy:
                 self.act_cheapest(state, breakthroughs=False)
             else:
                 self.act_best_roi(state, breakthroughs=False)
+        stage3.auto_systems(self, state)
 
     # ----- bot actions -----
 
@@ -1025,22 +1122,25 @@ class Economy:
         state.qi += gained
         state.lifetime_qi += gained
         state.time_sec += dt
+        stage3.advance(self, state, dt, gained, offline=False)
+        stage3.clamp_state(self, state)
+        achievements.track_tick(state, dt)
         if not state.history or state.time_sec - state.history[-1][0] >= 5.0:
             state.history.append((state.time_sec, prod, state.rank_index))
 
     def _offline_eff(self, state: GameState) -> float:
         base = float(self.balance["offline"]["efficiency"])
-        return min(1.0, base + self.offline_bonus(state))
+        return min(stage3.offline_cap(self, state), base + self.offline_bonus(state))
 
     def offline_needs_chunks(self, state: GameState) -> bool:
         self.sync_automation_unlocks(state)
         return self.auto_on(state, "auto_buy_upgrades") or self.auto_on(
             state, "auto_breakthrough"
-        ) or self.auto_on(state, "auto_rebirth")
+        ) or self.auto_on(state, "auto_rebirth") or stage3.needs_chunks(self, state)
 
     def apply_offline(self, state: GameState, absent_sec: float) -> dict:
         off = self.balance["offline"]
-        soft = float(off["soft_cap_hours"]) * 3600.0
+        soft = (float(off["soft_cap_hours"]) + stage3.soft_cap_bonus_hours(self, state)) * 3600.0
         hard = float(off["hard_cap_hours"]) * 3600.0
         raw = float(absent_sec)
         absent = min(max(0.0, raw), hard)
@@ -1053,6 +1153,8 @@ class Economy:
             state.qi += gained
             state.lifetime_qi += gained
             state.time_sec += absent
+            achievements.on_offline(state, absent)
+            achievements.track_tick(state, absent)
             return {
                 "gained": gained,
                 "absent_sec": absent,
@@ -1080,6 +1182,8 @@ class Economy:
             elapsed += dt
             remaining -= dt
         state.time_sec += absent
+        achievements.on_offline(state, absent)
+        achievements.track_tick(state, absent)
         eff = self._offline_eff(state)
         return {
             "gained": gained_total,
@@ -1098,6 +1202,13 @@ class Economy:
         gained = self.production(state) * dt * eff
         state.qi += gained
         state.lifetime_qi += gained
+        banked = stage3.maybe_bank_offline(self, state, gained, dt)
+        if banked > 0.0:
+            state.qi -= banked
+            state.lifetime_qi -= banked
+            gained -= banked
+        stage3.advance(self, state, dt, gained, offline=True)
+        stage3.clamp_state(self, state)
         return gained
 
 

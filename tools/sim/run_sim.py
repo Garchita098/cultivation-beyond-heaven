@@ -10,15 +10,20 @@ from typing import Dict, List, Tuple
 
 sys.path.insert(0, os.path.dirname(__file__))
 from bots import (  # noqa: E402
+    PATH_BOTS,
     ArtifactFocused,
     BestROI,
     GreedyCheapest,
+    MixedSwitch,
+    MixedWorld,
     OfflineHeavy,
     RebirthEarly,
     RebirthLate,
     RushBreakthrough,
     TalentFocused,
 )
+import stage3  # noqa: E402
+from mag import is_finite_qty, plain_qty  # noqa: E402
 from economy import Economy, GameState, fresh_state  # noqa: E402
 
 REPORT_DIR = os.path.join(os.path.dirname(__file__), "reports")
@@ -93,6 +98,19 @@ def longest_wait(state: GameState) -> Tuple[float, str]:
             best = (gap, k)
         prev = t
     return best[0], best[1]
+
+
+def run_path(eco: Economy, bot, max_sec: float, dt: float = 1.0) -> GameState:
+    """Path and ascension runs step once per second. Burst periods are tens of seconds."""
+    state = fresh_state()
+    steps = 0
+    limit = int(max_sec / dt) + 5
+    while state.time_sec < max_sec and steps < limit and state.ascension_count < 1:
+        eco.tick(state, dt)
+        steps += 1
+        bot.decide(eco, state)
+    bot.decide(eco, state)
+    return state
 
 
 def run_active(eco: Economy, bot, max_sec: float, stop_rebirths: int = 0, decide_every: float = 0.5) -> GameState:
@@ -185,15 +203,18 @@ def milestone_table(state: GameState, eco: Economy) -> List[dict]:
 
 
 def magnitude_ok(state: GameState, eco: Economy) -> List[str]:
+    from mag import Mag, is_finite_qty
+
     issues = []
     prod = eco.production(state)
     for name, val in (("qi", state.qi), ("lifetime_qi", state.lifetime_qi), ("prod", prod), ("karma", state.karma_shards)):
-        if not math.isfinite(val):
+        if not is_finite_qty(val):
             issues.append(f"{name} not finite")
-        if val < -1e-6:
+        if isinstance(val, Mag):
+            if val.v < 0.0:
+                issues.append(f"{name} negative")
+        elif val < -1e-6:
             issues.append(f"{name} negative")
-    if abs(state.qi) > 1e300 or abs(prod) > 1e300:
-        issues.append("magnitude exceeds 1e300")
     return issues
 
 
@@ -247,13 +268,13 @@ def pacing_issues_for(name: str, state: GameState, eco: Economy, walls: list) ->
 def final_blob(eco: Economy, st: GameState) -> dict:
     return {
         "time": st.time_sec,
-        "qi": st.qi,
-        "prod": eco.production(st),
+        "qi": plain_qty(st.qi),
+        "prod": plain_qty(eco.production(st)),
         "rank": eco.rank(st)["id"],
         "rank_index": st.rank_index,
         "rebirths": st.rebirth_count,
         "karma": st.karma_shards,
-        "lifetime_qi": st.lifetime_qi,
+        "lifetime_qi": plain_qty(st.lifetime_qi),
         "talents": len(st.talents_owned),
         "artifacts": len(st.artifacts_owned),
         "shop_mult": st.shop_mult,
@@ -280,12 +301,202 @@ def write_chart(results: Dict[str, GameState], path: str) -> None:
     ax.set_yscale("log")
     ax.set_xlabel("Time (minutes)")
     ax.set_ylabel("Qi / sec (log)")
-    ax.set_title("Cultivation: Beyond Heaven — Stage 2 production")
+    ax.set_title("Cultivation: Beyond Heaven — production")
     ax.legend(fontsize=8)
     ax.grid(True, which="both", alpha=0.3)
     fig.tight_layout()
     fig.savefig(path, dpi=120)
     plt.close(fig)
+
+
+def _probe_world(eco: Economy, world_id: str) -> dict:
+    st = fresh_state()
+    st.rank_index = 20
+    st.highest_rank_index = 20
+    st.rebirth_count = 25
+    st.qi = 5.0e6
+    st.lifetime_qi = 5.0e6
+    st.upgrade_levels = {"breath_meditation": 40, "body_tempering": 15}
+    st.unlocked.update({"upgrades_basic", "dao_laws", "dual_flow", "path_selection", "ascension_gate"})
+    st.path_joined = True
+    st.path_id = "heavenly_sword"
+    st.world_id = world_id
+    st.essence_ratio = 0.5
+    st.world_res["chaos_seed"] = 2.0
+    if world_id == "void_dimension":
+        st.retain_seconds = 60.0
+        st.qi = 1.0e8
+    st.slotted_laws = []
+    bot = BestROI()
+    dt = 1.0
+    for _ in range(420):
+        eco.tick(st, dt)
+        bot.decide(eco, st)
+        stage3.maintain(eco, st)
+    return {
+        "world": world_id,
+        "qi": plain_qty(st.qi),
+        "essence": float(st.world_res.get("spirit_essence", 0.0)),
+        "fragments": float(st.world_res.get("dao_fragments", 0.0)),
+        "dust": float(st.world_res.get("void_dust", 0.0)),
+        "seeds": float(st.world_res.get("chaos_seed", 0.0)),
+        "tribulations": st.tribulation_cycle,
+        "laws": list(st.slotted_laws),
+        "rank": st.rank_index,
+        "finite": is_finite_qty(st.qi),
+    }
+
+
+def run_stage3(eco: Economy, md: List[str]) -> List[str]:
+    from bignum import format_bn, normalize
+
+    failed: List[str] = []
+    bots = list(PATH_BOTS) + [MixedSwitch(), MixedWorld()]
+    horizon = float(eco.balance.get("ascension_max_sec", 48 * 3600))
+    path_states = {}
+    print("=== stage 3 paths ===")
+    for bot in bots:
+        st = run_path(eco, bot, max_sec=horizon, dt=1.0)
+        path_states[bot.name] = st
+        asc = st.milestones.get("ascension:1")
+        print(
+            f"  {bot.name} asc={fmt_time(asc) if asc else '—'} rebirths={st.rebirth_count} "
+            f"bursts={st.mechanic_counts.get('sword_burst', 0)} sac={st.sacrifice_count} "
+            f"absorb={st.mechanic_counts.get('absorb', 0)} speed={st.mechanic_counts.get('speed_window', 0)} "
+            f"hours={st.cultivated_hours:.2f} types={len(st.devour_types)}"
+        )
+    pure = [path_states[b.name] for b in PATH_BOTS]
+    times = []
+    for st in pure:
+        asc = st.milestones.get("ascension:1")
+        if asc is None:
+            failed.append("path did not ascend")
+        else:
+            times.append(asc)
+        if not is_finite_qty(st.qi):
+            failed.append("path magnitude")
+        lw, lk = longest_wait(st)
+        if lw > float(eco.balance["walls"]["late_game_max_idle_sec"]):
+            failed.append(f"path wait {lw:.0f}s until {lk}")
+    if len(times) == len(PATH_BOTS):
+        lo, hi = min(times), max(times)
+        spread = hi / lo if lo > 0 else 99
+        cap = 1.0 + float(eco.balance.get("path_pace_spread", 0.25))
+        print(f"  spread {spread:.3f} (cap {cap:.3f})")
+        if spread > cap + 1e-9:
+            failed.append(f"path spread {spread:.3f} > {cap:.3f}")
+    else:
+        spread = None
+    # Mechanics must actually diverge, not just wear different names.
+    sword = path_states["path_heavenly_sword"]
+    demon = path_states["path_demon_emperor"]
+    immortal = path_states["path_immortal"]
+    devour = path_states["path_world_devourer"]
+    time_lord = path_states["path_time_lord"]
+    if sword.mechanic_counts.get("sword_burst", 0) < 1:
+        failed.append("sword never burst")
+    if demon.sacrifice_count < 1 or demon.demon_permanent <= 0:
+        failed.append("demon never sacrificed")
+    if immortal.cultivated_hours <= 0:
+        failed.append("immortal never compounded")
+    if len(devour.devour_types) < 2:
+        failed.append("devourer lacked diversity")
+    if time_lord.mechanic_counts.get("speed_window", 0) < 1:
+        failed.append("time lord never opened a speed window")
+    if path_states["mixed_switch"].path_switch_count < 1:
+        failed.append("mixed switch did not pay to change path")
+    if path_states["mixed_switch"].milestones.get("ascension:1") is None:
+        failed.append("mixed switch did not ascend")
+
+    probes = {wid: _probe_world(eco, wid) for wid in (
+        "spirit_world", "heavenly_world", "void_dimension", "chaos_origin"
+    )}
+    if probes["spirit_world"]["essence"] <= 0:
+        failed.append("spirit probe produced no essence")
+    if probes["heavenly_world"]["tribulations"] < 1 or probes["heavenly_world"]["fragments"] <= 0:
+        failed.append("heavenly probe skipped tribulation")
+    if probes["void_dimension"]["dust"] <= 0:
+        failed.append("void probe produced no dust")
+    if probes["chaos_origin"]["seeds"] <= 0 and not probes["chaos_origin"]["laws"]:
+        failed.append("chaos probe forged nothing")
+    for name, probe in probes.items():
+        if not probe["finite"]:
+            failed.append(f"{name} magnitude")
+        print(f"  probe {name} essence={probe['essence']:.3g} frag={probe['fragments']:.3g} dust={probe['dust']:.3g} seeds={probe['seeds']:.3g} trib={probe['tribulations']} laws={probe['laws']}")
+
+    m, e = normalize(1.23, 1000000)
+    text = format_bn(m, e)
+    if text != "1.23e1000000":
+        failed.append(f"notation {text}")
+    from mag import Mag
+
+    huge = fresh_state()
+    huge.qi = 1e308
+    stage3.clamp_state(eco, huge)
+    if not isinstance(huge.qi, Mag) or huge.qi.log10() < 300:
+        failed.append("huge qi was destroyed")
+
+    md.append("")
+    md.append("## Stage 3 — time to first ascension")
+    md.append("")
+    md.append("Active bots step once per second after the shared early game. First ascension enters the Spirit World.")
+    md.append("")
+    md.append("| Strategy | Ascension | Rebirths | Bursts | Sacrifices | Absorbs | Speed windows | Compound hours |")
+    md.append("|----------|-----------|----------|--------|------------|---------|---------------|----------------|")
+    for bot in bots:
+        st = path_states[bot.name]
+        asc = st.milestones.get("ascension:1")
+        md.append(
+            "| {name} | {asc} | {rb} | {burst} | {sac} | {ab} | {spd} | {hours:.2f} |".format(
+                name=bot.name,
+                asc=fmt_time(asc) if asc else "not reached",
+                rb=st.rebirth_count,
+                burst=st.mechanic_counts.get("sword_burst", 0),
+                sac=st.sacrifice_count,
+                ab=st.mechanic_counts.get("absorb", 0),
+                spd=st.mechanic_counts.get("speed_window", 0),
+                hours=st.cultivated_hours,
+            )
+        )
+    if times:
+        md.append("")
+        md.append(
+            f"Pure paths span {fmt_time(min(times))} – {fmt_time(max(times))} "
+            f"(spread {max(times) / min(times):.3f}, cap {1 + float(eco.balance.get('path_pace_spread', 0.25)):.2f})."
+        )
+    md.append("")
+    md.append("## World probes (7 minutes from Soul Transformation)")
+    md.append("")
+    md.append("| World | Essence | Fragments | Dust | Seeds | Tribulations |")
+    md.append("|-------|---------|-----------|------|-------|--------------|")
+    for name, probe in probes.items():
+        md.append(
+            f"| {name} | {probe['essence']:.4g} | {probe['fragments']:.4g} | {probe['dust']:.4g} | {probe['seeds']:.4g} | {probe['tribulations']} |"
+        )
+    md.append("")
+    md.append("Notation supports exponent 1000000 (`1.23e1000000`). Live Qi keeps exponents past 300 instead of clamping at 1e300.")
+    md.append("")
+    if failed:
+        md.append("## Stage 3 issues")
+        md.append("")
+        for item in failed:
+            md.append(f"- {item}")
+    else:
+        md.append("Stage 3 checks: none.")
+
+    stage3_doc = {
+        "spread": None if not times else max(times) / min(times),
+        "ascension_sec": {b.name: path_states[b.name].milestones.get("ascension:1") for b in bots},
+        "probes": probes,
+        "issues": failed,
+        "notation": text,
+    }
+    with open(os.path.join(REPORT_DIR, "stage3_report.json"), "w", encoding="utf-8") as f:
+        json.dump(stage3_doc, f, indent=2)
+    write_chart(path_states, os.path.join(REPORT_DIR, "stage3_chart.png"))
+    if failed:
+        print("  STAGE3 ISSUES:", "; ".join(failed))
+    return failed
 
 
 def main() -> int:
@@ -381,7 +592,7 @@ def main() -> int:
     with open(out_json, "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2, ensure_ascii=False)
 
-    md = ["# Simulation Report — Cultivation: Beyond Heaven (Stage 2)", ""]
+    md = ["# Simulation Report — Cultivation: Beyond Heaven (Stage 3)", ""]
     md.append(f"**Best strategy (active):** `{best_name}`")
     md.append("")
     md.append("## Milestone times (best strategy)")
@@ -443,12 +654,17 @@ def main() -> int:
 
     chart_path = os.path.join(REPORT_DIR, "progress_chart.png")
     write_chart(results, chart_path)
+
+    path_failed = run_stage3(eco, md)
+    with open(md_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(md) + "\n")
     print(f"Wrote {out_json}")
     print(f"BEST={best_name}")
     failed = []
     for name in ("rebirth_early", "best_roi", "talent_focused", "artifact_focused", "offline_heavy"):
         if reports[name]["pacing_issues"] or reports[name]["magnitude_issues"]:
             failed.append(name)
+    failed.extend(path_failed)
     return 1 if failed else 0
 
 
