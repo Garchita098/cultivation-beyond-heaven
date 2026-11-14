@@ -33,6 +33,7 @@ static func production_bn(data: EconData, rank_index: int, levels: Dictionary, k
 
 
 static func production_state(data: EconData, state: SimState) -> float:
+	Achievements.sync(data, state)
 	refresh_derived(data, state)
 	var base := float(data.balance["base_qi_per_sec"])
 	var tmods := talent_mods(data, state)
@@ -67,7 +68,11 @@ static func production_state(data: EconData, state: SimState) -> float:
 		* float(amods["mult"])
 		* speed_mult
 	)
-	return Stage3Rules.adjust_prod(data, state, prod, {"flat_sum": flat_sum, "mult_add": mult_add, "speed_mult": speed_mult})
+	var out := Stage3Rules.adjust_prod(data, state, prod, {"flat_sum": flat_sum, "mult_add": mult_add, "speed_mult": speed_mult})
+	var bonus := Achievements.qi_mult(data, state)
+	if bonus != 1.0:
+		out *= bonus
+	return out
 
 
 static func upgrade_cost(data: EconData, levels: Dictionary, uid: String) -> float:
@@ -120,6 +125,9 @@ static func offline_bonus(data: EconData, state: SimState) -> float:
 	bonus += float(talent_mods(data, state)["offline"])
 	bonus += float(artifact_mods(data, state)["offline"])
 	bonus += Stage3Rules.extra_offline_bonus(data, state)
+	var ach_off := Achievements.offline_bonus(data, state)
+	if ach_off:
+		bonus += ach_off
 	return bonus
 
 
@@ -172,7 +180,7 @@ static func can_buy(data: EconData, state: SimState, uid: String) -> bool:
 	var mx := int(u.get("max_level", 0))
 	if mx > 0 and lvl >= mx:
 		return false
-	return state.qi >= upgrade_cost_state(data, state, uid)
+	return Ledger.ge_qi(state, upgrade_cost_state(data, state, uid))
 
 
 static func buy(data: EconData, state: SimState, uid: String) -> bool:
@@ -180,7 +188,7 @@ static func buy(data: EconData, state: SimState, uid: String) -> bool:
 		return false
 	var cost := upgrade_cost_state(data, state, uid)
 	var u: Dictionary = data.upgrades[uid]
-	state.qi -= cost
+	Ledger.spend_qi(state, cost)
 	state.upgrade_levels[uid] = int(state.upgrade_levels.get(uid, 0)) + 1
 	var extra := Stage3Rules.bonus_levels(data, state, int(state.upgrade_levels[uid]))
 	if extra > 0:
@@ -199,7 +207,7 @@ static func can_breakthrough(data: EconData, state: SimState) -> bool:
 	var cost := breakthrough_cost(data, state)
 	if cost < 0.0:
 		return false
-	return state.qi >= cost
+	return Ledger.ge_qi(state, cost)
 
 
 static func breakthrough(data: EconData, state: SimState) -> bool:
@@ -210,7 +218,7 @@ static func breakthrough(data: EconData, state: SimState) -> bool:
 	var spent := Stage3Rules.bank_spent_on_breakthrough(data, state)
 	if spent > 0.0:
 		state.banked_sec = maxf(0.0, state.banked_sec - spent)
-	state.qi -= cost
+	Ledger.spend_qi(state, cost)
 	state.rank_index += 1
 	state.highest_rank_index = maxi(state.highest_rank_index, state.rank_index)
 	state.last_purchase_or_unlock_time = state.time_sec
@@ -730,10 +738,9 @@ static func buy_shop_if_worth(data: EconData, state: SimState, item_id: String, 
 
 static func karma_gain(data: EconData, state: SimState) -> int:
 	var f: Dictionary = data.rebirth["formula"]
-	var lq := maxf(1.0, state.lifetime_qi)
 	var raw := (
 		float(f["base"])
-		+ (log(lq) / log(10.0)) / float(f["from_lifetime_qi_log10_div"])
+		+ Ledger.log10_life(state) / float(f["from_lifetime_qi_log10_div"])
 		+ float(state.highest_rank_index) * float(f["from_highest_rank_index"])
 	)
 	return int(floor(raw))
@@ -790,11 +797,12 @@ static func do_rebirth(data: EconData, state: SimState) -> bool:
 		for _i in grants:
 			grant_next_artifact(data, state)
 	refresh_derived(data, state)
-	state.qi = state.starting_qi_bonus
+	Ledger.set_qi_float(state, state.starting_qi_bonus)
 	state.upgrade_levels = kept_levels
 	state.rank_index = 0
 	_apply_start_rank(data, state)
 	state.last_purchase_or_unlock_time = state.time_sec
+	Achievements.on_rebirth(state)
 	Stage3Rules.on_rebirth(data, state)
 	_mark(state, "rebirth:%d" % state.rebirth_count)
 	_mark(state, "first_rebirth")
@@ -1146,9 +1154,10 @@ static func apply_offline(data: EconData, state: SimState, absent_sec: float) ->
 			gained = prod * absent * eff
 		else:
 			gained = prod * soft * eff + prod * (absent - soft) * eff * 0.5
-		state.qi += gained
-		state.lifetime_qi += gained
+		Ledger.add_both(state, gained)
 		state.time_sec += absent
+		Achievements.on_offline(state, absent)
+		Achievements.track_tick(state, absent)
 		return {
 			"gained": gained,
 			"absent_sec": absent,
@@ -1176,6 +1185,8 @@ static func apply_offline(data: EconData, state: SimState, absent_sec: float) ->
 		elapsed += dt
 		remaining -= dt
 	state.time_sec += absent
+	Achievements.on_offline(state, absent)
+	Achievements.track_tick(state, absent)
 	return {
 		"gained": gained_total,
 		"absent_sec": absent,
@@ -1192,12 +1203,10 @@ static func _offline_slice(data: EconData, state: SimState, dt: float, half: boo
 		return 0.0
 	var eff := offline_eff(data, state) * (0.5 if half else 1.0)
 	var gained := production_state(data, state) * dt * eff
-	state.qi += gained
-	state.lifetime_qi += gained
+	Ledger.add_both(state, gained)
 	var banked := Stage3Rules.maybe_bank_offline(data, state, gained, dt)
 	if banked > 0.0:
-		state.qi -= banked
-		state.lifetime_qi -= banked
+		Ledger.spend_both(state, banked)
 		gained -= banked
 	Stage3Rules.advance(data, state, dt, gained, true)
 	Stage3Rules.clamp_state(data, state)
@@ -1207,11 +1216,11 @@ static func _offline_slice(data: EconData, state: SimState, dt: float, half: boo
 static func tick(data: EconData, state: SimState, dt: float) -> void:
 	var prod := production_state(data, state)
 	var gained := prod * dt
-	state.qi += gained
-	state.lifetime_qi += gained
+	Ledger.add_both(state, gained)
 	state.time_sec += dt
 	Stage3Rules.advance(data, state, dt, gained, false)
 	Stage3Rules.clamp_state(data, state)
+	Achievements.track_tick(state, dt)
 
 
 static func _mark(state: SimState, key: String) -> void:

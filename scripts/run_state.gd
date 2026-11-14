@@ -64,6 +64,14 @@ var reality_mode: String = "still"
 var path_switch_count: int = 0
 var sacrifice_count: int = 0
 var mechanic_counts: Dictionary = {}
+var achievements: Dictionary = {}
+var stats: Dictionary = {}
+var heavenly_rites: Dictionary = {}
+var void_seals: Dictionary = {}
+var chaos_attunements: Dictionary = {}
+var notation: String = "letters"
+var sound_on: bool = true
+var reduced_effects: bool = false
 
 
 func _init() -> void:
@@ -139,6 +147,15 @@ static func from_save_dict(data: Dictionary) -> RunState:
 	run.reveal_seen = _flag_dict(data.get("reveal_seen", []))
 	run.dao_marks = float(data.get("dao_marks", 0.0))
 	run.ascension_count = int(data.get("ascension_count", 0))
+	run.achievements = _flag_dict(data.get("achievements", []))
+	var stats_v = data.get("stats", {})
+	run.stats = stats_v.duplicate(true) if typeof(stats_v) == TYPE_DICTIONARY else {}
+	var prefs = data.get("prefs", {})
+	if typeof(prefs) == TYPE_DICTIONARY:
+		run.notation = str(prefs.get("notation", "letters"))
+		run.sound_on = bool(prefs.get("sound", true))
+		run.reduced_effects = bool(prefs.get("reduced_effects", false))
+	Prefs.apply_run(run)
 	var layer = data.get("stage3", {})
 	if typeof(layer) == TYPE_DICTIONARY:
 		run._read_layer(layer)
@@ -187,14 +204,21 @@ func to_save_dict(save_version: int) -> Dictionary:
 		"dao_marks": dao_marks,
 		"ascension_count": ascension_count,
 		"stage3": _write_layer(),
+		"achievements": _flag_list(achievements),
+		"stats": stats.duplicate(true),
+		"prefs": {
+			"notation": notation,
+			"sound": sound_on,
+			"reduced_effects": reduced_effects,
+		},
 		"meta": {},
 	}
 
 
 func to_sim() -> SimState:
 	var sim := SimState.new()
-	sim.qi = _finite(qi)
-	sim.lifetime_qi = _finite(lifetime_qi)
+	Ledger.from_bn(sim, qi, false)
+	Ledger.from_bn(sim, lifetime_qi, true)
 	sim.rank_index = rank_index
 	sim.highest_rank_index = highest_rank_index
 	sim.upgrade_levels = upgrade_levels.duplicate()
@@ -223,9 +247,9 @@ func to_sim() -> SimState:
 
 
 func apply_sim(sim: SimState, copy_lifetime: bool = false) -> void:
-	qi = BigNum.from_float(sim.qi)
+	qi = Ledger.to_bn(sim, false)
 	if copy_lifetime:
-		lifetime_qi = BigNum.from_float(sim.lifetime_qi)
+		lifetime_qi = Ledger.to_bn(sim, true)
 		time_sec = sim.time_sec
 	rank_index = sim.rank_index
 	highest_rank_index = sim.highest_rank_index
@@ -293,6 +317,9 @@ func _read_layer(layer: Dictionary) -> void:
 	reality_mode = str(layer.get("reality_mode", "still"))
 	path_switch_count = int(layer.get("path_switch_count", 0))
 	sacrifice_count = int(layer.get("sacrifice_count", 0))
+	heavenly_rites = _flag_dict(layer.get("heavenly_rites", []))
+	void_seals = _flag_dict(layer.get("void_seals", []))
+	chaos_attunements = _flag_dict(layer.get("chaos_attunements", []))
 	mechanic_counts = {}
 	var counts = layer.get("mechanic_counts", {})
 	if typeof(counts) == TYPE_DICTIONARY:
@@ -334,6 +361,9 @@ func _write_layer() -> Dictionary:
 		"path_switch_count": path_switch_count,
 		"sacrifice_count": sacrifice_count,
 		"mechanic_counts": mechanic_counts.duplicate(),
+		"heavenly_rites": _flag_list(heavenly_rites),
+		"void_seals": _flag_list(void_seals),
+		"chaos_attunements": _flag_list(chaos_attunements),
 	}
 
 
@@ -373,6 +403,11 @@ func _copy_layer_to_sim(sim: SimState) -> void:
 	sim.path_switch_count = path_switch_count
 	sim.sacrifice_count = sacrifice_count
 	sim.mechanic_counts = mechanic_counts.duplicate()
+	sim.achievements = achievements.duplicate()
+	sim.stats = stats.duplicate(true)
+	sim.heavenly_rites = heavenly_rites.duplicate()
+	sim.void_seals = void_seals.duplicate()
+	sim.chaos_attunements = chaos_attunements.duplicate()
 
 
 func _copy_layer_from_sim(sim: SimState) -> void:
@@ -410,6 +445,11 @@ func _copy_layer_from_sim(sim: SimState) -> void:
 	path_switch_count = sim.path_switch_count
 	sacrifice_count = sim.sacrifice_count
 	mechanic_counts = sim.mechanic_counts.duplicate()
+	achievements = sim.achievements.duplicate()
+	stats = sim.stats.duplicate(true)
+	heavenly_rites = sim.heavenly_rites.duplicate()
+	void_seals = sim.void_seals.duplicate()
+	chaos_attunements = sim.chaos_attunements.duplicate()
 
 
 func _finite(bn: BigNum) -> float:

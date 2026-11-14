@@ -61,6 +61,7 @@ func show_world() -> void:
 		_laws(box, run, theme)
 	if run.unlocked.has("reality_stitch"):
 		_reality(box, run)
+	_layers(box, run)
 	var back := Button.new()
 	back.custom_minimum_size = Vector2(0, 64)
 	back.focus_mode = Control.FOCUS_NONE
@@ -210,6 +211,43 @@ func _reality(box: VBoxContainer, run: RunState) -> void:
 			show_world()
 		)
 		row.add_child(button)
+
+
+func _layers(box: VBoxContainer, run: RunState) -> void:
+	var kind := ""
+	var key := ""
+	var owned: Dictionary = {}
+	match run.world_id:
+		"heavenly_world":
+			kind = "rite"
+			key = "rites"
+			owned = run.heavenly_rites
+		"void_dimension":
+			kind = "seal"
+			key = "seals"
+			owned = run.void_seals
+		"chaos_origin":
+			kind = "attune"
+			key = "attunements"
+			owned = run.chaos_attunements
+		_:
+			return
+	var world: Dictionary = Content.data.worlds.get(run.world_id, {})
+	for spec in world.get(key, []):
+		var id := str(spec["id"])
+		var button := Button.new()
+		button.custom_minimum_size = Vector2(0, 56)
+		button.focus_mode = Control.FOCUS_NONE
+		if owned.has(id):
+			button.text = "%s  ·  есть" % str(spec.get("name_ru", id))
+			button.disabled = true
+		else:
+			button.text = "%s  ·  %s" % [str(spec.get("name_ru", id)), str(spec.get("cost", ""))]
+			button.pressed.connect(func():
+				GameState.try_buy_layer(kind)
+				show_world()
+			)
+		box.add_child(button)
 
 
 func _trim(value: float) -> String:

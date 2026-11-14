@@ -371,8 +371,8 @@
       "name_en": "Body Integration · Early",
       "name_ru": "Слияние Тела · Раннее",
       "index": 28,
-      "cost_qi": 3200000000000000.0,
-      "prod_mult": 2400000.0,
+      "cost_qi": 3225600000000000.5,
+      "prod_mult": 3000000.0,
       "unlocks": [
         "reality_stitch"
       ],
@@ -385,8 +385,8 @@
       "name_en": "Body Integration · Peak",
       "name_ru": "Слияние Тела · Пик",
       "index": 29,
-      "cost_qi": 1.2e+16,
-      "prod_mult": 5000000.0,
+      "cost_qi": 1.2096000000000002e+16,
+      "prod_mult": 6250000.0,
       "unlocks": [],
       "stage": 3
     },
@@ -397,8 +397,8 @@
       "name_en": "Mahayana · Early",
       "name_ru": "Махаяна · Ранняя",
       "index": 30,
-      "cost_qi": 4.5e+16,
-      "prod_mult": 11000000.0,
+      "cost_qi": 4.536000000000001e+16,
+      "prod_mult": 13750000.0,
       "unlocks": [],
       "stage": 3
     },
@@ -409,8 +409,8 @@
       "name_en": "Mahayana · Peak",
       "name_ru": "Махаяна · Пик",
       "index": 31,
-      "cost_qi": 1.6e+17,
-      "prod_mult": 24000000.0,
+      "cost_qi": 1.6128000000000003e+17,
+      "prod_mult": 30000000.0,
       "unlocks": [
         "tribulation_mechanic"
       ],
@@ -423,8 +423,8 @@
       "name_en": "Immortal Ascendant",
       "name_ru": "Вознесённый Бессмертный",
       "index": 32,
-      "cost_qi": 6e+17,
-      "prod_mult": 55000000.0,
+      "cost_qi": 6.048e+17,
+      "prod_mult": 68750000.0,
       "unlocks": [
         "heavenly_world"
       ],
@@ -437,8 +437,8 @@
       "name_en": "True Immortal",
       "name_ru": "Истинный Бессмертный",
       "index": 33,
-      "cost_qi": 2.4e+18,
-      "prod_mult": 120000000.0,
+      "cost_qi": 2.4192e+18,
+      "prod_mult": 150000000.0,
       "unlocks": [],
       "stage": 3
     },
@@ -449,8 +449,8 @@
       "name_en": "Golden Immortal",
       "name_ru": "Золотой Бессмертный",
       "index": 34,
-      "cost_qi": 9e+18,
-      "prod_mult": 280000000.0,
+      "cost_qi": 9.072e+18,
+      "prod_mult": 350000000.0,
       "unlocks": [],
       "stage": 3
     },
@@ -461,8 +461,8 @@
       "name_en": "Immortal Emperor",
       "name_ru": "Император Бессмертных",
       "index": 35,
-      "cost_qi": 3.5e+19,
-      "prod_mult": 650000000.0,
+      "cost_qi": 3.528e+19,
+      "prod_mult": 812500000.0,
       "unlocks": [],
       "stage": 3
     },
@@ -473,8 +473,8 @@
       "name_en": "Heavenly Lord",
       "name_ru": "Небесный Владыка",
       "index": 36,
-      "cost_qi": 1.4e+20,
-      "prod_mult": 1600000000.0,
+      "cost_qi": 1.4112e+20,
+      "prod_mult": 2000000000.0,
       "unlocks": [
         "dao_authority"
       ],
@@ -487,8 +487,8 @@
       "name_en": "Dimension Sovereign",
       "name_ru": "Повелитель Измерений",
       "index": 37,
-      "cost_qi": 6e+20,
-      "prod_mult": 4000000000.0,
+      "cost_qi": 6.048e+20,
+      "prod_mult": 5000000000.0,
       "unlocks": [
         "reality_rules"
       ],
@@ -501,8 +501,8 @@
       "name_en": "Law Weaver",
       "name_ru": "Ткач Законов",
       "index": 38,
-      "cost_qi": 2.5e+21,
-      "prod_mult": 10000000000.0,
+      "cost_qi": 2.5200000000000005e+21,
+      "prod_mult": 12500000000.0,
       "unlocks": [
         "law_rewrite"
       ],
@@ -515,8 +515,8 @@
       "name_en": "Reality Bender",
       "name_ru": "Искажающий Реальность",
       "index": 39,
-      "cost_qi": 1e+22,
-      "prod_mult": 26000000000.0,
+      "cost_qi": 1.0080000000000002e+22,
+      "prod_mult": 32500000000.0,
       "unlocks": [],
       "stage": 3
     },
@@ -527,8 +527,8 @@
       "name_en": "Dao Embodiment",
       "name_ru": "Воплощение Дао",
       "index": 40,
-      "cost_qi": 4.5e+22,
-      "prod_mult": 70000000000.0,
+      "cost_qi": 4.536e+22,
+      "prod_mult": 87500000000.0,
       "unlocks": [],
       "stage": 3
     },
@@ -539,8 +539,8 @@
       "name_en": "Beyond Heaven",
       "name_ru": "За Пределами Небес",
       "index": 41,
-      "cost_qi": 2e+23,
-      "prod_mult": 200000000000.0,
+      "cost_qi": 2.016e+23,
+      "prod_mult": 250000000000.0,
       "unlocks": [
         "endgame_loop"
       ],

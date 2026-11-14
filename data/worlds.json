@@ -32,11 +32,19 @@
       "resource_name_ru": "Сущность",
       "mechanic": "essence_channels",
       "mechanic_desc_ru": "Каналы делят поток между Ци и Сущностью. Сущность удешевляет прорыв.",
-      "unlock_requirement": {"type": "rank", "id": "nascent_peak"},
+      "unlock_requirement": {
+        "type": "rank",
+        "id": "nascent_peak"
+      },
       "qi_to_essence_convert_ratio": 0.02,
       "essence_breakthrough_discount_per": 0.001,
       "essence_discount_cap": 0.5,
-      "channel_presets": [0, 0.25, 0.5, 0.75],
+      "channel_presets": [
+        0,
+        0.25,
+        0.5,
+        0.75
+      ],
       "tint": "#3DDBA0",
       "stage": 3
     },
@@ -49,7 +57,10 @@
       "resource_name_ru": "Осколки Дао",
       "mechanic": "tribulation_cycles",
       "mechanic_desc_ru": "Трибуляция сама сверяет силу. Успех на время меняет формулу.",
-      "unlock_requirement": {"type": "rank", "id": "immortal_ascendant"},
+      "unlock_requirement": {
+        "type": "rank",
+        "id": "immortal_ascendant"
+      },
       "tribulation_interval_sec": 180,
       "pressure_base": 8,
       "pressure_per_cycle": 1.15,
@@ -65,7 +76,41 @@
       "defy_pressure": 1.28,
       "defy_reward": 1.55,
       "tint": "#F0C75E",
-      "stage": 3
+      "stage": 3,
+      "rites": [
+        {
+          "id": "calm_sky",
+          "name_ru": "Тихое небо",
+          "cost_key": "dao_fragments",
+          "cost": 2,
+          "effect": "pressure_mult",
+          "value": 0.88
+        },
+        {
+          "id": "golden_breath",
+          "name_ru": "Золотое дыхание",
+          "cost_key": "dao_fragments",
+          "cost": 4,
+          "effect": "qi_mult",
+          "value": 1.12
+        },
+        {
+          "id": "long_boon",
+          "name_ru": "Долгая милость",
+          "cost_key": "dao_fragments",
+          "cost": 7,
+          "effect": "boon_mult",
+          "value": 1.35
+        },
+        {
+          "id": "mandate",
+          "name_ru": "Небесный мандат",
+          "cost_key": "dao_fragments",
+          "cost": 11,
+          "effect": "qi_mult",
+          "value": 1.18
+        }
+      ]
     },
     {
       "id": "void_dimension",
@@ -76,14 +121,71 @@
       "resource_name_ru": "Пыль Пустоты",
       "mechanic": "entropy_drain",
       "mechanic_desc_ru": "Лишняя Ци сгорает в пыль. Пыль переписывает одно правило.",
-      "unlock_requirement": {"type": "ascension_count", "min": 3},
+      "unlock_requirement": {
+        "type": "ascension_count",
+        "min": 3
+      },
       "entropy_rate": 0.018,
       "dust_per_qi": 0.002,
-      "retain_choices": [60, 180, 600],
+      "retain_choices": [
+        60,
+        180,
+        600
+      ],
       "default_retain_seconds": 180,
       "rewrite_cost": 20,
       "tint": "#A78BFA",
-      "stage": 3
+      "stage": 3,
+      "seals": [
+        {
+          "id": "still_heart",
+          "name_ru": "Тихое сердце",
+          "cost_key": "void_dust",
+          "cost": 20,
+          "effect": "entropy_mult",
+          "value": 0.8
+        },
+        {
+          "id": "ash_scribe",
+          "name_ru": "Пепел памяти",
+          "cost_key": "void_dust",
+          "cost": 60,
+          "effect": "dust_mult",
+          "value": 1.4
+        },
+        {
+          "id": "second_pen",
+          "name_ru": "Второе перо",
+          "cost_key": "void_dust",
+          "cost": 140,
+          "effect": "extra_rewrite",
+          "value": 1
+        },
+        {
+          "id": "quiet_sky",
+          "name_ru": "Тихая высь",
+          "cost_key": "void_dust",
+          "cost": 280,
+          "effect": "qi_mult",
+          "value": 1.16
+        },
+        {
+          "id": "unmake",
+          "name_ru": "Развязать",
+          "cost_key": "void_dust",
+          "cost": 520,
+          "effect": "retain_add",
+          "value": 120
+        },
+        {
+          "id": "pale_star",
+          "name_ru": "Бледная звезда",
+          "cost_key": "void_dust",
+          "cost": 900,
+          "effect": "qi_mult",
+          "value": 1.18
+        }
+      ]
     },
     {
       "id": "chaos_origin",
@@ -94,12 +196,57 @@
       "resource_name_ru": "Семя Хаоса",
       "mechanic": "rule_forge",
       "mechanic_desc_ru": "Кузница законов: выбранные законы переписывают формулу забега.",
-      "unlock_requirement": {"type": "rank", "id": "law_weaver"},
-      "pulse_sec": 90,
+      "unlock_requirement": {
+        "type": "rank",
+        "id": "law_weaver"
+      },
+      "pulse_sec": 45,
       "seed_per_pulse": 1,
       "forge_slots": 2,
       "tint": "#E85D5D",
-      "stage": 3
+      "stage": 3,
+      "attunements": [
+        {
+          "id": "spark",
+          "name_ru": "Искра",
+          "cost_key": "chaos_seed",
+          "cost": 1,
+          "effect": "pulse_mult",
+          "value": 1.6
+        },
+        {
+          "id": "braid",
+          "name_ru": "Коса",
+          "cost_key": "chaos_seed",
+          "cost": 2,
+          "effect": "slot_bonus",
+          "value": 1
+        },
+        {
+          "id": "crown",
+          "name_ru": "Венец",
+          "cost_key": "chaos_seed",
+          "cost": 4,
+          "effect": "qi_mult",
+          "value": 1.2
+        },
+        {
+          "id": "echo",
+          "name_ru": "Эхо",
+          "cost_key": "chaos_seed",
+          "cost": 7,
+          "effect": "qi_mult",
+          "value": 1.15
+        },
+        {
+          "id": "loom",
+          "name_ru": "Ткацкий стан",
+          "cost_key": "chaos_seed",
+          "cost": 11,
+          "effect": "qi_mult",
+          "value": 1.22
+        }
+      ]
     }
   ]
 }

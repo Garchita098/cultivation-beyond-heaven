@@ -1,19 +1,19 @@
 {
-  "spread": 1.1607614021862043,
+  "spread": 1.1543256516811484,
   "ascension_sec": {
-    "path_heavenly_sword": 5831.0,
-    "path_demon_emperor": 5306.0,
-    "path_immortal": 6114.0,
-    "path_world_devourer": 5669.0,
-    "path_time_lord": 6159.0,
-    "mixed_switch": 5948.0,
-    "mixed_world": 8797.0
+    "path_heavenly_sword": 5799.0,
+    "path_demon_emperor": 5294.0,
+    "path_immortal": 6048.0,
+    "path_world_devourer": 5643.0,
+    "path_time_lord": 6111.0,
+    "mixed_switch": 5904.0,
+    "mixed_world": 8610.0
   },
   "probes": {
     "spirit_world": {
       "world": "spirit_world",
-      "qi": 782765863537.1132,
-      "essence": 6604692685.612968,
+      "qi": 784338489810.4254,
+      "essence": 7379090618.215883,
       "fragments": 0.0,
       "dust": 0.0,
       "seeds": 2.0,
@@ -26,9 +26,9 @@
     },
     "heavenly_world": {
       "world": "heavenly_world",
-      "qi": 1328745446517.0894,
-      "essence": 8202656168.319929,
-      "fragments": 4.199999999999999,
+      "qi": 1735683785916.7769,
+      "essence": 9616067178.543966,
+      "fragments": 2.1999999999999993,
       "dust": 0.0,
       "seeds": 2.0,
       "tribulations": 2,
@@ -40,10 +40,10 @@
     },
     "void_dimension": {
       "world": "void_dimension",
-      "qi": 458473361141.3027,
-      "essence": 2669253033.6849117,
+      "qi": 727716824465.7904,
+      "essence": 4315322264.01839,
       "fragments": 0.0,
-      "dust": 2176283535.708749,
+      "dust": 3511894316.3844295,
       "seeds": 2.0,
       "tribulations": 0,
       "laws": [
@@ -54,11 +54,11 @@
     },
     "chaos_origin": {
       "world": "chaos_origin",
-      "qi": 770217310513.5958,
-      "essence": 3084667237.2961636,
+      "qi": 797583383818.8453,
+      "essence": 3846827719.98433,
       "fragments": 0.0,
       "dust": 0.0,
-      "seeds": 5.0,
+      "seeds": 3.0,
       "tribulations": 0,
       "laws": [
         "flat_as_mult"

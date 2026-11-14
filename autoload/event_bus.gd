@@ -11,3 +11,4 @@ signal open_path_sheet
 signal open_ascension_confirm
 signal open_world_sheet
 signal state_changed
+signal achievement_unlocked(achievement_id: String)

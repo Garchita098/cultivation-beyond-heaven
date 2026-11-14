@@ -43,7 +43,11 @@
     "scientific_from_exponent": 33,
     "notation_max_exponent": 1000000
   },
-  "magnitude_cap": 1e300,
+  "magnitude_cap": 1e+300,
   "path_pace_spread": 0.25,
-  "ascension_max_sec": 172800
+  "ascension_max_sec": 172800,
+  "ascension_echo": 1.0,
+  "stage4_max_idle_sec": 900,
+  "ascension_cost_scale": 2.2,
+  "ascension_later_scale": 140
 }

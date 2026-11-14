@@ -16,7 +16,7 @@ func _ready() -> void:
 	margin.add_theme_constant_override("margin_left", 16)
 	margin.add_theme_constant_override("margin_right", 16)
 	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_bottom", 12)
+	margin.add_theme_constant_override("margin_bottom", 36)
 	scroll.add_child(margin)
 	_list = VBoxContainer.new()
 	_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -32,6 +32,8 @@ func _process(_delta: float) -> void:
 	var scroll := get_child(0) as ScrollContainer
 	if scroll and scroll.get_child_count() > 0:
 		(scroll.get_child(0) as Control).custom_minimum_size.x = maxf(0.0, scroll.size.x)
+		if GameState.screenshot_mode:
+			scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value)
 	if _built_rank < 0:
 		_rebuild()
 	else:
@@ -61,6 +63,9 @@ func _rebuild() -> void:
 	CBHTheme.style_label(later_label, theme.font_sans, 16, CBHTheme.COL_MUTED)
 	later.add_child(later_label)
 	_list.add_child(later)
+	var spacer := Control.new()
+	spacer.custom_minimum_size = Vector2(0, 48)
+	_list.add_child(spacer)
 	_built_rank = GameState.run.rank_index
 	_refresh_rows()
 
@@ -77,9 +82,7 @@ func _make_row(uid: String, u: Dictionary) -> PanelContainer:
 	icon.custom_minimum_size = Vector2(48, 48)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	var tex_path := "res://assets/icons/upgrades/%s.png" % uid
-	if ResourceLoader.exists(tex_path):
-		icon.texture = load(tex_path)
+	icon.texture = ArtBank.upgrade_icon(uid)
 	row.add_child(icon)
 
 	var text_col := VBoxContainer.new()
