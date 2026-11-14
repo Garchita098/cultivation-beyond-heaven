@@ -12,9 +12,17 @@ Qi past 1e300 is a mantissa and an exponent in both the sim and the Godot tick. 
 
 ## Frame cost and package size
 
-The economy steps at `balance.tick_seconds` (0.25s). A frame only accumulates time, and a hitch runs at most 20 steps. Hero and world textures import as VRAM-compressed (ETC2/ASTC). The 128px icon masters live in `assets/art/icons128/` and are excluded from the APK; the UI uses the 64px set. The export preset also leaves out `tools/`, `docs/`, `test/`, and `.github/`.
+The economy steps at `balance.tick_seconds` (0.25s). A frame only accumulates time, and a hitch runs at most 20 steps. One Python tick of the same rules is about 27 µs early and 34 µs with a joined path and a high rank (8,000 ticks). That sits far under the 0.25 s step. Hero and world textures import as VRAM-compressed (ETC2/ASTC). The 128px icon masters live in `assets/art/icons128/` and are excluded from the APK; the UI uses the 64px set. The export preset also leaves out `tools/`, `docs/`, `test/`, and `.github/`.
 
-Debug APK before the art pack (CI artifact on the settings commit): **58,849,567 bytes** (about 56.1 MiB). The size after compression is the `cbh-debug-apk` artifact on the optimization commit.
+Measured debug APKs (`cbh-debug.apk` from the CI artifact, not the zip):
+
+| Build | Bytes | |
+|-------|------:|--|
+| Before the art pack (settings commit `5847199`, run 42379062203) | 59,337,450 | 56.6 MiB |
+| Art packed, lossless import (`6003e91`, run 43549492878) | 70,604,807 | 67.3 MiB |
+| VRAM compression, 128px icons excluded (`f2ee273`, run 43549636896) | 67,885,781 | 64.7 MiB |
+
+Compression and dropping the 128px masters cut about 2.7 MiB off the post-art package. The engine and Android template still dominate the APK.
 
 ## Worlds after the first ascension
 
