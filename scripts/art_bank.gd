@@ -112,3 +112,42 @@ static func hero_path(run: RunState) -> String:
 
 static func hero(run: RunState) -> Texture2D:
 	return texture(hero_path(run))
+
+
+static func achievement_icon(ach: Dictionary) -> Texture2D:
+	var metric := str(ach.get("metric", ""))
+	var goal := str(ach.get("goal", ""))
+	if metric == "path":
+		return path_icon(goal)
+	if metric == "world":
+		return _world_icon(goal)
+	var aid := str(ach.get("id", ""))
+	if aid.begins_with("time_") or aid.begins_with("off_"):
+		return icon("res://assets/art/icons/artifact_chrono_hourglass_64.png", "res://assets/art/icons/tab_cultivation_64.png")
+	if aid.begins_with("rank_") or aid.begins_with("asc_"):
+		return icon("res://assets/art/icons/tab_ranks_64.png", "")
+	if aid.begins_with("reb_"):
+		return icon("res://assets/art/icons/res_karma_shards_64.png", "res://assets/art/icons/tab_rebirth_64.png")
+	if aid.begins_with("research") or aid.begins_with("study"):
+		return icon("res://assets/art/icons/tab_research_64.png", "")
+	if aid.begins_with("arts_"):
+		return icon("res://assets/art/icons/tab_artifacts_64.png", "")
+	if aid.begins_with("sac_"):
+		return path_icon("demon_emperor")
+	if aid.begins_with("trib_"):
+		return icon("res://assets/art/icons/artifact_heavenly_mirror_64.png", "")
+	return qi_icon()
+
+
+static func _world_icon(world_id: String) -> Texture2D:
+	match world_id:
+		"spirit_world":
+			return icon("res://assets/art/icons/res_essence_64.png", "")
+		"heavenly_world":
+			return icon("res://assets/art/icons/res_dao_marks_64.png", "")
+		"void_dimension":
+			return icon("res://assets/art/icons/res_void_dust_64.png", "")
+		"chaos_origin":
+			return icon("res://assets/art/icons/res_chaos_seeds_64.png", "")
+		_:
+			return qi_icon()

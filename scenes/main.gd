@@ -3,14 +3,14 @@ extends Control
 
 const STATUS_H := 64.0
 const CTA_H := 124.0
-const NAV_H := 152.0
+const NAV_H := 120.0
 
 const TABS := [
-	{"id": "cultivation", "label": "Культ.", "cta": true},
-	{"id": "upgrades", "label": "Улучш.", "cta": false},
+	{"id": "cultivation", "label": "Культивация", "cta": true},
+	{"id": "upgrades", "label": "Улучшения", "cta": false},
 	{"id": "ranks", "label": "Ранги", "cta": true},
 	{"id": "talents", "label": "Корни", "cta": false, "need": "spiritual_roots"},
-	{"id": "artifacts", "label": "Артеф.", "cta": false, "need": "artifacts_basic"},
+	{"id": "artifacts", "label": "Артефакты", "cta": false, "need": "artifacts_basic"},
 	{"id": "rebirth", "label": "Карма", "cta": false, "need": "rebirth_unlock"},
 	{"id": "research", "label": "Дао", "cta": false, "need": "automation_buy_upgrades"},
 ]
@@ -37,6 +37,7 @@ var _cta: Control
 var _cta_btn: Button
 var _pages: Dictionary = {}
 var _tab_buttons: Array = []
+var _tab_labels: Array = []
 var _current: int = 0
 var _flash: ColorRect
 var _reveal: Control
@@ -48,6 +49,7 @@ var _achievements: Control
 var _stats: Control
 var _settings: Control
 var _toast: PanelContainer
+var _toast_icon: TextureRect
 var _toast_label: Label
 
 var _shooting: bool = false
@@ -259,26 +261,41 @@ func _build_status(theme: CBHTheme) -> void:
 func _build_toast(theme: CBHTheme) -> void:
 	_toast = PanelContainer.new()
 	_toast.visible = false
-	_toast.anchor_left = 0.08
-	_toast.anchor_right = 0.92
-	_toast.offset_top = 78.0
-	_toast.offset_bottom = 156.0
+	_toast.anchor_left = 0.06
+	_toast.anchor_right = 0.94
+	_toast.anchor_top = 0.0
+	_toast.anchor_bottom = 0.0
+	_toast.offset_top = 156.0
+	_toast.offset_bottom = 228.0
 	_toast.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_toast.add_theme_stylebox_override("panel", CBHTheme.flat(Color("1A2438"), CBHTheme.COL_GOLD, 16, 1))
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	_toast.add_child(row)
+	_toast_icon = TextureRect.new()
+	_toast_icon.custom_minimum_size = Vector2(40, 40)
+	_toast_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_toast_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	row.add_child(_toast_icon)
 	_toast_label = Label.new()
-	_toast_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_toast_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_toast_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	CBHTheme.style_label(_toast_label, theme.font_bold, 18, CBHTheme.COL_GOLD)
-	_toast.add_child(_toast_label)
+	row.add_child(_toast_label)
 
 
 func _show_toast(achievement_id: String) -> void:
 	var title := achievement_id
+	var found: Dictionary = {}
 	for ach in Content.data.achievements:
 		if str(ach["id"]) == achievement_id:
 			title = str(ach.get("name_ru", title))
+			found = ach
 			break
-	_toast_label.text = "Достижение: %s" % title
+	_toast_label.text = title
+	if _toast_icon != null:
+		_toast_icon.texture = ArtBank.achievement_icon(found if not found.is_empty() else {"id": achievement_id})
 	_toast.visible = true
 	_toast.modulate.a = 1.0
 	var tw := create_tween()
@@ -348,21 +365,34 @@ func _build_nav(theme: CBHTheme) -> void:
 		var btn := Button.new()
 		btn.focus_mode = Control.FOCUS_NONE
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		btn.custom_minimum_size = Vector2(0, 120)
-		btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
-		btn.add_theme_font_size_override("font_size", 13)
-		btn.add_theme_font_override("font", theme.font_sans)
-		var tab_icon := ArtBank.tab_icon(str(spec["id"]))
-		if tab_icon != null:
-			btn.icon = tab_icon
-			btn.expand_icon = true
-			btn.add_theme_constant_override("icon_max_width", 28)
-		btn.text = str(spec["label"])
-		btn.add_theme_color_override("font_color", CBHTheme.COL_TEXT)
+		btn.custom_minimum_size = Vector2(0, 104)
+		btn.text = ""
+		var stack := VBoxContainer.new()
+		stack.set_anchors_preset(Control.PRESET_FULL_RECT)
+		stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		stack.alignment = BoxContainer.ALIGNMENT_CENTER
+		stack.add_theme_constant_override("separation", 2)
+		btn.add_child(stack)
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(44, 44)
+		icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture = ArtBank.tab_icon(str(spec["id"]))
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		stack.add_child(icon)
+		var label := Label.new()
+		label.text = str(spec["label"])
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		label.visible = false
+		CBHTheme.style_label(label, theme.font_sans, 12, CBHTheme.COL_TEXT)
+		stack.add_child(label)
 		var index := i
 		btn.pressed.connect(func(): _show_tab(index))
 		row.add_child(btn)
 		_tab_buttons.append(btn)
+		_tab_labels.append(label)
 
 
 func _build_pages() -> void:
@@ -409,8 +439,14 @@ func _show_tab(index: int) -> void:
 		var open := true
 		if spec_i.has("need") and GameState.run != null:
 			open = GameState.run.unlocked.has(str(spec_i["need"])) or GameState.run.rebirth_count > 0 and str(spec_i["id"]) == "rebirth"
-		btn.add_theme_color_override("font_color", CBHTheme.COL_TEXT if open else CBHTheme.COL_MUTED)
 		var active := i == index
+		if i < _tab_labels.size():
+			var tab_label: Label = _tab_labels[i]
+			tab_label.visible = active
+			tab_label.add_theme_color_override("font_color", CBHTheme.COL_TEXT if open else CBHTheme.COL_MUTED)
+		var icon_node := btn.get_child(0).get_child(0) as CanvasItem
+		if icon_node != null:
+			icon_node.modulate = Color.WHITE if open else Color(0.55, 0.58, 0.66)
 		var style := CBHTheme.flat(
 			Color("182033") if active else Color(0, 0, 0, 0),
 			CBHTheme.COL_QI if active else Color(0, 0, 0, 0),
@@ -588,6 +624,10 @@ func _prepare_extra(index: int) -> void:
 		_achievements.show_sheet()
 	elif name == "stats":
 		_achievements.visible = false
+		GameState.run.world_id = "mortal_world"
+		var kept: Dictionary = GameState.run.stats
+		kept["worlds"] = ["mortal_world", "spirit_world"]
+		GameState.run.stats = kept
 		_stats.show_sheet()
 	elif name == "settings":
 		_stats.visible = false

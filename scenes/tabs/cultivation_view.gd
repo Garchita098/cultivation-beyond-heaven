@@ -3,9 +3,12 @@ extends Control
 
 var _shader_rect: ColorRect
 var _mat: ShaderMaterial
+var _shade: ColorRect
+var _shade_mat: ShaderMaterial
 var _aura: ColorRect
 var _aura_mat: ShaderMaterial
 var _hero: TextureRect
+var _hero_mat: ShaderMaterial
 var _qi_label: Label
 var _float_t: float = 0.0
 var _last_qi: String = ""
@@ -54,6 +57,13 @@ func _ready() -> void:
 	_mat.shader = shader
 	_shader_rect.material = _mat
 	stage.add_child(_shader_rect)
+	_shade = ColorRect.new()
+	_shade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_shade_mat = ShaderMaterial.new()
+	_shade_mat.shader = load("res://assets/shaders/hero_shade.gdshader")
+	_shade.material = _shade_mat
+	stage.add_child(_shade)
 	_aura = ColorRect.new()
 	_aura.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_aura.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -70,6 +80,9 @@ func _ready() -> void:
 	_hero.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_hero.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_hero.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_hero_mat = ShaderMaterial.new()
+	_hero_mat.shader = load("res://assets/shaders/hero_sprite.gdshader")
+	_hero.material = _hero_mat
 	stage.add_child(_hero)
 
 	var qi_panel := PanelContainer.new()
@@ -173,6 +186,14 @@ func refresh() -> void:
 			_hero.texture = hero_tex
 		_hero.visible = hero_tex != null
 	var use_sprite := hero_tex != null
+	if _shade != null:
+		_shade.visible = use_sprite
+		var shade := 0.46
+		if run.world_id == "heavenly_world":
+			shade = 0.82
+		elif run.world_id == "void_dimension":
+			shade = 0.34
+		_shade_mat.set_shader_parameter("strength", shade)
 	_shader_rect.visible = not use_sprite
 	if _aura != null:
 		_aura.visible = use_sprite

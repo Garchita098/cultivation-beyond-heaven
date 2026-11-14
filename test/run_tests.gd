@@ -92,6 +92,9 @@ func _test_bignum() -> void:
 		1500.0: "1.5K",
 		1230000.0: "1.23M",
 		2.5e9: "2.5B",
+		158.01: "158",
+		249.65: "250",
+		722.84: "723",
 	}
 	for value in cases.keys():
 		var got := BigNum.format(BigNum.from_float(float(value)))

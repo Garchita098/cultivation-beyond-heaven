@@ -28,6 +28,7 @@ func show_sheet() -> void:
 	frame.add_theme_constant_override("margin_bottom", 28)
 	add_child(frame)
 	var panel := PanelContainer.new()
+	panel.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	panel.add_theme_stylebox_override("panel", CBHTheme.flat(CBHTheme.COL_PANEL, CBHTheme.COL_GOLD, 18, 1))
 	frame.add_child(panel)
 	var box := VBoxContainer.new()
@@ -38,30 +39,31 @@ func show_sheet() -> void:
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	CBHTheme.style_label(title, theme.font_serif, 30, CBHTheme.COL_GOLD)
 	box.add_child(title)
-	box.add_child(_choice(theme, "Буквы", "letters"))
-	box.add_child(_choice(theme, "Научная", "scientific"))
-	box.add_child(_toggle(theme, "Меньше эффектов", Prefs.reduced_effects, func(on: bool):
+	var format_head := Label.new()
+	format_head.text = "Формат чисел"
+	CBHTheme.style_label(format_head, theme.font_bold, 16, CBHTheme.COL_MUTED)
+	box.add_child(format_head)
+	box.add_child(_choice(theme, "Формат чисел: Буквы", "letters"))
+	box.add_child(_choice(theme, "Формат чисел: Научная", "scientific"))
+	box.add_child(_toggle(theme, "Меньше эффектов: тише свечение и анимации", Prefs.reduced_effects, func(on: bool):
 		Prefs.reduced_effects = on
 		_store()
 	))
-	box.add_child(_toggle(theme, "Звук (эффектов пока нет)", Prefs.sound_on, func(on: bool):
-		Prefs.sound_on = on
-		_store()
-	))
 	var hint := Label.new()
-	hint.text = "Сохранение текстом. Вставьте строку и нажмите «Взять»."
+	hint.text = "Сохранение текстом. «Копировать» кладёт строку в буфер, «Вставить» читает буфер и применяет его."
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	CBHTheme.style_label(hint, theme.font_sans, 14, CBHTheme.COL_MUTED)
 	box.add_child(hint)
 	_box = TextEdit.new()
-	_box.custom_minimum_size = Vector2(0, 220)
+	_box.custom_minimum_size = Vector2(0, 72)
 	_box.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	_box.placeholder_text = "Строка сохранения"
 	box.add_child(_box)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
 	box.add_child(row)
-	row.add_child(_action(theme, "Выдать", _export_save))
-	row.add_child(_action(theme, "Взять", _import_save))
+	row.add_child(_action(theme, "Копировать", _export_save))
+	row.add_child(_action(theme, "Вставить", _import_save))
 	_status = Label.new()
 	_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	CBHTheme.style_label(_status, theme.font_sans, 14, CBHTheme.COL_JADE)
@@ -77,7 +79,13 @@ func show_sheet() -> void:
 
 func _choice(theme: CBHTheme, label_text: String, mode: String) -> Button:
 	var button := Button.new()
-	button.text = label_text + ("  ·" if Prefs.notation == mode else "")
+	var selected := Prefs.notation == mode
+	button.text = label_text + ("  · сейчас" if selected else "")
+	if selected:
+		var gold := CBHTheme.flat(Color("2A2416"), CBHTheme.COL_GOLD, 14, 2)
+		button.add_theme_stylebox_override("normal", gold)
+		button.add_theme_stylebox_override("hover", gold)
+		button.add_theme_stylebox_override("pressed", gold)
 	button.custom_minimum_size = Vector2(0, 56)
 	button.focus_mode = Control.FOCUS_NONE
 	button.pressed.connect(func():
@@ -116,11 +124,16 @@ func _store() -> void:
 
 
 func _export_save() -> void:
-	_box.text = GameState.export_text()
-	_status.text = "Строка готова"
+	var text := GameState.export_text()
+	_box.text = text
+	DisplayServer.clipboard_set(text)
+	_status.text = "Скопировано"
 
 
 func _import_save() -> void:
+	var clipped := DisplayServer.clipboard_get().strip_edges()
+	if clipped != "":
+		_box.text = clipped
 	if GameState.import_text(_box.text):
 		_status.text = "Сохранение принято"
 	else:

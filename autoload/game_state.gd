@@ -380,6 +380,16 @@ func _bootstrap_screenshot() -> void:
 	run.path_nodes = {"shorten_charge": 2, "extend_burst": 1, "echo_slash": 1}
 	run.burst_left = 6.0
 	run.dao_marks = 3.0
+	run.ascension_count = 1
+	run.time_sec = 780.0
+	run.stats = {
+		"offline_sec": 5400.0,
+		"best_rebirth_sec": 2740.0,
+		"fastest_ascension_sec": 5820.0,
+		"path_sec": {"heavenly_sword": 780.0},
+		"worlds": ["mortal_world", "spirit_world"],
+	}
+	run.achievements = {"asc_1": true}
 	run.essence_ratio = 0.25
 	run.world_res = {"spirit_essence": 12.0}
 	run.research_progress = 40.0

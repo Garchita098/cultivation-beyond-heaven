@@ -168,11 +168,10 @@ static func format(bn: BigNum, sci_from: int = 33) -> String:
 	var group := _group_of(e)
 	if group >= 0 and group < SUFFIXES.size():
 		var val := m * pow(10.0, float(posmod(e, 3)))
+		var body := _sig3(val)
 		if group == 0:
-			if e == 0 and absf(m - round(m)) < 1e-9:
-				return str(int(round(m)))
-			return _trim2(val)
-		return _trim2(val) + SUFFIXES[group]
+			return body
+		return body + SUFFIXES[group]
 	return ("%.2f" % m) + "e" + str(e)
 
 
@@ -216,8 +215,21 @@ static func _group_of(e: int) -> int:
 	return int(floor(float(e) / 3.0))
 
 
-static func _trim2(val: float) -> String:
-	var s := "%.2f" % val
+static func _sig3(val: float) -> String:
+	var av := absf(val)
+	if av < 1e-9:
+		return "0"
+	if av >= 100.0:
+		return str(int(round(val)))
+	if av >= 10.0:
+		return _trim_places(val, 1)
+	if av >= 1.0:
+		return _trim_places(val, 2)
+	return _trim_places(val, 3)
+
+
+static func _trim_places(val: float, places: int) -> String:
+	var s := ("%." + str(places) + "f") % val
 	while s.ends_with("0") and s.contains("."):
 		s = s.substr(0, s.length() - 1)
 	if s.ends_with("."):
